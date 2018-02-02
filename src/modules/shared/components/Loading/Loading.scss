@@ -1,0 +1,12 @@
+/*
+  Set the color of the icon
+*/
+.loading path {
+  fill: #FF6700;
+}
+
+.absolute {
+  position: absolute;
+  transform: translateX(-50%);
+  left: 50%;
+}

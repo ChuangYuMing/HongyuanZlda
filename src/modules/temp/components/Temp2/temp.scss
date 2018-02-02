@@ -1,0 +1,32 @@
+@import 'styles/helpers/mixins';
+
+.action {
+  display: inline-block;
+}
+.btn {
+  // width: 50px;
+  display: inline-block;
+  border: solid 1px black;
+  padding: 10px;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+.buy {
+  background-color: red;
+}
+.sell {
+  background-color: green;
+}
+.output {
+  .item {
+    display: inline-block;
+    padding: 10px;
+    border: solid 1px black;
+  }
+  .tag {
+    color: red;
+  }
+  .value {
+    color: #ff9100;
+  }
+}
