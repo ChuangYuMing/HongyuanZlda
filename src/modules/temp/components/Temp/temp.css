@@ -1,0 +1,17 @@
+@import 'helpers/_mixins.css';
+
+.main {
+  @apply --clearfix;
+  & .test {
+    color: green;
+    &:hover {
+      color: blue;
+      border-radius: 5px;
+    }
+    @media (width >= 500px) and (width <= 3200px) {
+      color: red;
+    }
+  }
+}
+
+/* css.validate */

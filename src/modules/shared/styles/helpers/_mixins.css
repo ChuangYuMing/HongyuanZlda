@@ -1,0 +1,37 @@
+@import 'helpers/_variables.css';
+
+@define-mixin test $val {
+  font-size: $val;
+}
+
+:root {
+  --clearfix {
+    &:after,
+    &:before {
+      content: '';
+      display: table;
+    }
+    &:after {
+      clear: both;
+    }
+    *zoom: 1;
+  }
+
+  --reset-button {
+    text-align: center;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  --vertical-middle {
+    &:before {
+      content: '';
+      width: 0;
+      height: 100%;
+      display: inline-block;
+      position: relative;
+      vertical-align: middle;
+    }
+  }
+}
