@@ -2,7 +2,6 @@ import { connect } from 'react-redux'
 import App from './App'
 import { getClientIP } from '../../actions.js'
 import { withRouter } from 'react-router-dom'
-import api from 'api'
 import queryString from 'query-string'
 import { updateAppInfo } from '../../actions.js'
 
@@ -21,18 +20,6 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     ...ownProps,
     getClientIP: () => {
       dispatch(getClientIP())
-    },
-    setApiDomain: () => {
-      let apiDomain
-      const parsed = queryString.parse(location.search)
-      apiDomain =
-        parsed.ip ||
-        stateProps.apiDomain ||
-        window.localStorage.getItem('apiDomain')
-      console.log(apiDomain)
-      window.localStorage.setItem('apiDomain', apiDomain)
-      api.setApiDomain(apiDomain)
-      dispatch(updateAppInfo({ apiDomain: apiDomain }))
     },
     logout: () => {
       dispatch(updateAppInfo({ login: false }))
