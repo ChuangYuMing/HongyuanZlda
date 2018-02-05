@@ -1,7 +1,7 @@
 @import 'helpers/_variables.css';
 
 html {
-  font-size: var(--base-font-size);
+  font-size: $base-font-size;
 }
 
 html,
@@ -12,8 +12,8 @@ body {
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.4;
-  background: #3d3d3b;
-  color: white;
+  /* background: #3d3d3b; */
+  /* color: white; */
   user-select: none;
 }
 

@@ -3,6 +3,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/lib/integration/react'
 import { store, persistor } from 'store/index.js'
+import { hot } from 'react-hot-loader'
 
 import App from '../App'
 // import withTracker from 'modules/common/withTracker.js'
@@ -28,4 +29,4 @@ class AppProvider extends React.Component {
   }
 }
 
-export default AppProvider
+export default hot(module)(AppProvider)
