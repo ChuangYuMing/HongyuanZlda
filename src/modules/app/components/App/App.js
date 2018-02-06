@@ -4,6 +4,8 @@ import { Route, Switch } from 'react-router-dom'
 import classNames from 'classnames/bind'
 import styles from './App.css'
 import Temp from 'modules/temp/components/Temp'
+import Temp2 from 'modules/temp/components/Temp2'
+import Main from 'modules/main/components/Main'
 
 let cx = classNames.bind(styles)
 class App extends React.Component {
@@ -60,8 +62,9 @@ class App extends React.Component {
     return (
       <div>
         <Switch>
-          <Route exact path={'/'} component={Temp} />
+          <Route exact path={'/'} component={Main} />
           <Route exact path={'/temp'} component={Temp} />
+          <Route exact path={'/temp2'} component={Temp2} />
         </Switch>
         <div id="popupContainer" />
       </div>
