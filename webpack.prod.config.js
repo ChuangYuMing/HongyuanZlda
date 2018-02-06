@@ -2,7 +2,6 @@
   FOR PRODUCTION
 */
 const path = require('path')
-const autoprefixer = require('autoprefixer')
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -11,7 +10,7 @@ const WebpackMd5Hash = require('webpack-md5-hash')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
 const extractSass = new ExtractTextPlugin({
-  filename: '/css/main.[contenthash:8].css',
+  filename: 'css/main.[contenthash:8].css',
   disable: false,
   allChunks: true
 })
@@ -33,8 +32,8 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: '/js/[name].[chunkhash:8].js',
-    chunkFilename: '/js/[name].[chunkhash:8].js',
+    filename: 'js/[name].[chunkhash:8].js',
+    chunkFilename: 'js/[name].[chunkhash:8].js',
     publicPath: '/'
   },
   resolve: {
@@ -75,16 +74,12 @@ module.exports = {
         exclude: /node_modules\/(?!(dom7|swiper)\/).*/,
         use: [
           {
-            loader: 'babel-loader',
-            options: {
-              presets: ['es2015', 'react', 'stage-0'],
-              babelrc: false
-            }
+            loader: 'babel-loader'
           }
         ]
       },
       {
-        test: /\.scss$/,
+        test: /\.css$/,
         exclude: /node_modules/,
         use: extractSass.extract({
           fallback: 'style-loader',
@@ -101,14 +96,18 @@ module.exports = {
             {
               loader: 'postcss-loader',
               options: {
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'sass-loader',
-              options: {
-                sourceMap: true,
-                includePaths: [path.resolve(__dirname, 'src/modules/shared')]
+                ident: 'postcss',
+                plugins: loader => [
+                  require('postcss-global-import')(),
+                  require('postcss-import')({
+                    path: './src/modules/shared/styles/'
+                  }),
+                  require('postcss-mixins')(),
+                  require('postcss-nested')(),
+                  require('postcss-simple-vars')(),
+                  require('autoprefixer')(),
+                  require('cssnano')()
+                ]
               }
             }
           ]
@@ -116,7 +115,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpg)$/,
-        loader: 'url-loader?limit=8192&name=/images/[hash:8].[name].[ext]'
+        loader: 'url-loader?limit=8192&name=images/[hash:8].[name].[ext]'
       },
       { test: /\.html$/, loader: 'html-loader' },
       {

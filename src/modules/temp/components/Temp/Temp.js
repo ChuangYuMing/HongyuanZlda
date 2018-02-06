@@ -5,6 +5,8 @@ import { getCookie, setCookie } from 'tools/cookie.js'
 import xml2js from 'xml2js'
 import { StickyTable, Row, Cell } from 'react-sticky-table'
 import PropTypes from 'prop-types'
+import image from 'static/image/icons/booking.png'
+import image2 from 'static/image/ct2.png'
 
 let cx = classNames.bind(styles)
 class Temp extends React.Component {
@@ -54,6 +56,8 @@ class Temp extends React.Component {
           login
         </span>
         <br />
+        <img src={image} />
+        <img src={image2} />
         <br />
 
         {/* <div style={{ width: '100%', height: '200px' }}>
