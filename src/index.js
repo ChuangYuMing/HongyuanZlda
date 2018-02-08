@@ -13,10 +13,10 @@ const render = Component => {
 }
 
 if (module.hot) {
-  module.hot.accept()
-  render(AppProvider)
-} else {
-  render(AppProvider)
-  console.log()
+  module.hot.accept('./modules/app/components/AppProvider', () => {
+    render(AppProvider)
+  })
 }
-// render(<AppContainer><AppProvider /></AppContainer>, document.getElementById('root'))
+render(AppProvider)
+// ReactDOM.render(<div>333</div>, document.getElementById('root'))
+// render(<div>3332</div>)

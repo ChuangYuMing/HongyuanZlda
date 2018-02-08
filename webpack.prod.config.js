@@ -34,7 +34,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: '/js/[name].[chunkhash:8].js',
-    chunkFilename: '/js/[name].[chunkhash:8].js'
+    chunkFilename: '/js/[name].[chunkhash:8].js',
+    publicPath: '/'
   },
   resolve: {
     alias: {

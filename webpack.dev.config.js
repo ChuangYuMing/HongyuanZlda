@@ -19,11 +19,16 @@ module.exports = {
   entry: [
     'babel-polyfill',
     'react-hot-loader/patch',
-    'webpack-dev-server/client?http://0.0.0.0:8007',
-    'webpack/hot/only-dev-server',
+    // 'webpack-dev-server/client?http://0.0.0.0:8007',
+    // 'webpack/hot/only-dev-server',
     'whatwg-fetch',
     './src/index.js'
   ],
+  output: {
+    path: path.resolve(__dirname, 'build'),
+    filename: 'bundle.js',
+    publicPath: '/'
+  },
   resolve: {
     alias: {
       modules: path.resolve(__dirname, 'src/modules'),
@@ -36,7 +41,8 @@ module.exports = {
   plugins: [
     extractSass,
     new webpack.HotModuleReplacementPlugin(), // Enable HMR
-    new webpack.NamedModulesPlugin()
+    new webpack.NamedModulesPlugin(),
+    new webpack.optimize.ModuleConcatenationPlugin()
   ],
   module: {
     rules: [
@@ -45,24 +51,7 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
-            options: {
-              presets: ['es2015', 'react', 'stage-0'],
-              babelrc: false
-            }
-          }
-        ]
-      },
-      {
-        test: /\.css$/,
-        include: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              presets: ['es2015', 'react', 'stage-0'],
-              babelrc: false
-            }
+            loader: 'babel-loader'
           }
         ]
       },
@@ -121,9 +110,9 @@ module.exports = {
     ]
   },
   devServer: {
+    // contentBase: path.join(__dirname, 'dist'),
     contentBase: './src',
     hot: true,
-    host: '0.0.0.0',
     compress: true,
     historyApiFallback: true,
     headers: {
@@ -131,6 +120,6 @@ module.exports = {
       'Access-Control-Allow-Credentials': 'true',
       'Access-Control-Allow-Methods': '*'
     },
-    port: 8007
+    port: 8009
   }
 }

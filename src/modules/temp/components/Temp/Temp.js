@@ -8,11 +8,13 @@ let cx = classNames.bind(styles)
 function Temp({ onTest, test }) {
   return (
     <div>
-      <span onClick={login}>login</span>
+      <span className={cx('test')} onClick={login}>
+        login
+      </span>
       <br />
       <br />
       <br />
-      <span onClick={testapi}>test</span>
+      <span onClick={testapi}>test2</span>
       <br />
       <br />
       <br />
