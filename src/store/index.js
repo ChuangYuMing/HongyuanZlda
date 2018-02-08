@@ -5,6 +5,7 @@ import thunk from 'redux-thunk'
 import reducers from '../reducers'
 
 const apiUrl = 'http://192.168.12.134:8080'
+// const apiUrl = 'http://192.168.12.166:8080'
 
 const persistConfig = {
   key: 'root',
@@ -23,4 +24,4 @@ const store = createStore(
 )
 const persistor = persistStore(store)
 
-export { store, persistor }
+export { store, persistor, apiUrl }

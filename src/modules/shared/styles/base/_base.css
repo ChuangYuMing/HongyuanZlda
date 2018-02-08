@@ -10,6 +10,14 @@ body {
   background-color: #242d40;
 }
 
+:global {
+  #root {
+    height: 100%;
+    > div {
+      height: 100%;
+    }
+  }
+}
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.4;
@@ -39,4 +47,19 @@ ul {
 
 a {
   text-decoration: none;
+}
+
+:global {
+  .sticky-table-x-wrapper {
+    .sticky-table-container {
+      width: 100%;
+    }
+  }
+  .sticky-table-y-wrapper {
+    top: 1px;
+  }
+  .sticky-table-cell {
+    padding: 8px 12px;
+    border-bottom: 1px solid #444444;
+  }
 }

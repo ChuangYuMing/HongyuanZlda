@@ -1,1 +1,88 @@
 @import 'helpers/_mixins.css';
+
+.order-wrap {
+  height: 100%;
+}
+.action-wrap {
+  margin-left: 5px;
+  .input-wrap {
+    margin: 10px 0px;
+    display: inline-block;
+    width: 80%;
+  }
+  .action {
+    display: inline-block;
+    width: 18%;
+    .btn {
+      width: 40%;
+      display: inline-block;
+      border: solid 1px black;
+      padding: 4px 10px;
+      border-radius: 5px;
+      margin-left: 5px;
+      text-align: center;
+    }
+  }
+
+  .buy {
+    background-color: red;
+  }
+  .sell {
+    background-color: green;
+  }
+
+  .item-wrap {
+    display: inline-block;
+    margin-right: 10px;
+    > span {
+      display: inline-block;
+      width: 100%;
+    }
+    input {
+      width: 100%;
+    }
+    .name {
+      display: inline-block;
+      border: solid 1px #5e5c67;
+      text-align: center;
+      background-color: #5e5c67;
+      padding: 1px;
+    }
+  }
+  .t1 {
+    width: 25%;
+  }
+  .t1-1 {
+    width: 10%;
+  }
+  .t2 {
+    width: 25%;
+  }
+  .t3 {
+    width: 10%;
+  }
+  .t4 {
+    width: 10%;
+  }
+  .t5 {
+    width: 10%;
+  }
+}
+
+.info-wrap {
+  margin-top: 10px;
+  margin-left: 5px;
+  width: 80%;
+  .item-wrap {
+    margin-top: 10px;
+    display: inline-block;
+    width: 10%;
+    > span {
+      display: inline-block;
+      width: 100%;
+    }
+  }
+  .name {
+    width: 20%;
+  }
+}
