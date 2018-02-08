@@ -1,5 +1,5 @@
 /*
-  FOR DEVELOPMENT
+  FOR DEVELOPMENT test
 */
 const path = require('path')
 // const autoprefixer = require('autoprefixer')
