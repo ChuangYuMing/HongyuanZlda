@@ -1,0 +1,10 @@
+@import 'styles/helpers/mixins';
+
+.update-row {
+  width: 100%;
+  display: block !important;
+  position: absolute;
+  border-bottom: solid 1px skyblue !important;
+  opacity: 0;
+  bottom: 0px;
+}
