@@ -1,4 +1,4 @@
-@import 'styles/helpers/mixins';
+@import 'helpers/_mixins.css';
 
 .action {
   display: inline-block;
