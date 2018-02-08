@@ -5,10 +5,15 @@
   @mixin clearfix;
   .test {
     color: orange;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    background-image: url('static/image/icons/booking.png');
     @mixin reset-button;
     &:hover {
       color: blue;
       border-radius: 5px;
+      background-image: url('static/image/icons/date.png');
     }
     @media (width >= 500px) and (width <= 3200px) {
       color: red;
