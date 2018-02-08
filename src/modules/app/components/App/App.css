@@ -1,0 +1,9 @@
+/* @import 'styles/helpers/mixins'; */
+@import 'base/_normalize.css';
+@import 'base/_base.css';
+/* @import 'lib/popup';
+@import 'lib/swiper'; */
+
+.test {
+  padding: 10px 0px;
+}

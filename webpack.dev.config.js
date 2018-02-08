@@ -2,11 +2,11 @@
   FOR DEVELOPMENT
 */
 const path = require('path')
-const autoprefixer = require('autoprefixer')
+// const autoprefixer = require('autoprefixer')
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-const extractSass = new ExtractTextPlugin({
+const extractCss = new ExtractTextPlugin({
   filename: '[name].css',
   disable: true,
   allChunks: true
@@ -39,7 +39,7 @@ module.exports = {
     }
   },
   plugins: [
-    extractSass,
+    extractCss,
     new webpack.HotModuleReplacementPlugin(), // Enable HMR
     new webpack.NamedModulesPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin()
@@ -56,9 +56,9 @@ module.exports = {
         ]
       },
       {
-        test: /\.scss$/,
+        test: /\.css$/,
         exclude: /node_modules/,
-        use: extractSass.extract({
+        use: extractCss.extract({
           fallback: 'style-loader',
           use: [
             {
@@ -73,14 +73,16 @@ module.exports = {
             {
               loader: 'postcss-loader',
               options: {
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'sass-loader',
-              options: {
-                sourceMap: true,
-                includePaths: [path.resolve(__dirname, 'src/modules/shared')]
+                ident: 'postcss',
+                plugins: loader => [
+                  // require('cssnano')(),
+                  require('postcss-import')({
+                    path: './src/modules/shared/styles/'
+                  }),
+                  require('postcss-cssnext')(),
+                  require('postcss-mixins')()
+                  // require('autoprefixer')(),
+                ]
               }
             }
           ]

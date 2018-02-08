@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDom from 'react-dom'
 import { Route, Switch } from 'react-router-dom'
 import classNames from 'classnames/bind'
-import styles from './App.scss'
+import styles from './App.css'
 import Temp from 'modules/temp/components/Temp'
 
 let cx = classNames.bind(styles)

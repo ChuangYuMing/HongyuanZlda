@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './temp.scss'
+import styles from './temp.css'
 import classNames from 'classnames/bind'
 import { getCookie, setCookie } from 'tools/cookie.js'
 import xml2js from 'xml2js'
@@ -7,7 +7,7 @@ import xml2js from 'xml2js'
 let cx = classNames.bind(styles)
 function Temp({ onTest, test }) {
   return (
-    <div>
+    <div className={cx('main')}>
       <span className={cx('test')} onClick={login}>
         login
       </span>
