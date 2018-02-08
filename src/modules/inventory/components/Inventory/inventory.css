@@ -1,1 +1,54 @@
 @import 'helpers/_mixins.css';
+
+.inventory-wrap {
+  height: 100%;
+  .btn {
+    cursor: pointer;
+    display: inline-block;
+    border: solid 1px $table-header-bg;
+    border-radius: 3px;
+    background-color: white;
+    text-align: center;
+    color: black;
+    margin-right: 1px;
+    &:hover {
+      background-color: $table-header-bg;
+    }
+  }
+  .delete-btn,
+  .info-btn {
+    width: 50%;
+  }
+}
+.top-wrap {
+  height: 35px;
+  padding: 5px 8px;
+  .search-wrap {
+    display: inline-block;
+    color: $orange;
+    input {
+      height: 22px;
+    }
+  }
+}
+.sticky-table {
+  width: 100%;
+  height: calc(100% - 35px);
+  :global {
+    .sticky-table-x-wrapper {
+      .sticky-table-container {
+        width: 200%;
+      }
+    }
+    .sticky-table-header {
+      background-color: $table-header-bg;
+      color: black;
+    }
+    .sticky-table-cell {
+      padding: 3px 12px;
+    }
+  }
+}
+.cell-center {
+  text-align: center;
+}

@@ -38,18 +38,18 @@ class Temp2 extends React.Component {
     let action = e.target.dataset.action
     let { account, symbol, volume, price, orderType, date } = this.state
     var formData = new FormData()
-    formData.append('type', 0)
+    formData.append('Mode', 22)
     formData.append('date', date)
     formData.append('lino', 0)
     formData.append('sbdm', 10)
     formData.append('comp', 6460)
-    formData.append('sett', account)
+    formData.append('Account', account)
     formData.append('mark', 'SEHK')
-    formData.append('symb', symbol)
+    formData.append('Symbol', symbol)
     formData.append('orls', action)
-    formData.append('orpt', orderType)
-    formData.append('orpr', price)
-    formData.append('orsh', volume)
+    formData.append('OrdType', orderType)
+    formData.append('Price', price)
+    formData.append('OrderQty', volume)
     fetch(`http://192.168.12.166:8080/api/order`, {
       method: 'POST',
       body: formData
@@ -59,101 +59,9 @@ class Temp2 extends React.Component {
       })
       .then(xml => {
         console.log(xml)
-        xml2js.parseString(xml, (err, result) => {
-          console.log(result)
-          let tastatus = result.TARoot.TAStatus[0].$
-          let xbft = result.TARoot.XBFTXORD[0].$
-          let tags = {
-            _oxtp: '	交易類別',
-            _oxtr: '	處理類別',
-            domn: '	產業',
-            date: '	 ⽇期',
-            lino: '		盤別',
-            txse: '	 交易序號',
-            sbdm: '	副產業',
-            comp: '	公司為⼤州內部券商編號',
-            cosy: '	券商市場編號',
-            sett: '		帳號',
-            comm: '	委託書號',
-            mark: '	市場',
-            symb: '	股票代碼',
-            txun: '	交易單位',
-            curr: '		幣別',
-            losh: '	買賣別',
-            txpt: '		價格別',
-            txpr: ' 		原始價格',
-            txvp: '		有效價格',
-            txsh: '		原始股數',
-            txvs: '		有效股數',
-            txcn: '		條件別',
-            txtr: ' 		委託別',
-            txcl: ' 		停損/利價',
-            txcp: '	交易對⼿',
-            txcy: '		交易幣別',
-            txpp: '	交易預付',
-            txpd: '	交易預收',
-            txst: '		交易狀態',
-            txex: '		成交股數',
-            txem: '		成交價⾦',
-            txsa: '		業代',
-            txcl: '		櫃員',
-            txme: '	⽤⼾端序號',
-            txdp: '	部門',
-            txad: '		位址',
-            coer: '		強迫級別',
-            prio: '	優先順序',
-            grou: '		群組',
-            clor: '		⼾端編號',
-            toke: '		⽤⼾端⾃訂',
-            suac: '		⼦帳號',
-            dsig: '		 指定⽤參數',
-            txvl: '		其它資訊⼀',
-            txif: '	其它資訊⼆',
-            txtx: '		其它資訊三',
-            txmx: '		 其它資訊四',
-            txxx: '		其它資訊五',
-            txdt: '		最後異動⽇期',
-            txtm: '		最後異動時間',
-            txel: '		 錯誤等級',
-            txen: '		錯誤序號',
-            txec: '		錯誤原因',
-            txea: '		錯誤處理',
-            logs: '		編輯資訊',
-            memo: '		備註',
-            ttse: '		異動序號',
-            tttp: '		本次交易類別',
-            ttst: '		本次交易後委託單狀態',
-            ttov: '		原始有效股數',
-            ttva: '		異動後有效股數',
-            ttor: '		原始有效價格',
-            ttra: '		異動後有效價格'
-          }
-          let tags2 = {
-            code: '日期',
-            date: '日期',
-            elapse: '日期',
-            intf: '日期',
-            lang: '日期',
-            oper: '日期',
-            syst: '日期',
-            time: '時間'
-          }
-          let items = []
-          for (const key in tags) {
-            // let item = `${key}: ${xbft[key]}, ${tags[key]}`
-            let item = {
-              tag: key,
-              value: xbft[key],
-              name: tags[key]
-            }
-            items.push(item)
-          }
-          this.setState({
-            items
-          })
-          console.log(tastatus)
-          console.log(xbft)
-        })
+        // xml2js.parseString(xml, (err, result) => {
+        //   console.log(result)
+        // })
       })
   }
   render() {

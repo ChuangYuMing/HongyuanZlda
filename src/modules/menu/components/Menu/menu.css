@@ -1,1 +1,68 @@
 @import 'helpers/_mixins.css';
+
+.menu-wrap {
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
+  .item-wrap {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 14px;
+    > span {
+      display: inline-block;
+      width: 100%;
+    }
+    select {
+      width: 100%;
+    }
+  }
+  .t1 {
+    width: 10%;
+  }
+  .t2 {
+    width: 20%;
+  }
+  .t3 {
+    width: 15%;
+  }
+  .t4 {
+    width: 15%;
+  }
+  .t5 {
+    width: 15%;
+    font-size: 12px;
+  }
+  .t6 {
+    width: 18%;
+    vertical-align: bottom;
+    select {
+      width: 45%;
+      height: 30px;
+    }
+    span {
+      width: 45%;
+      padding: 5px 0px;
+      vertical-align: bottom;
+      margin-left: 4px;
+    }
+  }
+  .inline {
+    display: inline !important;
+  }
+  .inline-bk {
+    display: inline-block !important;
+  }
+  .btn {
+    cursor: pointer;
+    display: inline-block;
+    border: solid 1px $table-header-bg;
+    border-radius: 3px;
+    background-color: white;
+    text-align: center;
+    color: black;
+    margin-right: 1px;
+    &:hover {
+      background-color: $table-header-bg;
+    }
+  }
+}
