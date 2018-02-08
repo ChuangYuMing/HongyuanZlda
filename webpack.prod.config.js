@@ -90,7 +90,8 @@ module.exports = {
                 module: true,
                 importLoaders: 1,
                 sourceMap: true,
-                localIdentName: '[name]_[local]_[hash:base64:5]'
+                localIdentName: '[name]_[local]_[hash:base64:5]',
+                minimize: true
               }
             },
             {
@@ -105,8 +106,8 @@ module.exports = {
                   require('postcss-mixins')(),
                   require('postcss-nested')(),
                   require('postcss-simple-vars')(),
-                  require('autoprefixer')(),
-                  require('cssnano')()
+                  require('autoprefixer')()
+                  // require('cssnano')()
                 ]
               }
             }
