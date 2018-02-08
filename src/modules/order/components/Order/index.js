@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import Order from './Order'
+import { order } from '../../actions.js'
 
 const mapStateToProps = state => {
   return {
@@ -9,8 +10,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onTest: () => {
-      alert('test')
+    order: params => {
+      dispatch(order(params))
     }
   }
 }

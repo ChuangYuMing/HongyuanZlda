@@ -3,16 +3,47 @@ import PropTypes from 'prop-types'
 import styles from './information.css'
 import classNames from 'classnames/bind'
 import { StickyTable, Row, Cell } from 'react-sticky-table'
-
+import { orderStatusMaping } from 'tools/format-res-data.js'
+import { getDateFromFormat } from 'tools/date.js'
 let cx = classNames.bind(styles)
 class Information extends Component {
   constructor() {
     super()
+    this.state = {
+      sortByTime: false
+    }
   }
   render() {
-    let lists = [1, 2, 3, 4]
-    lists = [...lists, ...lists]
-    lists = [...lists, ...lists]
+    let { lists } = this.props
+    let hiddenData = {
+      Account: '255428',
+      TransactTime: '20180208-09:32:40.989',
+      OrderID: 'X0076',
+      Symbol: 'MSTF',
+      Side: '買',
+      Price: '9999.9999',
+      OrderQty: 9999,
+      CumQty: 9999,
+      CxlQty: 9999,
+      LastPx: '9999.9999',
+      LeavesQty: 9999,
+      OrdStatus: 'E'
+    }
+
+    let _lists = [...lists]
+    if (this.state.sortByTime) {
+      lists.sort((a, b) => {
+        let atime = a.TransactTime.split('.')
+        let btime = b.TransactTime.split('.')
+        let adatetime = getDateFromFormat(atime[0], 'yMMdd-HH:mm:ss')
+        let bdatetime = getDateFromFormat(btime[0], 'yMMdd-HH:mm:ss')
+        adatetime = adatetime + parseInt(atime[1])
+        bdatetime = bdatetime + parseInt(btime[1])
+        // console.log(adatetime, bdatetime)
+        return adatetime - bdatetime
+      })
+    }
+    _lists.push(hiddenData)
     var rows = []
     var cells = []
     let headers = [
@@ -46,11 +77,16 @@ class Information extends Component {
       )
     }
     rows.push(<Row key={0}>{cells}</Row>)
-    let mainDatas = lists.map((item, index) => {
+    let mainDatas = _lists.map((item, index) => {
       let cells = []
+      item.Side = item.Side == 1 ? '買' : '賣'
+      let cxx = cx({
+        'cell-right': true,
+        'hidden-row': index + 1 === _lists.length ? true : false
+      })
       return (
         <Row
-          className={cx('cell-right')}
+          className={cxx}
           key={index + 1}
           data-id={item.assetCode}
           onClick={this.order}
@@ -60,18 +96,18 @@ class Information extends Component {
             <span className={cx('btn')}>量</span>
             <span className={cx('btn')}>價</span>
           </Cell>
-          <Cell key="1">cell</Cell>
-          <Cell key="2">cell</Cell>
-          <Cell key="3">cell</Cell>
-          <Cell key="4">cell</Cell>
-          <Cell key="5">cell</Cell>
-          <Cell key="6">cell</Cell>
-          <Cell key="7">cell</Cell>
-          <Cell key="8">cell</Cell>
-          <Cell key="9">cell</Cell>
-          <Cell key="10">cell</Cell>
-          <Cell key="11">cell</Cell>
-          <Cell key="12">cell</Cell>
+          <Cell key="1">{item.Account}</Cell>
+          <Cell key="2">{item.OrderID}</Cell>
+          <Cell key="3">{item.TransactTime}</Cell>
+          <Cell key="4">{item.Symbol}</Cell>
+          <Cell key="5">{item.Side}</Cell>
+          <Cell key="6">{item.Price}</Cell>
+          <Cell key="7">{item.OrderQty}</Cell>
+          <Cell key="8">{item.CumQty}</Cell>
+          <Cell key="9">{item.CxlQty}</Cell>
+          <Cell key="10">{item.LastPx}</Cell>
+          <Cell key="11">{item.LeavesQty}</Cell>
+          <Cell key="12">{orderStatusMaping(item.OrdStatus)}</Cell>
         </Row>
       )
     })

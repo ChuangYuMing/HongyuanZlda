@@ -1,21 +1,10 @@
 import { store, apiUrl } from 'store'
 import SockJS from 'sockjs-client'
 import pako from 'pako'
-// import { formatDate } from 'tools/date'
+import appGlobal from 'modules/common/app-global.js'
 import { uuid } from 'tools/math'
-// import encoding from 'text-encoding'
 import { Utf8ArrayToStr } from 'tools/text-decode'
-// import {
-//   ticksPub,
-//   eventNewSymbolPub,
-//   eventInfoPub,
-//   eventQuotePub,
-//   eventStatisticPub,
-//   eventStatChangePub,
-//   bidAskPub,
-//   sessionIdPub,
-//   klinePub
-// } from 'modules/app/publisher'
+import { orderPub } from 'modules/app/publisher'
 
 class WsConnect {
   constructor() {
@@ -23,7 +12,7 @@ class WsConnect {
     this.sock = ''
     this.shouldReload = false //畫面重整
     this.reConnectCount = 0
-    this.apiUrl = apiUrl
+    this.apiUrl = appGlobal.apiUrl
   }
   creatSessionId() {
     this.sessionId = window.btoa(uuid() + '$' + 'apex@tw')
@@ -75,7 +64,7 @@ class WsConnect {
         try {
           let result = pako.inflate(window.atob(e.data))
           res = JSON.parse(Utf8ArrayToStr(result))
-          console.log(res)
+          // console.log(res)
         } catch (err) {
           console.log(err)
         }
@@ -86,15 +75,11 @@ class WsConnect {
           console.log('heartbeat')
         }
       }
-      // console.log(res)
-      // store.dispatch(updateSocketLight(formatDate(new Date(), 'hh:mm:ss')))
-
-      if (typeof res.SessionID !== 'undefined') {
-        window.localStorage.setItem('sessionId', res.SessionID)
-        console.log('seeionid:', res.SessionID)
-        // sessionIdPub.trigger(true)
+      if (res.hasOwnProperty('SessionID')) {
         return
       }
+      // console.log(res)
+      orderPub.trigger(res)
     }
   }
   close() {

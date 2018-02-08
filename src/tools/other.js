@@ -50,4 +50,17 @@ var getSiblings = function(elem) {
   return siblings
 }
 
-export { sleep, getClientOffset, searchMinDiffItem, getSiblings }
+function formatFormData(params) {
+  let formData = new FormData()
+  for (const key in params) {
+    formData.append(key, params[key])
+  }
+  return formData
+}
+export {
+  sleep,
+  getClientOffset,
+  searchMinDiffItem,
+  getSiblings,
+  formatFormData
+}

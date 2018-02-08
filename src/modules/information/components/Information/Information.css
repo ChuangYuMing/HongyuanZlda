@@ -52,3 +52,9 @@
 .cell-center {
   text-align: center;
 }
+.hidden-row {
+  color: red;
+  div {
+    opacity: 0;
+  }
+}

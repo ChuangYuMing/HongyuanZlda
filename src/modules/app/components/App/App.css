@@ -1,9 +1,14 @@
-/* @import 'styles/helpers/mixins'; */
+@import 'helpers/_mixins.css';
 @import 'base/_normalize.css';
 @import 'base/_base.css';
+@global-import 'react-sticky-table/dist/react-sticky-table.css';
+@global-import 'react-tabs/style/react-tabs.css';
 /* @import 'lib/popup';
 @import 'lib/swiper'; */
 
-.test {
-  padding: 10px 0px;
+:global {
+  .react-tabs__tab--selected {
+    background-color: $bg;
+    color: white;
+  }
 }

@@ -21,14 +21,21 @@
       border-radius: 5px;
       margin-left: 5px;
       text-align: center;
+      cursor: pointer;
     }
   }
 
   .buy {
-    background-color: red;
+    background-color: rgba(253, 0, 3, 1);
+    &:hover {
+      background-color: rgba(253, 0, 3, 0.5);
+    }
   }
   .sell {
-    background-color: green;
+    background-color: rgba(3, 185, 1, 1);
+    &:hover {
+      background-color: rgba(3, 185, 1, 0.5);
+    }
   }
 
   .item-wrap {
@@ -85,4 +92,25 @@
   .name {
     width: 20%;
   }
+}
+
+.setting-wrap {
+  width: 100%;
+  background-color: $focus;
+  .env {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #afafa9;
+    color: black;
+  }
+  img {
+    cursor: pointer;
+    display: inline-block;
+    height: 32px;
+    vertical-align: bottom;
+  }
+}
+.tabs-wrap {
+  margin-top: 15px;
+  margin-left: 5px;
 }

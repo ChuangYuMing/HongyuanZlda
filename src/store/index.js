@@ -3,9 +3,9 @@ import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import thunk from 'redux-thunk'
 import reducers from '../reducers'
+import appGlobal from 'modules/common/app-global.js'
 
-const apiUrl = 'http://192.168.12.134:8080'
-// const apiUrl = 'http://192.168.12.166:8080'
+const apiUrl = appGlobal.apiUrl
 
 const persistConfig = {
   key: 'root',
@@ -24,4 +24,4 @@ const store = createStore(
 )
 const persistor = persistStore(store)
 
-export { store, persistor, apiUrl }
+export { store, persistor }

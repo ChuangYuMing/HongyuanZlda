@@ -1,5 +1,5 @@
 import { Publisher } from 'tools/pub-sub'
 
-const tempTest = new Publisher()
+const orderPub = new Publisher()
 
-export { tempTest }
+export { orderPub }
