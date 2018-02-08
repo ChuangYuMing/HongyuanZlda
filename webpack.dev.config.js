@@ -75,13 +75,15 @@ module.exports = {
               options: {
                 ident: 'postcss',
                 plugins: loader => [
-                  // require('cssnano')(),
+                  require('postcss-global-import')(),
                   require('postcss-import')({
                     path: './src/modules/shared/styles/'
                   }),
-                  require('postcss-cssnext')(),
-                  require('postcss-mixins')()
-                  // require('autoprefixer')(),
+                  require('postcss-mixins')(),
+                  require('postcss-nested')(),
+                  require('postcss-simple-vars')(),
+                  require('autoprefixer')()
+                  // require('cssnano')(),
                 ]
               }
             }
@@ -115,6 +117,7 @@ module.exports = {
     // contentBase: path.join(__dirname, 'dist'),
     contentBase: './src',
     hot: true,
+    host: '0.0.0.0',
     compress: true,
     historyApiFallback: true,
     headers: {

@@ -12,11 +12,12 @@ const render = Component => {
   )
 }
 
-if (module.hot) {
-  module.hot.accept('./modules/app/components/AppProvider', () => {
-    render(AppProvider)
-  })
-}
+// if (module.hot) {
+//   module.hot.accept('./modules/app/components/AppProvider', () => {
+//     const AppProvider = require('./modules/app/components/AppProvider').default
+//     render(AppProvider)
+//   })
+// }
 render(AppProvider)
 // ReactDOM.render(<div>333</div>, document.getElementById('root'))
 // render(<div>3332</div>)

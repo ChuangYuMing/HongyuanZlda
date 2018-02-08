@@ -1,9 +1,11 @@
 @import 'helpers/_mixins.css';
+@global-import 'react-sticky-table/dist/react-sticky-table.css';
 
 .main {
-  @apply --clearfix;
-  & .test {
-    color: green;
+  @mixin clearfix;
+  .test {
+    color: orange;
+    @mixin reset-button;
     &:hover {
       color: blue;
       border-radius: 5px;
@@ -12,6 +14,5 @@
       color: red;
     }
   }
+  @mixin test blue;
 }
-
-/* css.validate */
