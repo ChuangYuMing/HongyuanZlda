@@ -107,14 +107,14 @@ function bidAskFormatEven(symbol, data) {
 //========================================================
 
 // for socket data
-function quoteFormatOdd(symbol, quote) {
+function quoteFormatOdd(symbol, quote, priceDec) {
   // console.log(quote)
-  let allProds = window.allprodsforstock
-  let priceDec = allProds.prodList[symbol].PriceDec
-  let name = allProds.prodList[symbol].Name
+  // let allProds = window.allprodsforstock
+  // let priceDec = allProds.prodList[symbol].PriceDec
+  // let name = allProds.prodList[symbol].Name
   let obj = {
     Symbol: symbol,
-    Name: name,
+    // Name: name,
     APrice: numAddDecimal(quote['646'], priceDec) || '--',
     AVol: quote['648'],
     BPrice: numAddDecimal(quote['645'], priceDec) || '--',
@@ -149,9 +149,9 @@ function quoteFormatOdd(symbol, quote) {
   return obj
 }
 
-function tickFormatOdd(symbol, tick) {
-  let allProds = window.allprodsforstock
-  let priceDec = allProds.prodList[symbol].PriceDec
+function tickFormatOdd(symbol, tick, priceDec) {
+  // let allProds = window.allprodsforstock
+  // let priceDec = allProds.prodList[symbol].PriceDec
   let obj = {
     Vol: tick['12010'][0]['1020'],
     TotVol: tick['14'],
@@ -264,5 +264,6 @@ export {
   bidAskFormatOdd,
   volumeFormat,
   klineFormatOdd,
-  KlineFormatEven
+  KlineFormatEven,
+  numAddDecimal
 }

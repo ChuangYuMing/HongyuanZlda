@@ -24,18 +24,18 @@ export default (state = init, action) => {
     }
     case types.SHOW_ORDER_QUOTE: {
       let _state = JSON.parse(JSON.stringify(state))
-      _state.orderQuote = Object.assign({}, action.data)
+      _state.orderQuote = Object.assign({}, _state.orderQuote, action.data)
       return _state
     }
     case types.UPDATE_TICK: {
       let _state = JSON.parse(JSON.stringify(state))
-      _state.orderQuote = Object.assign({}, action.data)
+      _state.orderQuote = Object.assign({}, _state.orderQuote, action.data)
       return _state
     }
     case types.BID_AND_ASK_TICK: {
       let _state = JSON.parse(JSON.stringify(state))
       if (_state.orderQuote.Symbol === action.data.Symbol) {
-        _state.orderQuote = Object.assign({}, action.data)
+        _state.orderQuote = Object.assign({}, _state.orderQuote, action.data)
       }
 
       return _state

@@ -4,7 +4,12 @@ import pako from 'pako'
 import appGlobal from 'modules/common/app-global.js'
 import { uuid } from 'tools/math'
 import { Utf8ArrayToStr } from 'tools/text-decode'
-import { orderPub } from 'modules/app/publisher'
+import {
+  orderPub,
+  eventQuotePub,
+  ticksPub,
+  bidAskPub
+} from 'modules/app/publisher'
 import { quoteFormatOdd, tickFormatOdd } from 'tools/apex-dataformat'
 
 class WsQuoteConnect {
@@ -60,6 +65,7 @@ class WsQuoteConnect {
     this.sock.onmessage = e => {
       // console.log(e.data)
       let res
+      let priceDec = store.getState().order.orderQuote.PriceDec
       let base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
       if (base64regex.test(e.data)) {
         try {
@@ -92,15 +98,17 @@ class WsQuoteConnect {
         // EventType QUOTE
         if (res['12013'] === 2) {
           // console.log('sock message :', res)
-          eventQuotePub.trigger(res)
+          // eventQuotePub.trigger(res)
         }
       }
       if (typeof res['11000'] !== 'undefined' && res['11000'] === 51) {
         // console.log('sock message-tick :', res)
+        let priceDec = store.getState().order.orderQuote.PriceDec
         let symbol = res['48']
+        // console.log(priceDec)
         let tickObj = Object.assign(
-          quoteFormatOdd(symbol, res['11501']),
-          tickFormatOdd(symbol, res['11500']),
+          quoteFormatOdd(symbol, res['11501'], priceDec),
+          tickFormatOdd(symbol, res['11500'], priceDec),
           { update: true }
         )
         ticksPub.trigger(tickObj)

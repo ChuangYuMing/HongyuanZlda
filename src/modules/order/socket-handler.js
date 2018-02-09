@@ -26,15 +26,14 @@ class SocketHandler {
     })
     quoteObs.subscribe(eventQuotePub, data => {
       let symbol = data['12015'] || data['Symbol']
-      if (!window.allprodsforstock.prodList[symbol]) {
-        return
-      }
-      let priceDec = window.allprodsforstock.prodList[symbol].PriceDec
+      let priceDec = store.getState().order.orderQuote.PriceDec
+      // console.log(priceDec)
       let obj = {
         Symbol: symbol,
         update: true
       }
       for (let item of data['12016']) {
+        // console.log(item['871'])
         switch (item['871']) {
           case '1025':
             obj.Open = numAddDecimal(item['872'], priceDec)
@@ -50,6 +49,7 @@ class SocketHandler {
             break
           case '31':
             obj.Price = numAddDecimal(item['872'], priceDec)
+            // console.log(obj.Price)
             break
           default:
             return
@@ -60,9 +60,8 @@ class SocketHandler {
       }
     })
     bidAskObs.subscribe(bidAskPub, data => {
-      let allProds = window.allprodsforstock
       let symbol = data['48']
-      let priceDec = allProds.prodList[symbol].PriceDec
+      let priceDec = store.getState().order.orderQuote.PriceDec
       // console.log(symbol, priceDec)
       let baObj = {
         Symbol: symbol,
