@@ -114,3 +114,10 @@
   margin-top: 15px;
   margin-left: 5px;
 }
+
+.up {
+  color: red;
+}
+.down {
+  color: green;
+}

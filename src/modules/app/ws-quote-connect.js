@@ -5,8 +5,9 @@ import appGlobal from 'modules/common/app-global.js'
 import { uuid } from 'tools/math'
 import { Utf8ArrayToStr } from 'tools/text-decode'
 import { orderPub } from 'modules/app/publisher'
+import { quoteFormatOdd, tickFormatOdd } from 'tools/apex-dataformat'
 
-class WsConnect {
+class WsQuoteConnect {
   constructor() {
     this.sessionId = window.btoa(uuid() + '$' + 'apex@tw')
     this.sock = ''
@@ -31,7 +32,7 @@ class WsConnect {
     // }
     this.reConnectCount = this.reConnectCount + 1
     this.creatSessionId()
-    this.sock = new SockJS(this.apiUrl + '/orderWS', null, {
+    this.sock = new SockJS(this.apiUrl + '/ws', null, {
       sessionId: () => {
         return this.sessionId
       }
@@ -72,14 +73,38 @@ class WsConnect {
         res = JSON.parse(e.data)
         if (res.hasOwnProperty('heartbeat')) {
           this.sock.send('got it!!')
-          console.log('heartbeat')
+          // console.log('heartbeat')
         }
       }
       if (res.hasOwnProperty('SessionID')) {
+        appGlobal.wsQuoteSessionId = res.SessionID
         return
       }
-      console.log(res)
-      orderPub.trigger(res)
+      if (typeof res['11000'] !== 'undefined' && res['11000'] === 53) {
+        // UPDATE BA
+        // console.log('sock message-BA :', res)
+        bidAskPub.trigger(res)
+      }
+      if (typeof res['11000'] !== 'undefined' && res['11000'] === 57) {
+        //Update Event
+        // console.log('sock message :', res)
+        let symbol = res['12015'] || res['Symbol']
+        // EventType QUOTE
+        if (res['12013'] === 2) {
+          // console.log('sock message :', res)
+          eventQuotePub.trigger(res)
+        }
+      }
+      if (typeof res['11000'] !== 'undefined' && res['11000'] === 51) {
+        // console.log('sock message-tick :', res)
+        let symbol = res['48']
+        let tickObj = Object.assign(
+          quoteFormatOdd(symbol, res['11501']),
+          tickFormatOdd(symbol, res['11500']),
+          { update: true }
+        )
+        ticksPub.trigger(tickObj)
+      }
     }
   }
   close() {
@@ -87,4 +112,4 @@ class WsConnect {
   }
 }
 
-export default new WsConnect()
+export default new WsQuoteConnect()

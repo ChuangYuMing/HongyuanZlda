@@ -57,10 +57,28 @@ function formatFormData(params) {
   }
   return formData
 }
+function priceStyle(target, prePrice) {
+  target = parseFloat(target)
+  prePrice = parseFloat(prePrice)
+  if (target > prePrice) {
+    return {
+      color: 'red'
+    }
+  } else if (target < prePrice) {
+    return {
+      color: 'green'
+    }
+  } else {
+    return {
+      color: 'white'
+    }
+  }
+}
 export {
   sleep,
   getClientOffset,
   searchMinDiffItem,
   getSiblings,
-  formatFormData
+  formatFormData,
+  priceStyle
 }

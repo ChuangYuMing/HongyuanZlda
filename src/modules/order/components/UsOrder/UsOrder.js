@@ -132,57 +132,57 @@ class UsOrder extends Component {
           </div>
         </div>
         <div className={cx('info-wrap')}>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>買進</span>
+            <span>113.950</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>賣出</span>
+            <span>113.950</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>成交</span>
+            <span>113.950</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>開盤價</span>
+            <span>113.950</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>平盤價</span>
+            <span>113.950</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>漲停價</span>
+            <span>113.950</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>跌停價</span>
+            <span>113.950</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>今高價</span>
+            <span>113.950</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>今低價</span>
+            <span>113.950</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>股代</span>
+            <span>XXX</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>手單位</span>
+            <span>XXX</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>交易幣別</span>
+            <span>XXX</span>
+          </div>
           <div className={cx('item-wrap', 'name')}>
-            <span className={cx('name')}>股名</span>
-            <span className={cx('name')}>自動資料處理公司</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>買進</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>賣出</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>成交</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>開盤價</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>平盤價</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>漲停價</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>跌停價</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>今高價</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>今低價</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>股代</span>
-            <span className={cx('name')}>XXX</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>手單位</span>
-            <span className={cx('name')}>XXX</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>交易幣別</span>
-            <span className={cx('name')}>XXX</span>
+            <span>股名</span>
+            <span>自動資料處理公司</span>
           </div>
         </div>
       </div>

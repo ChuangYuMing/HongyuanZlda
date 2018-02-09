@@ -3,7 +3,7 @@ import Information from './Information'
 
 const mapStateToProps = state => {
   return {
-    lists: state.order
+    lists: state.order.orderList
   }
 }
 

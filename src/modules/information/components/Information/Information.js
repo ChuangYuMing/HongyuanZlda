@@ -13,6 +13,7 @@ class Information extends Component {
       sortByTime: false
     }
   }
+
   render() {
     let { lists } = this.props
     let hiddenData = {

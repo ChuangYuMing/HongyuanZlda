@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
 import Order from './Order'
-import { order } from '../../actions.js'
+import { order, getQuote } from '../../actions.js'
 
 const mapStateToProps = state => {
   return {
-    test: state.app
+    // quote: state.order.orderQuote
   }
 }
 
@@ -12,6 +12,9 @@ const mapDispatchToProps = dispatch => {
   return {
     order: params => {
       dispatch(order(params))
+    },
+    getQuote: symbol => {
+      dispatch(getQuote(symbol))
     }
   }
 }

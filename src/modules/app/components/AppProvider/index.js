@@ -5,6 +5,7 @@ import { PersistGate } from 'redux-persist/lib/integration/react'
 import { store, persistor } from 'store/index.js'
 import { hot } from 'react-hot-loader'
 import WsConnect from 'modules/app/ws-connect.js'
+import WsQuoteConnect from 'modules/app/ws-quote-connect.js'
 import App from '../App'
 // import withTracker from 'modules/common/withTracker.js'
 
@@ -14,11 +15,11 @@ let AppWithGA = App
 class AppProvider extends React.Component {
   constructor() {
     super()
-  }
-  componentDidMount() {
     WsConnect.connect()
+    WsQuoteConnect.connect()
     window.apexTest = WsConnect
   }
+  componentDidMount() {}
   componentWillUnmount() {
     // WsConnect.close()
   }

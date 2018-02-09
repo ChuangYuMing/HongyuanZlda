@@ -7,8 +7,18 @@ import appGlobal from 'modules/common/app-global.js'
 import SocketHandler from '../../socket-handler'
 import i1 from 'static/image/i1.png'
 import i2 from 'static/image/i2.png'
+import throttle from 'lodash/throttle'
+import { priceStyle } from 'tools/other.js'
 
 let cx = classNames.bind(styles)
+let updtProdThrottle = throttle(
+  callback => {
+    // console.log('%c 更新quote', 'color: #e30e0e')
+    callback()
+  },
+  1000,
+  { leading: false }
+)
 
 class HkOrder extends Component {
   constructor(props) {
@@ -16,7 +26,7 @@ class HkOrder extends Component {
     this.state = {
       data: {},
       account: 255428,
-      symbol: 'MSFT',
+      symbol: '',
       volume: 1,
       price: '',
       orderType: '0',
@@ -54,7 +64,42 @@ class HkOrder extends Component {
     }
     this.props.order(params)
   }
+  getQuote = e => {
+    const target = e.target
+    const name = target.name
+    let value = target.value
+    this.setState({
+      [name]: value
+    })
+    let symbol = [`${value}.US`]
+    updtProdThrottle(() => {
+      this.props.getQuote(symbol)
+    })
+  }
   render() {
+    // console.log(this.props.quote)
+    let {
+      Symbol,
+      Name,
+      APrice,
+      BPrice,
+      Price,
+      Open,
+      PrePrice,
+      HighLimitPrice,
+      LowLimitPrice,
+      high,
+      low
+    } = this.props.quote
+
+    let pStyle = priceStyle(Price, PrePrice)
+    let bPriceStyle = priceStyle(BPrice, PrePrice)
+    let aPriceStyle = priceStyle(APrice, PrePrice)
+    let openStyle = priceStyle(Open, PrePrice)
+    let highStyle = priceStyle(high, PrePrice)
+    let lowStyle = priceStyle(low, PrePrice)
+    let limitHighStyle = priceStyle(99999, PrePrice)
+    let limitLowStyle = priceStyle(0, PrePrice)
     return (
       <div className={cx('usorder-wrap')}>
         <div className={cx('action-wrap')}>
@@ -78,7 +123,7 @@ class HkOrder extends Component {
                 type="text"
                 name="symbol"
                 value={this.state.symbol}
-                onChange={this.handleInputChange}
+                onChange={this.getQuote}
                 ref="symbol"
               />
             </div>
@@ -132,57 +177,57 @@ class HkOrder extends Component {
           </div>
         </div>
         <div className={cx('info-wrap')}>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>買進</span>
+            <span style={bPriceStyle}>{BPrice}</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>賣出</span>
+            <span style={aPriceStyle}>{APrice}</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>成交</span>
+            <span style={pStyle}>{Price}</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>開盤價</span>
+            <span style={openStyle}>{Open}</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>平盤價</span>
+            <span>{PrePrice}</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>漲停價</span>
+            <span style={limitHighStyle}>{HighLimitPrice}</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>跌停價</span>
+            <span style={limitLowStyle}>{LowLimitPrice}</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>今高價</span>
+            <span style={highStyle}>{high}</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>今低價</span>
+            <span style={lowStyle}>{low}</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>股代</span>
+            <span>{Symbol}</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>手單位</span>
+            <span>XXX</span>
+          </div>
+          <div className={cx('item-wrap', 'b1')}>
+            <span>交易幣別</span>
+            <span>XXX</span>
+          </div>
           <div className={cx('item-wrap', 'name')}>
-            <span className={cx('name')}>股名</span>
-            <span className={cx('name')}>自動資料處理公司</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>買進</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>賣出</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>成交</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>開盤價</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>平盤價</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>漲停價</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>跌停價</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>今高價</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>今低價</span>
-            <span className={cx('name')}>113.950</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>股代</span>
-            <span className={cx('name')}>XXX</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>手單位</span>
-            <span className={cx('name')}>XXX</span>
-          </div>
-          <div className={cx('item-wrap', 'b1')}>
-            <span className={cx('name')}>交易幣別</span>
-            <span className={cx('name')}>XXX</span>
+            <span>股名</span>
+            <span>{Name}</span>
           </div>
         </div>
       </div>

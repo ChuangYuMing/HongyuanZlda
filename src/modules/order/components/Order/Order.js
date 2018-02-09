@@ -8,7 +8,7 @@ import i1 from 'static/image/i1.png'
 import i2 from 'static/image/i2.png'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import UsOrder from '../UsOrder/UsOrder.js'
-import HkOrder from '../HkOrder/HkOrder.js'
+import HkOrder from '../HkOrder/index.js'
 
 let cx = classNames.bind(styles)
 class Order extends Component {
@@ -38,10 +38,16 @@ class Order extends Component {
             </TabList>
 
             <TabPanel>
-              <HkOrder order={this.props.order} />
+              <HkOrder
+                order={this.props.order}
+                getQuote={this.props.getQuote}
+              />
             </TabPanel>
             <TabPanel>
-              <UsOrder order={this.props.order} />
+              <UsOrder
+                order={this.props.order}
+                getQuote={this.props.getQuote}
+              />
             </TabPanel>
           </Tabs>
         </div>
