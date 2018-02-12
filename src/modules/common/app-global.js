@@ -15,3 +15,5 @@ class AppGlobal {
   }
 }
 export default new AppGlobal()
+
+//1024*662

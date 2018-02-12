@@ -2,6 +2,14 @@
 
 .order-wrap {
   height: 100%;
+  :global {
+    .react-tabs__tab-list {
+      margin: 0px;
+    }
+    .order_tabs-wrap_8dIgX {
+      margin-top: 5px;
+    }
+  }
 }
 .action-wrap {
   margin-left: 5px;
@@ -77,11 +85,11 @@
 }
 
 .info-wrap {
-  margin-top: 10px;
+  // margin-top: 10px;
   margin-left: 5px;
   width: 80%;
   .item-wrap {
-    margin-top: 10px;
+    margin-top: 2px;
     display: inline-block;
     width: 10%;
     > span {

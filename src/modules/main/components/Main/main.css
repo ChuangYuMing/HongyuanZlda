@@ -1,7 +1,7 @@
 @import 'helpers/_mixins.css';
 
 $menu-height: 80px;
-$bottom-height: 300px;
+$bottom-height: 220px;
 
 .main-wrap {
   width: 100%;
