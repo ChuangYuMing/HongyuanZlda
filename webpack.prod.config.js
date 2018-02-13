@@ -65,6 +65,11 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+    new webpack.ProvidePlugin({
+      Map: ['immutable', 'Map'],
+      List: ['immutable', 'List'],
+      fromJS: ['immutable', 'fromJS']
     })
   ],
   module: {

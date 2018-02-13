@@ -5,7 +5,6 @@ import classNames from 'classnames/bind'
 import { StickyTable, Row, Cell } from 'react-sticky-table'
 import { orderStatusMaping } from 'tools/format-res-data.js'
 import { getDateFromFormat } from 'tools/date.js'
-import { Map } from 'immutable'
 
 let cx = classNames.bind(styles)
 class Information extends PureComponent {

@@ -42,7 +42,12 @@ module.exports = {
     extractCss,
     new webpack.HotModuleReplacementPlugin(), // Enable HMR
     new webpack.NamedModulesPlugin(),
-    new webpack.optimize.ModuleConcatenationPlugin()
+    new webpack.optimize.ModuleConcatenationPlugin(),
+    new webpack.ProvidePlugin({
+      Map: ['immutable', 'Map'],
+      List: ['immutable', 'List'],
+      fromJS: ['immutable', 'fromJS']
+    })
   ],
   module: {
     rules: [

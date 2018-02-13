@@ -1,5 +1,5 @@
 import * as types from './action-types'
-import { fromJS } from 'immutable'
+
 let init = fromJS({
   orderList: [],
   orderQuote: {}

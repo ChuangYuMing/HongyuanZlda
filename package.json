@@ -41,6 +41,7 @@
     "redux-persist": "5.6.9",
     "redux-persist-transform-immutable": "^5.0.0",
     "redux-thunk": "2.2.0",
+    "rxjs": "^5.5.6",
     "sockjs-client": "^1.1.4",
     "swiper": "^4.1.0",
     "text-encoding": "0.6.4",
