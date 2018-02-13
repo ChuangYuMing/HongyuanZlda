@@ -3,6 +3,7 @@ import { formatFormData } from 'tools/other.js'
 import { formatReponse } from 'tools/format-res-data.js'
 import appGlobal from 'modules/common/app-global.js'
 import { quoteFormatEven } from 'tools/apex-dataformat'
+import { Map } from 'immutable'
 
 export const order = params => {
   return (dispatch, getState, apiUrl) => {
@@ -15,8 +16,9 @@ export const order = params => {
         return res.json()
       })
       .then(obj => {
-        let data = formatReponse(obj)
-        // console.log(data)
+        console.log(obj)
+        let data = Map(formatReponse(obj))
+        // console.log(data.toJS())
         dispatch(newOrder(data))
       })
   }
@@ -58,8 +60,8 @@ export const getQuote = (symbols, options = {}) => {
         }
         let quote = obj.Prods[0].Quote
         let symbol = quote['48']
-        let iob = quoteFormatEven(symbol, quote)
-        console.log(iob)
+        let iob = Map(quoteFormatEven(symbol, quote))
+        // console.log(iob)
         dispatch(show(iob))
         dispatch(registerTick(sessionId, symbols))
       })

@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import styles from './prototype.css'
 import classNames from 'classnames/bind'
 
 let cx = classNames.bind(styles)
-class Prototype extends Component {
+class Prototype extends PureComponent {
   constructor() {
     super()
   }

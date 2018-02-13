@@ -65,7 +65,9 @@ class WsQuoteConnect {
     this.sock.onmessage = e => {
       // console.log(e.data)
       let res
-      let priceDec = store.getState().order.orderQuote.PriceDec
+      // console.log(store.getState())
+      let priceDec = store.getState().order.getIn(['orderQuote', 'PriceDec'])
+      // console.log(priceDec)
       let base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
       if (base64regex.test(e.data)) {
         try {

@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import styles from './menu.css'
 import classNames from 'classnames/bind'
 
 let cx = classNames.bind(styles)
-class Menu extends Component {
+class Menu extends PureComponent {
   constructor() {
     super()
   }

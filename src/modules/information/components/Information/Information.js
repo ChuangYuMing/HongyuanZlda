@@ -1,12 +1,14 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import styles from './information.css'
 import classNames from 'classnames/bind'
 import { StickyTable, Row, Cell } from 'react-sticky-table'
 import { orderStatusMaping } from 'tools/format-res-data.js'
 import { getDateFromFormat } from 'tools/date.js'
+import { Map } from 'immutable'
+
 let cx = classNames.bind(styles)
-class Information extends Component {
+class Information extends PureComponent {
   constructor() {
     super()
     this.state = {
@@ -15,8 +17,9 @@ class Information extends Component {
   }
 
   render() {
-    let { lists } = this.props
-    let hiddenData = {
+    let { list } = this.props
+    // console.log(this.props)
+    let hiddenData = Map({
       Account: '255428',
       TransactTime: '20180208-09:32:40.989',
       OrderID: 'X0076',
@@ -29,13 +32,12 @@ class Information extends Component {
       LastPx: '9999.9999',
       LeavesQty: 9999,
       OrdStatus: 'E'
-    }
+    })
 
-    let _lists = [...lists]
     if (this.state.sortByTime) {
-      lists.sort((a, b) => {
-        let atime = a.TransactTime.split('.')
-        let btime = b.TransactTime.split('.')
+      list = list.sort((a, b) => {
+        let atime = a.get('TransactTime').split('.')
+        let btime = b.get('TransactTime').split('.')
         let adatetime = getDateFromFormat(atime[0], 'yMMdd-HH:mm:ss')
         let bdatetime = getDateFromFormat(btime[0], 'yMMdd-HH:mm:ss')
         adatetime = adatetime + parseInt(atime[1])
@@ -44,7 +46,7 @@ class Information extends Component {
         return adatetime - bdatetime
       })
     }
-    _lists.push(hiddenData)
+    list = list.push(hiddenData)
     var rows = []
     var cells = []
     let headers = [
@@ -77,19 +79,20 @@ class Information extends Component {
         </Cell>
       )
     }
+
     rows.push(<Row key={0}>{cells}</Row>)
-    let mainDatas = _lists.map((item, index) => {
+    let mainDatas = list.map((item, index) => {
       let cells = []
-      item.Side = item.Side == 1 ? '買' : '賣'
+      item.get('Side') == 1 ? '買' : '賣'
       let cxx = cx({
         'cell-right': true,
-        'hidden-row': index + 1 === _lists.length ? true : false
+        'hidden-row': index + 1 === list.size ? true : false
       })
       return (
         <Row
           className={cxx}
           key={index + 1}
-          data-id={item.assetCode}
+          data-id={item.get('assetCode')}
           onClick={this.order}
         >
           <Cell key="0">
@@ -97,18 +100,18 @@ class Information extends Component {
             <span className={cx('btn')}>量</span>
             <span className={cx('btn')}>價</span>
           </Cell>
-          <Cell key="1">{item.Account}</Cell>
-          <Cell key="2">{item.OrderID}</Cell>
-          <Cell key="3">{item.TransactTime}</Cell>
-          <Cell key="4">{item.Symbol}</Cell>
-          <Cell key="5">{item.Side}</Cell>
-          <Cell key="6">{item.Price}</Cell>
-          <Cell key="7">{item.OrderQty}</Cell>
-          <Cell key="8">{item.CumQty}</Cell>
-          <Cell key="9">{item.CxlQty}</Cell>
-          <Cell key="10">{item.LastPx}</Cell>
-          <Cell key="11">{item.LeavesQty}</Cell>
-          <Cell key="12">{orderStatusMaping(item.OrdStatus)}</Cell>
+          <Cell key="1">{item.get('Account')}</Cell>
+          <Cell key="2">{item.get('OrderID')}</Cell>
+          <Cell key="3">{item.get('TransactTime')}</Cell>
+          <Cell key="4">{item.get('Symbol')}</Cell>
+          <Cell key="5">{item.get('Side')}</Cell>
+          <Cell key="6">{item.get('Price')}</Cell>
+          <Cell key="7">{item.get('OrderQty')}</Cell>
+          <Cell key="8">{item.get('CumQty')}</Cell>
+          <Cell key="9">{item.get('CxlQty')}</Cell>
+          <Cell key="10">{item.get('LastPx')}</Cell>
+          <Cell key="11">{item.get('LeavesQty')}</Cell>
+          <Cell key="12">{orderStatusMaping(item.get('OrdStatus'))}</Cell>
         </Row>
       )
     })

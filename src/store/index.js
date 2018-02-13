@@ -4,10 +4,12 @@ import storage from 'redux-persist/lib/storage'
 import thunk from 'redux-thunk'
 import reducers from '../reducers'
 import appGlobal from 'modules/common/app-global.js'
+import immutableTransform from 'redux-persist-transform-immutable'
 
 const apiUrl = appGlobal.apiUrl
 
 const persistConfig = {
+  transforms: [immutableTransform()],
   key: 'root',
   storage,
   whitelist: ['app']

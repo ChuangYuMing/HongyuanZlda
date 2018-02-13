@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 // import styles from './us-order.css'
 import styles from '../Order/order.css'
@@ -20,7 +20,7 @@ let updtProdThrottle = throttle(
   { leading: false }
 )
 
-class HkOrder extends Component {
+class HkOrder extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -54,13 +54,13 @@ class HkOrder extends Component {
     let action = e.target.dataset.action
     let { account, symbol, volume, price, orderType, date } = this.state
     let params = {
-      Mode: 22,
-      Symbol: symbol,
-      Account: account,
-      Side: action,
-      OrdType: orderType,
-      Price: price,
-      OrderQty: volume
+      '11000': 22,
+      '48': symbol,
+      '1': account,
+      '54': action,
+      '40': orderType,
+      '44': price,
+      '38': volume
     }
     this.props.order(params)
   }
@@ -77,20 +77,18 @@ class HkOrder extends Component {
     })
   }
   render() {
-    // console.log(this.props.quote)
-    let {
-      Symbol,
-      Name,
-      APrice,
-      BPrice,
-      Price,
-      Open,
-      PrePrice,
-      HighLimitPrice,
-      LowLimitPrice,
-      high,
-      low
-    } = this.props.quote
+    let quote = this.props.quote
+    let Symbol = quote.get('Symbol')
+    let Name = quote.get('Name')
+    let APrice = quote.get('APrice')
+    let BPrice = quote.get('BPrice')
+    let Price = quote.get('Price')
+    let Open = quote.get('Open')
+    let PrePrice = quote.get('PrePrice')
+    let HighLimitPrice = quote.get('HighLimitPrice')
+    let LowLimitPrice = quote.get('LowLimitPrice')
+    let high = quote.get('high')
+    let low = quote.get('low')
 
     let pStyle = priceStyle(Price, PrePrice)
     let bPriceStyle = priceStyle(BPrice, PrePrice)

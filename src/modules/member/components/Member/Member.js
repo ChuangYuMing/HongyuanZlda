@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import styles from './member.css'
 import classNames from 'classnames/bind'
 import { StickyTable, Row, Cell } from 'react-sticky-table'
 
 let cx = classNames.bind(styles)
-class Member extends Component {
+class Member extends PureComponent {
   constructor() {
     super()
   }

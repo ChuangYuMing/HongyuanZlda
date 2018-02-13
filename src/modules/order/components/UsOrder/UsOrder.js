@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 // import styles from './us-order.css'
 import styles from '../Order/order.css'
@@ -10,7 +10,7 @@ import i2 from 'static/image/i2.png'
 
 let cx = classNames.bind(styles)
 
-class UsOrder extends Component {
+class UsOrder extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {

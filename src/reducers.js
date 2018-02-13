@@ -1,4 +1,7 @@
 import { combineReducers } from 'redux'
+// not use this, because using react-persist with immutable
+// import { combineReducers } from 'redux-immutable'
+
 import app from './modules/app'
 import order from 'modules/order'
 

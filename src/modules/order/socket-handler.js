@@ -8,6 +8,7 @@ import { Observer } from 'tools/pub-sub'
 import { store } from 'store'
 import { changeOrderStatus, bidAndAskTick, updateTick } from './actions'
 import { numAddDecimal } from 'tools/apex-dataformat.js'
+import { Map } from 'immutable'
 
 const dispatch = store.dispatch
 const orderObs = new Observer()
@@ -19,6 +20,7 @@ class SocketHandler {
   constructor() {}
   on() {
     orderObs.subscribe(orderPub, data => {
+      data = Map(data)
       dispatch(changeOrderStatus(data))
     })
     ticksObs.subscribe(ticksPub, data => {
@@ -56,6 +58,7 @@ class SocketHandler {
         }
       }
       if (Object.keys(obj).length > 2) {
+        obj = Map(obj)
         dispatch(updateTick(obj))
       }
     })
@@ -73,6 +76,7 @@ class SocketHandler {
           : '--',
         update: true
       }
+      baObj = Map(baObj)
       dispatch(bidAndAskTick(baObj))
     })
   }
