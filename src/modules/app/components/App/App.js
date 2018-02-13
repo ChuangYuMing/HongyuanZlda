@@ -6,11 +6,13 @@ import styles from './App.css'
 import Temp from 'modules/temp/components/Temp'
 import Temp2 from 'modules/temp/components/Temp2'
 import Main from 'modules/main/components/Main'
+import Loading from '../Loading/Loading.js'
 
 let cx = classNames.bind(styles)
-class App extends React.Component {
+class App extends React.PureComponent {
   constructor(props) {
     super(props)
+    this.haveload = false
     // let newVersion = '1070201'
     // let oldVersion = getCookie('version')
     // this.props.setApiDomain()
@@ -34,6 +36,7 @@ class App extends React.Component {
     // this.props.setApiDomain()
     // console.log(this.props)
     this.props.getClientIP()
+
     // if (window.performance) {
     //   setTimeout(() => {
     //     let pefTime = performance.timing
@@ -59,16 +62,21 @@ class App extends React.Component {
     // }
   }
   render() {
-    return (
-      <div>
-        <Switch>
-          <Route exact path={'/'} component={Main} />
-          <Route exact path={'/temp'} component={Temp} />
-          <Route exact path={'/temp2'} component={Temp2} />
-        </Switch>
-        <div id="popupContainer" />
-      </div>
-    )
+    let { rehydrated } = this.props
+    if (!rehydrated) {
+      return <Loading />
+    } else {
+      return (
+        <div>
+          <Switch>
+            <Route exact path={'/'} component={Main} />
+            <Route exact path={'/temp'} component={Temp} />
+            <Route exact path={'/temp2'} component={Temp2} />
+          </Switch>
+          <div id="popupContainer" />
+        </div>
+      )
+    }
   }
 }
 

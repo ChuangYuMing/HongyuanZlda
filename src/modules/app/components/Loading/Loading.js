@@ -1,7 +1,8 @@
 import React from 'react'
 
 const Loading = () => {
-  return <div>haha</div>
+  //   alert('123')
+  return <div>...</div>
 }
 
 export default Loading

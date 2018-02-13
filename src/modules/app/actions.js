@@ -1,5 +1,5 @@
 import * as types from './action-types'
-
+import { Map } from 'immutable'
 export const tempTest = value => {
   return {
     type: types.TEMP_TEST,
@@ -20,7 +20,7 @@ export const getClientIP = () => {
         })
         .then(res => {
           // console.log(res)
-          dispatch(updateAppInfo({ clientIP: res.ip }))
+          dispatch(updateAppInfo(Map({ clientIP: res.ip })))
         })
         .catch(e => {
           console.log(e)

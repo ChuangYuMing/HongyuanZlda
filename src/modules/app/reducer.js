@@ -6,12 +6,13 @@ let init = fromJS({
   clientIP: '',
   apiDomain: ''
 })
+
 export default (state = init, action) => {
   switch (action.type) {
     case types.TEMP_TEST:
-      return action.data
+      return state
     case types.UPDATE_APP_INFO:
-      return Object.assign({}, state, action.data)
+      return state.merge(action.data)
     default:
       return state
   }

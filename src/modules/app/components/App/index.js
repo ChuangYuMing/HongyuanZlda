@@ -7,9 +7,7 @@ import { updateAppInfo } from '../../actions.js'
 
 const mapStateToProps = state => {
   return {
-    isLogin: state.app.login,
-    apiDomain: state.app.apiDomain,
-    haveTaifex: state.app.haveTaifex
+    rehydrated: state._persist.rehydrated
   }
 }
 

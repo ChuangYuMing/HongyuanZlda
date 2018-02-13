@@ -7,7 +7,7 @@ import { hot } from 'react-hot-loader'
 import WsConnect from 'modules/app/ws-connect.js'
 import WsQuoteConnect from 'modules/app/ws-quote-connect.js'
 import App from '../App'
-import Loading from '../Loading/Loading.js'
+
 // import withTracker from 'modules/common/withTracker.js'
 
 // let AppWithGA = withTracker(App)
@@ -29,11 +29,9 @@ class AppProvider extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <PersistGate loading={<Loading />} persistor={persistor}>
-          <Router>
-            <Route component={AppWithGA} />
-          </Router>
-        </PersistGate>
+        <Router>
+          <Route component={AppWithGA} />
+        </Router>
       </Provider>
     )
   }
