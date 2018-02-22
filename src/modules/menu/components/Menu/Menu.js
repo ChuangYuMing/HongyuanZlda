@@ -8,6 +8,10 @@ class Menu extends PureComponent {
   constructor() {
     super()
   }
+  logout = () => {
+    this.props.logout()
+    // this.props.history.replace('/login')
+  }
   render() {
     return (
       <div className={cx('menu-wrap')}>
@@ -45,6 +49,9 @@ class Menu extends PureComponent {
           </select>
           <span className={cx('btn', 'inline-bk')}>另存條件</span>
         </div>
+        <span onClick={this.logout} className={cx('logout')}>
+          登出
+        </span>
       </div>
     )
   }

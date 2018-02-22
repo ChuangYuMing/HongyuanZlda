@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import Menu from './Menu'
+import { updateAppInfo } from 'modules/app/actions.js'
 
 const mapStateToProps = state => {
   return {
@@ -9,8 +10,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onTest: () => {
-      alert('test')
+    logout: () => {
+      let data = Map({
+        isLogin: false,
+        userTolen: ''
+      })
+      dispatch(updateAppInfo(data))
     }
   }
 }

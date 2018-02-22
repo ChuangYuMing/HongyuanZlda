@@ -25,7 +25,7 @@ class HkOrder extends PureComponent {
     super(props)
     this.state = {
       data: {},
-      account: 255428,
+      account: 'user01',
       symbol: '',
       volume: 1,
       price: '',
@@ -49,6 +49,7 @@ class HkOrder extends PureComponent {
       })
     }
   }
+  // 11000=22&48=FB&553=user01&1=acc01&30056=branch01
   handleOrderAction = e => {
     let apiUrl = appGlobal.apiurl
     let action = e.target.dataset.action
@@ -60,7 +61,9 @@ class HkOrder extends PureComponent {
       '54': action,
       '40': orderType,
       '44': price,
-      '38': volume
+      '38': volume,
+      '30056': 'branch01',
+      '553': 'user01'
     }
     this.props.order(params)
   }

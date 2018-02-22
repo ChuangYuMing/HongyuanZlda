@@ -7,59 +7,37 @@ import Temp from 'modules/temp/components/Temp'
 import Temp2 from 'modules/temp/components/Temp2'
 import Main from 'modules/main/components/Main'
 import Loading from '../Loading/Loading.js'
+import Login from 'modules//login/components/Login'
+import WsConnect from 'modules/app/ws-connect.js'
+import WsQuoteConnect from 'modules/app/ws-quote-connect.js'
 
 let cx = classNames.bind(styles)
 class App extends React.PureComponent {
   constructor(props) {
     super(props)
     this.haveload = false
-    // let newVersion = '1070201'
-    // let oldVersion = getCookie('version')
-    // this.props.setApiDomain()
-    // let apiDomain =
-    //   this.props.apiDomain || window.localStorage.getItem('apiDomain')
-    // if (oldVersion !== newVersion) {
-    //   this.props.logout()
-    //   setCookie('version', newVersion, 365)
-    //   window.localStorage.clear()
-    //   if (window.location.pathname !== '/login') {
-    //     window.location.replace(`/login`)
-    //   }
-    // }
-    // if (!this.props.isLogin && window.location.pathname !== '/login') {
-    //   window.location.replace(`/login`)
-    // }
+    this.WsConnect = ''
+    this.WsQuoteConnect = ''
   }
-  // componentWillMount() {}
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isLogin && this.props.isLogin !== nextProps.isLogin) {
+      this.WsConnect = new WsConnect(this.props.userToken)
+      this.WsQuoteConnect = new WsQuoteConnect()
+      this.WsConnect.connect()
+      this.WsQuoteConnect.connect()
+    }
+  }
+  componentWillUnmount() {
+    this.WsConnect.close()
+    this.WsQuoteConnect.close()
+  }
   componentDidMount() {
-    console.log('componentDidMount')
-    // this.props.setApiDomain()
-    // console.log(this.props)
+    if (this.props.isLogin) {
+      let Ws = new WsConnect(this.props.userToken)
+      Ws.connect()
+      WsQuoteConnect.connect()
+    }
     this.props.getClientIP()
-
-    // if (window.performance) {
-    //   setTimeout(() => {
-    //     let pefTime = performance.timing
-    //     let renderTime = pefTime.domComplete - pefTime.domLoading
-    //     let pageLoadTime = pefTime.loadEventEnd - pefTime.navigationStart
-    //     let connectTime = pefTime.responseEnd - pefTime.requestStart
-    //     GoogleAnalytics.timing({
-    //       category: 'page performance',
-    //       variable: ' render time',
-    //       value: renderTime
-    //     })
-    //     GoogleAnalytics.timing({
-    //       category: 'page performance',
-    //       variable: 'total page load time',
-    //       value: pageLoadTime
-    //     })
-    //     GoogleAnalytics.timing({
-    //       category: 'page performance',
-    //       variable: 'response time',
-    //       value: connectTime
-    //     })
-    //   }, 2000)
-    // }
   }
   render() {
     let { rehydrated } = this.props
@@ -72,6 +50,7 @@ class App extends React.PureComponent {
             <Route exact path={'/'} component={Main} />
             <Route exact path={'/temp'} component={Temp} />
             <Route exact path={'/temp2'} component={Temp2} />
+            <Route exact path={'/login'} component={Login} />
           </Switch>
           <div id="popupContainer" />
         </div>

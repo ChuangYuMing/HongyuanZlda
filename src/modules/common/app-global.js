@@ -1,8 +1,9 @@
 class AppGlobal {
   constructor() {
-    this._apiUrl = 'http://192.168.12.134:8080'
-    // this._apiUrl = 'http://192.168.12.166:8080'
+    // this._apiUrl = 'http://192.168.12.134:8080'
+    this._apiUrl = 'http://192.168.12.153:8080'
     this._wsQuoteSessionId = ''
+    this._userToken = ''
   }
   get apiUrl() {
     return this._apiUrl

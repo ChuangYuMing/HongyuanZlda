@@ -1,0 +1,56 @@
+@import 'helpers/_mixins.css';
+
+.main {
+  height: 100%;
+  width: 100%;
+  background-color: $bg;
+}
+.login-wrap {
+  background-color: white;
+  height: 400px;
+  width: 300px;
+  position: relative;
+  margin: 0 auto;
+  transform: translateY(-50%);
+  top: 50%;
+  color: black;
+  border-radius: 5px;
+  .logo {
+    display: block;
+    margin: 0 auto;
+    width: 110px;
+    height: 110px;
+  }
+  .title {
+    padding-top: 20px;
+    display: block;
+    text-align: center;
+    font-size: 36px;
+    color: black;
+  }
+  .input-wrap {
+    position: relative;
+    font-size: 16px;
+    margin-top: 40px;
+    padding-left: 20px;
+    .item {
+      padding-top: 10px;
+    }
+    input {
+      border-bottom: solid 2px #706e6e;
+    }
+  }
+}
+.btn {
+  position: absolute;
+  right: 30px;
+  bottom: -60px;
+  cursor: pointer;
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: azure;
+  &:hover {
+    background-color: #96fcfc;
+  }
+}

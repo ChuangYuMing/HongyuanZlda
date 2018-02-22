@@ -7,15 +7,17 @@ import { Utf8ArrayToStr } from 'tools/text-decode'
 import { orderPub } from 'modules/app/publisher'
 
 class WsConnect {
-  constructor() {
-    this.sessionId = window.btoa(uuid() + '$' + 'apex@tw')
+  constructor(userToken) {
+    this.sessionId = ''
     this.sock = ''
     this.shouldReload = false //畫面重整
     this.reConnectCount = 0
     this.apiUrl = appGlobal.apiUrl
+    this.userToken = userToken
   }
   creatSessionId() {
-    this.sessionId = window.btoa(uuid() + '$' + 'apex@tw')
+    // this.sessionId = window.btoa(uuid() + '$' + 'apex@tw')
+    this.sessionId = window.btoa(this.userToken + '$' + 'apex@tw')
   }
   connect() {
     // console.log('re connect!!')
@@ -87,4 +89,4 @@ class WsConnect {
   }
 }
 
-export default new WsConnect()
+export default WsConnect

@@ -4,10 +4,12 @@ import { combineReducers } from 'redux'
 
 import app from './modules/app'
 import order from 'modules/order'
+import login from 'modules/login'
 
 const manipulator = combineReducers({
   [app.constants.NAME]: app.reducer,
-  [order.constants.NAME]: order.reducer
+  [order.constants.NAME]: order.reducer,
+  [login.constants.NAME]: login.reducer
 })
 
 export default manipulator

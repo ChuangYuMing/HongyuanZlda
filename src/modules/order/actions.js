@@ -25,7 +25,7 @@ export const order = params => {
 }
 
 export const changeOrderStatus = res => {
-  let data = formatReponse(res)
+  let data = Map(formatReponse(res))
   // console.log(data)
   return {
     type: types.CHANGE_ORDER_STATUS,

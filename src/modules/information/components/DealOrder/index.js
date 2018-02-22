@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
-import Prototype from './Prototype'
+import DealOrder from './DealOrder'
 
 const mapStateToProps = state => {
   return {
-    test: state.app
+    list: state.order.getIn(['orderList'])
   }
 }
 
@@ -15,4 +15,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Prototype)
+export default connect(mapStateToProps, mapDispatchToProps)(DealOrder)

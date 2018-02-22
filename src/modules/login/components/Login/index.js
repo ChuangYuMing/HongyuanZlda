@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
-import Main from './Main'
+import Login from './Login'
+import { login } from '../../actions.js'
 
 const mapStateToProps = state => {
   return {
@@ -9,10 +10,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onTest: () => {
-      alert('test')
+    login: data => {
+      dispatch(login(data))
     }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main)
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

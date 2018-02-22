@@ -122,4 +122,4 @@ class WsQuoteConnect {
   }
 }
 
-export default new WsQuoteConnect()
+export default WsQuoteConnect

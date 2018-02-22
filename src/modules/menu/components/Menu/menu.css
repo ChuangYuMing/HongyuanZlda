@@ -2,7 +2,7 @@
 
 .menu-wrap {
   width: 100%;
-  height: 100%;
+  // height: 100%;
   margin-top: 10px;
   .item-wrap {
     display: inline-block;
@@ -65,4 +65,8 @@
       background-color: $table-header-bg;
     }
   }
+}
+
+.logout {
+  cursor: pointer;
 }

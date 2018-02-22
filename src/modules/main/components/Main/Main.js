@@ -7,6 +7,7 @@ import Information from 'modules/information/components/Information'
 import Member from 'modules/member/components/Member'
 import Inventory from 'modules/inventory/components/Inventory'
 import Menu from 'modules/menu/components/Menu'
+import { Redirect } from 'react-router-dom'
 
 let cx = classNames.bind(styles)
 class Main extends Component {
@@ -14,6 +15,16 @@ class Main extends Component {
     super()
   }
   render() {
+    if (!this.props.isLogin) {
+      return (
+        <Redirect
+          to={{
+            pathname: '/login',
+            state: { from: this.props.location }
+          }}
+        />
+      )
+    }
     return (
       <div className={cx('main-wrap')}>
         <div className={cx('menu')}>

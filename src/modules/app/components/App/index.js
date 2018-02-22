@@ -7,7 +7,9 @@ import { updateAppInfo } from '../../actions.js'
 
 const mapStateToProps = state => {
   return {
-    rehydrated: state._persist.rehydrated
+    rehydrated: state._persist.rehydrated,
+    isLogin: state.app.get('isLogin'),
+    userToken: state.app.get('userToken')
   }
 }
 

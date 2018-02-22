@@ -4,7 +4,8 @@ import { fromJS } from 'immutable'
 let init = fromJS({
   temp: 'ttt11t',
   clientIP: '',
-  apiDomain: ''
+  userToken: '',
+  isLogin: false
 })
 
 export default (state = init, action) => {

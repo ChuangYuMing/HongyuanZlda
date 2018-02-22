@@ -1,8 +1,11 @@
 import * as types from './action-types'
 
-export default (state = [], action) => {
+let init = fromJS({
+  temp: false
+})
+export default (state = init, action) => {
   switch (action.type) {
-    case types.SHOW: {
+    case types.UPDATE_STATUS: {
       return state
     }
     default:

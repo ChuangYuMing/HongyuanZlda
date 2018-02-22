@@ -1,6 +1,6 @@
 @import 'helpers/_mixins.css';
 
-$menu-height: 80px;
+$menu-height: 60px;
 $bottom-height: 220px;
 
 .main-wrap {
@@ -12,12 +12,14 @@ $bottom-height: 220px;
   width: 100%;
   height: $menu-height;
   border: solid 1px $frame-border-color;
+  border-bottom: none;
 }
 
 .information {
   width: 100%;
   height: calc((100% - $menu-height - $bottom-height) / 2);
   border: solid 1px $frame-border-color;
+  border-top: none;
 }
 .middle-wrap {
   width: 100%;
