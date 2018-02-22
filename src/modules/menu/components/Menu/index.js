@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import Menu from './Menu'
 import { updateAppInfo } from 'modules/app/actions.js'
+import { clearOrder } from 'modules/order/actions.js'
 
 const mapStateToProps = state => {
   return {
@@ -13,9 +14,10 @@ const mapDispatchToProps = dispatch => {
     logout: () => {
       let data = Map({
         isLogin: false,
-        userTolen: ''
+        userToken: ''
       })
       dispatch(updateAppInfo(data))
+      dispatch(clearOrder())
     }
   }
 }

@@ -16,17 +16,22 @@ export const order = params => {
         return res.json()
       })
       .then(obj => {
-        console.log(obj)
-        let data = Map(formatReponse(obj))
-        // console.log(data.toJS())
+        // console.log(obj)
+        let data = formatReponse(obj)
+        data = Object.assign({}, data, data.itemData[0])
+        delete data.itemData
+        data = fromJS(data)
+        console.log(data.toJS())
         dispatch(newOrder(data))
       })
   }
 }
 
 export const changeOrderStatus = res => {
-  let data = Map(formatReponse(res))
-  // console.log(data)
+  let data = formatReponse(res)
+  data = Object.assign({}, data, data.itemData[0])
+  delete data.itemData
+  data = fromJS(data)
   return {
     type: types.CHANGE_ORDER_STATUS,
     data
@@ -108,5 +113,11 @@ export const updateTick = data => {
   return {
     type: types.UPDATE_TICK,
     data
+  }
+}
+
+export const clearOrder = () => {
+  return {
+    type: types.CLEAR_ORDER
   }
 }

@@ -25,7 +25,7 @@ class HkOrder extends PureComponent {
     super(props)
     this.state = {
       data: {},
-      account: 'user01',
+      account: 'acc01',
       symbol: '',
       volume: 1,
       price: '',

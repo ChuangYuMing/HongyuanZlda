@@ -17,7 +17,7 @@ class Information extends PureComponent {
 
   render() {
     let { list } = this.props
-    console.log(this.props)
+    // console.log(this.props)
     let hiddenData = Map({
       Account: '255428',
       TransactTime: '20180208-09:32:40.989',

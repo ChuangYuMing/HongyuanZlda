@@ -35,6 +35,9 @@ export default (state = init, action) => {
       }
       return state
     }
+    case types.CLEAR_ORDER: {
+      return init
+    }
     default:
       return state
   }
