@@ -23,8 +23,8 @@ const mapDispatchToProps = dispatch => {
         isLogin: false,
         userToken: ''
       })
-      dispatch(updateAppInfo(data))
-      dispatch(clearOrder())
+      // dispatch(updateAppInfo(data))
+      // dispatch(clearOrder())
     }
     flag = true
   })

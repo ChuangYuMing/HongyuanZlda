@@ -9,6 +9,7 @@ import i1 from 'static/image/i1.png'
 import i2 from 'static/image/i2.png'
 import throttle from 'lodash/throttle'
 import { priceStyle } from 'tools/other.js'
+import PopUp from 'modules/shared/components/PopUp/PopUp.js'
 
 let cx = classNames.bind(styles)
 let updtProdThrottle = throttle(
@@ -31,7 +32,10 @@ class HkOrder extends PureComponent {
       price: '',
       orderType: '0',
       date: 20180131,
-      items: []
+      items: [],
+      showPopUP: false,
+      action: '',
+      orderParams: {}
     }
   }
   handleInputChange = e => {
@@ -65,7 +69,22 @@ class HkOrder extends PureComponent {
       '30056': 'branch01',
       '553': 'user01'
     }
+    this.setState({
+      showPopUP: true,
+      action,
+      orderParams: params
+    })
+    // this.props.order(params)
+  }
+  order = () => {
+    let params = this.state.orderParams
     this.props.order(params)
+    this.closePopUp()
+  }
+  closePopUp = () => {
+    this.setState({
+      showPopUP: false
+    })
   }
   getQuote = e => {
     const target = e.target
@@ -101,6 +120,7 @@ class HkOrder extends PureComponent {
     let lowStyle = priceStyle(low, PrePrice)
     let limitHighStyle = priceStyle(99999, PrePrice)
     let limitLowStyle = priceStyle(0, PrePrice)
+    let { account, symbol, volume, price, orderType, date, action } = this.state
     return (
       <div className={cx('usorder-wrap')}>
         <div className={cx('action-wrap')}>
@@ -231,6 +251,59 @@ class HkOrder extends PureComponent {
             <span>{Name}</span>
           </div>
         </div>
+        <PopUp
+          show={this.state.showPopUP}
+          width="600"
+          height="300"
+          order={this.props.order}
+          data={this.state.orderParams}
+        >
+          <div className={cx('order-popup')}>
+            <div className={cx('title')}>
+              <span>確認委託（港交所）</span>
+            </div>
+            <div
+              className={
+                action === '1' ? cx('main', 'buy') : cx('main', 'sell')
+              }
+            >
+              <div className={cx('left')}>
+                <span className={cx('s1', 'acc')}>{account}</span>
+              </div>
+              <div className={cx('right')}>
+                <div className={cx('item')}>
+                  <span className={cx('s1')}>
+                    {action === '1' ? '買' : '賣'}
+                  </span>
+                  <span className={cx('s2')}>
+                    {orderType === '0' ? '限價盤' : '增強限價盤'}
+                  </span>
+                </div>
+                <div className={cx('item')}>
+                  <span className={cx('s1')}>{symbol}</span>
+                </div>
+                <div className={cx('item')}>
+                  <span className={cx('s1')}>{volume}</span>
+                  <span className={cx('s2')}>股</span>
+                </div>
+                <div className={cx('item')}>
+                  <span className={cx('s2')}>價位</span>
+                  <span className={cx('s1')}>{price}</span>
+                </div>
+              </div>
+            </div>
+            <div className={cx('bottom')}>
+              <div className={cx('button-wrap')}>
+                <span onClick={this.order} className={cx('btn')}>
+                  委託單送出
+                </span>
+                <span onClick={this.closePopUp} className={cx('btn')}>
+                  取消
+                </span>
+              </div>
+            </div>
+          </div>
+        </PopUp>
       </div>
     )
   }

@@ -16,8 +16,8 @@ class WsConnect {
     this.userToken = userToken
   }
   creatSessionId() {
-    // this.sessionId = window.btoa(uuid() + '$' + 'apex@tw')
-    this.sessionId = window.btoa(this.userToken + '$' + 'apex@tw')
+    this.sessionId = window.btoa(this.userToken)
+    // this.sessionId = window.btoa(this.userToken + '$' + 'apex@tw')
   }
   connect() {
     // console.log('re connect!!')

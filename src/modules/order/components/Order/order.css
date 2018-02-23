@@ -129,3 +129,85 @@
 .down {
   color: green;
 }
+
+.order-popup {
+  background-color: hsl(208, 99%, 27%);
+  border: solid 2px black;
+  height: 100%;
+  width: 100%;
+  .title {
+    text-align: center;
+    span {
+      display: inline-block;
+      font-size: 20px;
+      padding: 5px 0px;
+      color: $orange;
+    }
+  }
+  .buy {
+    background-color: red;
+  }
+  .sell {
+    background-color: green;
+  }
+  .main {
+    height: 200px;
+    @mixin clearfix;
+    .left {
+      width: 30%;
+      float: left;
+      height: 100%;
+      position: relative;
+      .acc {
+        position: absolute;
+        display: inline-block;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+      }
+    }
+    .right {
+      width: 70%;
+      float: left;
+      height: 100%;
+    }
+    .item {
+      display: block;
+      padding: 10px;
+      span {
+        display: inline-block;
+        padding: 0px 10px;
+      }
+    }
+    .s1 {
+      color: yellow;
+      font-size: 24px;
+    }
+    .s2 {
+      color: white;
+      font-size: 18px;
+    }
+  }
+  .bottom {
+    position: relative;
+    .button-wrap {
+      display: inline-block;
+      position: absolute;
+      bottom: -40px;
+      right: 30px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 5px 10px;
+      background-color: white;
+      color: black;
+      cursor: pointer;
+      border-radius: 2px;
+      margin: 0px 5px;
+      &:hover {
+        background-color: #5e5c67;
+        color: white;
+      }
+    }
+  }
+}
