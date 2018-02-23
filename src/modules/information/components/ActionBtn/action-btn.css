@@ -1,0 +1,19 @@
+@import 'helpers/_mixins.css';
+
+.btns-wrap {
+  display: block;
+  .btn {
+    cursor: pointer;
+    display: inline-block;
+    width: 25%;
+    border: solid 1px $table-header-bg;
+    border-radius: 3px;
+    background-color: white;
+    text-align: center;
+    color: black;
+    margin-right: 1px;
+    &:hover {
+      background-color: $table-header-bg;
+    }
+  }
+}

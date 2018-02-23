@@ -1,23 +1,61 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import styles from '../Information/information.css'
+import validOrderStyles from './valid-order.css'
 import classNames from 'classnames/bind'
 import { StickyTable, Row, Cell } from 'react-sticky-table'
 import { orderStatusMaping } from 'tools/format-res-data.js'
 import { getDateFromFormat } from 'tools/date.js'
+import ActionBtn from '../ActionBtn/ActionBtn.js'
+import PopUp from 'modules/shared/components/PopUp/PopUp.js'
+import { formatRequestData } from 'tools/format-res-data.js'
 
 let cx = classNames.bind(styles)
+let validOrderCx = classNames.bind(validOrderStyles)
 class Information extends PureComponent {
   constructor() {
     super()
     this.state = {
-      sortByTime: false
+      sortByTime: false,
+      showCancelPopUp: false,
+      showReplacePopUp: false,
+      targetRow: Map({})
     }
   }
-
+  showCancelPopUp = () => {
+    console.log('123')
+    this.setState({
+      showCancelPopUp: true
+    })
+  }
+  closeCancelPopUp = () => {
+    this.setState({
+      showCancelPopUp: false
+    })
+  }
+  targetRow = e => {
+    let list = this.props.list
+    const target = e.currentTarget
+    let orderid = target.dataset.orderid
+    const index = list.findIndex(i => i.get('OrderID') === orderid)
+    if (index !== -1) {
+      let targetRow = list.get(index)
+      this.setState({
+        targetRow
+      })
+    }
+  }
+  cancelOrder = () => {
+    let targetRow = this.state.targetRow
+    targetRow = targetRow.set('Mode', '26')
+    targetRow = formatRequestData(targetRow.toJS())
+    console.log(targetRow)
+    this.props.cancelOrder(targetRow)
+    this.closeCancelPopUp()
+  }
   render() {
     let { list } = this.props
-    // console.log(this.props)
+    let targetRow = this.state.targetRow
     let hiddenData = Map({
       Account: '255428',
       TransactTime: '20180208-09:32:40.989',
@@ -91,11 +129,13 @@ class Information extends PureComponent {
         <Row
           className={cxx}
           key={index + 1}
-          data-id={item.get('assetCode')}
-          onClick={this.order}
+          data-orderid={item.get('OrderID')}
+          onClick={this.targetRow}
         >
           <Cell key="0">
-            <span className={cx('btn')}>刪</span>
+            <span onClick={this.showCancelPopUp} className={cx('btn')}>
+              刪
+            </span>
             <span className={cx('btn')}>量</span>
             <span className={cx('btn')}>價</span>
           </Cell>
@@ -120,6 +160,46 @@ class Information extends PureComponent {
     return (
       <div className={cx('sticky-table')}>
         <StickyTable stickyColumnCount={0}>{rows}</StickyTable>
+        <PopUp show={this.state.showCancelPopUp} width="300" height="350">
+          <div className={validOrderCx('cancel-popup')}>
+            <div className={validOrderCx('title')}>
+              <span>刪單</span>
+            </div>
+            <div className={validOrderCx('main')}>
+              <div className={validOrderCx('info-wrap')}>
+                <span className={validOrderCx('bold')}>
+                  {targetRow.get('Account')}
+                </span>
+                <span className={validOrderCx('bold')}>
+                  {targetRow.get('Symbol')}
+                </span>
+                <span className={validOrderCx('orderType')}>
+                  {targetRow.get('Side')}
+                </span>
+                <span className={validOrderCx('price')}>
+                  {targetRow.get('Price')}
+                </span>
+              </div>
+
+              <div className={validOrderCx('volume-wrap')}>
+                <div className={validOrderCx('item')}>
+                  <span>原始委託量</span>
+                  <span>已成交數量</span>
+                  <span>未成交數量</span>
+                </div>
+                <div className={validOrderCx('values')}>
+                  <span>{`${targetRow.get('OrderQty')} 股`}</span>
+                  <span>{`${targetRow.get('CumQty')} 股`}</span>
+                  <span>{`${targetRow.get('LeavesQty')} 股`}</span>
+                </div>
+              </div>
+              <div className={validOrderCx('btn-wrap')}>
+                <span onClick={this.cancelOrder}>委託單送出</span>
+                <span onClick={this.closeCancelPopUp}>取消</span>
+              </div>
+            </div>
+          </div>
+        </PopUp>
       </div>
     )
   }

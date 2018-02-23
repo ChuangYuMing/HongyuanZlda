@@ -4,6 +4,8 @@ import appGlobal from 'modules/common/app-global.js'
 import { updateAppInfo } from 'modules/app/actions.js'
 
 export const login = params => {
+  console.log(params)
+  let userId = params['553']
   return (dispatch, getState, apiUrl) => {
     let formData = formatFormData(params)
     return fetch(`${apiUrl}/api/login`, {
@@ -16,7 +18,9 @@ export const login = params => {
       .then(obj => {
         let token = obj['1129']
         console.log(token)
-        dispatch(updateAppInfo(Map({ userToken: token, isLogin: true })))
+        dispatch(
+          updateAppInfo(Map({ userToken: token, isLogin: true, userId }))
+        )
       })
   }
 }

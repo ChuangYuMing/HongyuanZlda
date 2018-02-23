@@ -145,7 +145,7 @@
     }
   }
   .buy {
-    background-color: red;
+    background-color: #fa2121ec;
   }
   .sell {
     background-color: green;
@@ -197,17 +197,7 @@
       right: 30px;
     }
     .btn {
-      display: inline-block;
-      padding: 5px 10px;
-      background-color: white;
-      color: black;
-      cursor: pointer;
-      border-radius: 2px;
-      margin: 0px 5px;
-      &:hover {
-        background-color: #5e5c67;
-        color: white;
-      }
+      @mixin action-btn;
     }
   }
 }

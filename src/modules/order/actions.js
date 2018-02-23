@@ -29,6 +29,7 @@ export const order = params => {
 
 export const changeOrderStatus = res => {
   let data = formatReponse(res)
+  // console.log(data)
   data = Object.assign({}, data, data.itemData[0])
   delete data.itemData
   data = fromJS(data)

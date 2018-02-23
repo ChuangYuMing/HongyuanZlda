@@ -67,7 +67,7 @@ class HkOrder extends PureComponent {
       '44': price,
       '38': volume,
       '30056': 'branch01',
-      '553': 'user01'
+      '553': this.props.userId
     }
     this.setState({
       showPopUP: true,

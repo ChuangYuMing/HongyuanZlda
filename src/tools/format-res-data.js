@@ -22,6 +22,43 @@ function numFormat(num) {
   return parseFloat(num).toFixed(2)
 }
 
+function formatRequestData(res) {
+  let obj = {
+    '1': res.Account,
+    '11': res.ClOrdID,
+    '14': res.CumQty,
+    '17': res.ExecID,
+    '31': res.LastPx,
+    '32': res.LastQty,
+    '37': res.OrderID,
+    '38': res.OrderQty,
+    '39': res.OrdStatus,
+    '40': res.OrdType,
+    '41': res.OrigClOrdID,
+    '44': res.Price,
+    '48': res.Symbol,
+    '54': res.Side,
+    '58': res.Text,
+    '59': res.TimeInForce,
+    '60': res.TransactTime,
+    '84': res.CxlQty,
+    '103': res.OrdRejReason,
+    '150': res.ExecType,
+    '151': res.LeavesQty,
+    '30056': res.Branch,
+    '49': res.SenderCompID,
+    '50': res.MSGID,
+    '52': res.SendingTime,
+    '56': res.TargetCompID,
+    '57': res.TargetSubID,
+    '82': res.NoRpts,
+    '553': res.Username,
+    '1129': res.TokenID,
+    '11000': res.Mode,
+    '30050': res.SenderSubID
+  }
+  return obj
+}
 function formatReponse(res) {
   let main = res['30058']
   let mainArr = []
@@ -109,5 +146,6 @@ export {
   formatReponse,
   numFormat,
   orderStatusMaping,
-  orderErrorMaping
+  orderErrorMaping,
+  formatRequestData
 }
