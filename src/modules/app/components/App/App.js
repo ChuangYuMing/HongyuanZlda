@@ -21,7 +21,8 @@ class App extends React.PureComponent {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.isLogin && this.props.isLogin !== nextProps.isLogin) {
-      this.WsConnect = new WsConnect(this.props.userToken)
+      // console.log(nextProps.userToken)
+      this.WsConnect = new WsConnect(nextProps.userToken)
       this.WsQuoteConnect = new WsQuoteConnect()
       this.WsConnect.connect()
       this.WsQuoteConnect.connect()

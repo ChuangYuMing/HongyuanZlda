@@ -15,10 +15,6 @@ class AppProvider extends React.Component {
   constructor() {
     super()
   }
-  componentDidMount() {}
-  componentWillUnmount() {
-    // WsConnect.close()
-  }
 
   render() {
     return (

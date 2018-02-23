@@ -8,7 +8,6 @@ let cx = classNames.bind(styles)
 class Login extends Component {
   constructor(props) {
     super(props)
-    console.log(props)
     this.state = {
       userId: '',
       pwd: ''

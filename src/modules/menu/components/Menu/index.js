@@ -10,6 +10,24 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
+  let flag = true
+  document.addEventListener('keydown', function(event) {
+    console.log(event.keyCode, event.metaKey)
+    if (event.keyCode == 82 && event.metaKey) {
+      flag = false
+    }
+  })
+  window.addEventListener('beforeunload', function(e) {
+    if (flag) {
+      let data = Map({
+        isLogin: false,
+        userToken: ''
+      })
+      dispatch(updateAppInfo(data))
+      dispatch(clearOrder())
+    }
+    flag = true
+  })
   return {
     logout: () => {
       let data = Map({
