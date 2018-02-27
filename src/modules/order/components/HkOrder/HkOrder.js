@@ -59,15 +59,15 @@ class HkOrder extends PureComponent {
     let action = e.target.dataset.action
     let { account, symbol, volume, price, orderType, date } = this.state
     let params = {
-      '11000': 22,
-      '48': symbol,
-      '1': account,
-      '54': action,
-      '40': orderType,
-      '44': price,
-      '38': volume,
-      '30056': 'branch01',
-      '553': this.props.userId
+      Mode: 22,
+      Symbol: symbol,
+      Account: account,
+      Side: action,
+      OrdType: orderType,
+      Price: price,
+      OrderQty: volume * 1000,
+      Branch: 'branch01',
+      Username: this.props.userId
     }
     this.setState({
       showPopUP: true,
@@ -255,7 +255,6 @@ class HkOrder extends PureComponent {
           show={this.state.showPopUP}
           width="600"
           height="300"
-          order={this.props.order}
           data={this.state.orderParams}
         >
           <div className={cx('order-popup')}>
@@ -283,7 +282,7 @@ class HkOrder extends PureComponent {
                   <span className={cx('s1')}>{symbol}</span>
                 </div>
                 <div className={cx('item')}>
-                  <span className={cx('s1')}>{volume}</span>
+                  <span className={cx('s1')}>{volume * 1000}</span>
                   <span className={cx('s2')}>股</span>
                 </div>
                 <div className={cx('item')}>

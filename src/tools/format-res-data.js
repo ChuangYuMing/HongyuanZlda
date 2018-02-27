@@ -22,88 +22,92 @@ function numFormat(num) {
   return parseFloat(num).toFixed(2)
 }
 
-function formatRequestData(res) {
-  let obj = {
-    '1': res.Account,
-    '11': res.ClOrdID,
-    '14': res.CumQty,
-    '17': res.ExecID,
-    '31': res.LastPx,
-    '32': res.LastQty,
-    '37': res.OrderID,
-    '38': res.OrderQty,
-    '39': res.OrdStatus,
-    '40': res.OrdType,
-    '41': res.OrigClOrdID,
-    '44': res.Price,
-    '48': res.Symbol,
-    '54': res.Side,
-    '58': res.Text,
-    '59': res.TimeInForce,
-    '60': res.TransactTime,
-    '84': res.CxlQty,
-    '103': res.OrdRejReason,
-    '150': res.ExecType,
-    '151': res.LeavesQty,
-    '30056': res.Branch,
-    '49': res.SenderCompID,
-    '50': res.MSGID,
-    '52': res.SendingTime,
-    '56': res.TargetCompID,
-    '57': res.TargetSubID,
-    '82': res.NoRpts,
-    '553': res.Username,
-    '1129': res.TokenID,
-    '11000': res.Mode,
-    '30050': res.SenderSubID
+function fixDataMaping() {
+  let fixToName = {}
+  let NameToFix = {}
+  fixToName = {
+    '1': 'Account',
+    '11': 'ClOrdID',
+    '14': 'CumQty',
+    '15': 'Currency',
+    '100': 'ExDestination',
+    '120': 'SettlCurrency',
+    '17': 'ExecID',
+    '31': 'LastPx',
+    '32': 'LastQty',
+    '37': 'OrderID',
+    '38': 'OrderQty',
+    '39': 'OrdStatus',
+    '40': 'OrdType',
+    '41': 'OrigClOrdID',
+    '44': 'Price',
+    '48': 'Symbol',
+    '54': 'Side',
+    '58': 'Text',
+    '59': 'TimeInForce',
+    '60': 'TransactTime',
+    '84': 'CxlQty',
+    '103': 'OrdRejReason',
+    '150': 'ExecType',
+    '151': 'LeavesQty',
+    '30056': 'Branch',
+    '49': 'SenderCompID',
+    '50': 'MSGID',
+    '52': 'SendingTime',
+    '56': 'TargetCompID',
+    '57': 'TargetSubID',
+    '82': 'NoRpts',
+    '553': 'Username',
+    '1129': 'TokenID',
+    '11000': 'Mode',
+    '30050': 'SenderSubID'
   }
-  return obj
+  for (const key in fixToName) {
+    const element = fixToName[key]
+    NameToFix[element] = key
+  }
+  return { fixToName, NameToFix }
+}
+function formatRequestData(res) {
+  let { NameToFix } = fixDataMaping()
+  let formatObj = {}
+  for (const key in res) {
+    const element = res[key]
+    let fix = NameToFix[key]
+    formatObj[fix] = element
+  }
+  // console.log('foramtobj', formatObj)
+  return formatObj
 }
 function formatReponse(res) {
+  // console.log(res)
+  let { fixToName } = fixDataMaping()
   let main = res['30058']
-  let mainArr = []
-  let obj = {
-    SenderCompID: res['49'],
-    MSGID: res['50'],
-    SendingTime: res['52'],
-    TargetCompID: res['56'],
-    TargetSubID: res['57'],
-    NoRpts: res['82'],
-    Username: res['553'],
-    TokenID: res['1129'],
-    Mode: res['11000'],
-    SenderSubID: res['30050']
+  let dataArr = []
+  let finalArr = []
+  if (main) {
+    main.forEach(item => {
+      let newItem = Object.assign({}, res, item)
+      delete newItem['30058']
+      dataArr.push(newItem)
+    })
   }
-  main.forEach(res => {
-    let itemData = {
-      Account: res['1'],
-      ClOrdID: res['11'],
-      CumQty: res['14'],
-      ExecID: res['17'],
-      LastPx: res['31'],
-      LastQty: res['32'],
-      OrderID: res['37'],
-      OrderQty: res['38'],
-      OrdStatus: res['39'],
-      OrdType: res['40'],
-      OrigClOrdID: res['41'],
-      Price: res['44'],
-      Symbol: res['48'],
-      Side: res['54'],
-      Text: res['58'],
-      TimeInForce: res['59'],
-      TransactTime: res['60'],
-      CxlQty: res['84'],
-      OrdRejReason: res['103'],
-      ExecType: res['150'],
-      LeavesQty: res['151'],
-      Branch: res['30056']
+
+  dataArr.forEach(res => {
+    let itemData = {}
+    for (const key in res) {
+      const element = res[key]
+      let attrName = fixToName[key]
+      if (!attrName) {
+        console.log('not mapping key', key)
+      }
+      itemData[attrName] = element
     }
-    mainArr.push(itemData)
+    finalArr.push(itemData)
   })
-  obj.itemData = mainArr
-  // console.log(obj)
-  return obj
+
+  console.log(finalArr)
+  return finalArr
 }
 function orderStatusMaping(status) {
   let res = ''

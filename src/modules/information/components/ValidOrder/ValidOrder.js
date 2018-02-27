@@ -8,7 +8,6 @@ import { orderStatusMaping } from 'tools/format-res-data.js'
 import { getDateFromFormat } from 'tools/date.js'
 import ActionBtn from '../ActionBtn/ActionBtn.js'
 import PopUp from 'modules/shared/components/PopUp/PopUp.js'
-import { formatRequestData } from 'tools/format-res-data.js'
 
 let cx = classNames.bind(styles)
 let validOrderCx = classNames.bind(validOrderStyles)
@@ -18,19 +17,30 @@ class Information extends PureComponent {
     this.state = {
       sortByTime: false,
       showCancelPopUp: false,
-      showReplacePopUp: false,
-      targetRow: Map({})
+      showChangeVolPopUp: false,
+      targetRow: Map({}),
+      changeDiffVol: '',
+      changeDiffPrice: ''
     }
   }
   showCancelPopUp = () => {
     console.log('123')
     this.setState({
-      showCancelPopUp: true
+      showCancelPopUp: true,
+      showChangeVolPopUp: false
     })
   }
-  closeCancelPopUp = () => {
+  showChangeVolPopUp = () => {
+    console.log('1233')
     this.setState({
-      showCancelPopUp: false
+      showCancelPopUp: false,
+      showChangeVolPopUp: true
+    })
+  }
+  closePopUp = () => {
+    this.setState({
+      showCancelPopUp: false,
+      showChangeVolPopUp: false
     })
   }
   targetRow = e => {
@@ -45,13 +55,33 @@ class Information extends PureComponent {
       })
     }
   }
+  handleInputChange = e => {
+    // console.log(this)
+    const target = e.target
+    let value = target.type === 'checkbox' ? target.checked : target.value
+    const name = target.name
+    if (parseInt(value)) {
+      this.setState({
+        [name]: parseInt(value)
+      })
+    } else {
+      this.setState({
+        [name]: value
+      })
+    }
+  }
   cancelOrder = () => {
     let targetRow = this.state.targetRow
-    targetRow = targetRow.set('Mode', '26')
-    targetRow = formatRequestData(targetRow.toJS())
-    console.log(targetRow)
     this.props.cancelOrder(targetRow)
-    this.closeCancelPopUp()
+    this.closePopUp()
+  }
+  changeOrder = (value, type) => {
+    let targetRow = this.state.targetRow
+    // targetRow = targetRow.set('OrderQty', diffVol)
+    // targetRow = formatRequestData(targetRow.toJS())
+    // console.log(targetRow)
+    this.props.changeOrder({ targetRow, value, type })
+    this.closePopUp()
   }
   render() {
     let { list } = this.props
@@ -136,7 +166,9 @@ class Information extends PureComponent {
             <span onClick={this.showCancelPopUp} className={cx('btn')}>
               刪
             </span>
-            <span className={cx('btn')}>量</span>
+            <span onClick={this.showChangeVolPopUp} className={cx('btn')}>
+              量
+            </span>
             <span className={cx('btn')}>價</span>
           </Cell>
           <Cell key="1">{item.get('Account')}</Cell>
@@ -161,7 +193,7 @@ class Information extends PureComponent {
       <div className={cx('sticky-table')}>
         <StickyTable stickyColumnCount={0}>{rows}</StickyTable>
         <PopUp show={this.state.showCancelPopUp} width="300" height="350">
-          <div className={validOrderCx('cancel-popup')}>
+          <div className={validOrderCx('popup')}>
             <div className={validOrderCx('title')}>
               <span>刪單</span>
             </div>
@@ -173,8 +205,14 @@ class Information extends PureComponent {
                 <span className={validOrderCx('bold')}>
                   {targetRow.get('Symbol')}
                 </span>
-                <span className={validOrderCx('orderType')}>
-                  {targetRow.get('Side')}
+                <span
+                  className={
+                    targetRow.get('Side') == '1'
+                      ? validOrderCx('orderType', 'buy')
+                      : validOrderCx('orderType', 'sell')
+                  }
+                >
+                  {targetRow.get('Side') == '1' ? '買' : '賣'}
                 </span>
                 <span className={validOrderCx('price')}>
                   {targetRow.get('Price')}
@@ -188,14 +226,75 @@ class Information extends PureComponent {
                   <span>未成交數量</span>
                 </div>
                 <div className={validOrderCx('values')}>
-                  <span>{`${targetRow.get('OrderQty')} 股`}</span>
-                  <span>{`${targetRow.get('CumQty')} 股`}</span>
-                  <span>{`${targetRow.get('LeavesQty')} 股`}</span>
+                  <span>{`${targetRow.get('OrderQty')} 張`}</span>
+                  <span>{`${targetRow.get('CumQty')} 張`}</span>
+                  <span>{`${targetRow.get('LeavesQty')} 張`}</span>
                 </div>
               </div>
               <div className={validOrderCx('btn-wrap')}>
                 <span onClick={this.cancelOrder}>委託單送出</span>
-                <span onClick={this.closeCancelPopUp}>取消</span>
+                <span onClick={this.closePopUp}>取消</span>
+              </div>
+            </div>
+          </div>
+        </PopUp>
+        <PopUp show={this.state.showChangeVolPopUp} width="300" height="350">
+          <div className={validOrderCx('popup', 'changeVolPop')}>
+            <div className={validOrderCx('title')}>
+              <span>改量</span>
+            </div>
+            <div className={validOrderCx('main')}>
+              <div className={validOrderCx('info-wrap')}>
+                <span className={validOrderCx('bold')}>
+                  {targetRow.get('Account')}
+                </span>
+                <span className={validOrderCx('bold')}>
+                  {targetRow.get('Symbol')}
+                </span>
+                <span
+                  className={
+                    targetRow.get('Side') == '1'
+                      ? validOrderCx('orderType', 'buy')
+                      : validOrderCx('orderType', 'sell')
+                  }
+                >
+                  {targetRow.get('Side') == '1' ? '買' : '賣'}
+                </span>
+                <span className={validOrderCx('price')}>
+                  {targetRow.get('Price')}
+                </span>
+              </div>
+
+              <div className={validOrderCx('volume-wrap')}>
+                <div className={validOrderCx('item')}>
+                  <span>原始委託量</span>
+                  <span>已成交數量</span>
+                  <span>未成交數量</span>
+                </div>
+                <div className={validOrderCx('values')}>
+                  <span>{`${targetRow.get('OrderQty')} 張`}</span>
+                  <span>{`${targetRow.get('CumQty')} 張`}</span>
+                  <span>{`${targetRow.get('LeavesQty')} 張`}</span>
+                </div>
+              </div>
+              <div className={validOrderCx('diffVol-wrap')}>
+                <span>數量</span>
+                <input
+                  onChange={this.handleInputChange}
+                  value={this.state.changeDiffVol}
+                  name="changeDiffVol"
+                  type="number"
+                />張
+              </div>
+              <div className={validOrderCx('btn-wrap')}>
+                <span
+                  onClick={() => {
+                    this.changeOrder(this.state.changeDiffVol, 'volume')
+                  }}
+                >
+                  委託單送出
+                </span>
+                <span onClick={this.closePopUp}>取消</span>
               </div>
             </div>
           </div>

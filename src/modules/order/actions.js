@@ -1,12 +1,15 @@
 import * as types from './action-types'
 import { formatFormData } from 'tools/other.js'
 import { formatReponse } from 'tools/format-res-data.js'
+import { formatRequestData } from 'tools/format-res-data.js'
 import appGlobal from 'modules/common/app-global.js'
 import { quoteFormatEven } from 'tools/apex-dataformat'
 import { Map } from 'immutable'
 
 export const order = params => {
   return (dispatch, getState, apiUrl) => {
+    params = formatRequestData(params)
+    console.log(params)
     let formData = formatFormData(params)
     return fetch(`${apiUrl}/api/order`, {
       method: 'POST',
@@ -16,22 +19,16 @@ export const order = params => {
         return res.json()
       })
       .then(obj => {
-        // console.log(obj)
-        let data = formatReponse(obj)
-        data = Object.assign({}, data, data.itemData[0])
-        delete data.itemData
+        console.log(obj)
+        let data = formatReponse(obj)[0]
         data = fromJS(data)
-        console.log(data.toJS())
         dispatch(newOrder(data))
       })
   }
 }
 
 export const changeOrderStatus = res => {
-  let data = formatReponse(res)
-  // console.log(data)
-  data = Object.assign({}, data, data.itemData[0])
-  delete data.itemData
+  let data = formatReponse(res)[0]
   data = fromJS(data)
   return {
     type: types.CHANGE_ORDER_STATUS,

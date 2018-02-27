@@ -1,8 +1,8 @@
 @import 'helpers/_mixins.css';
 
-.cancel-popup {
+.popup {
   z-index: 2;
-  background-color: #afadad;
+  background-color: rgb(235, 235, 235);
   height: 100%;
   width: 100%;
   .main {
@@ -32,7 +32,6 @@
     }
     .orderType {
       color: white;
-      background-color: green;
       padding: 5px 2px;
     }
   }
@@ -61,5 +60,27 @@
     span {
       @mixin action-btn;
     }
+  }
+}
+.changeVolPop {
+  .btn-wrap {
+    bottom: -50px;
+  }
+}
+.sell {
+  background-color: green;
+}
+.buy {
+  background-color: red;
+}
+.diffVol-wrap {
+  padding-top: 20px;
+  span {
+    display: inline-block;
+    padding-right: 85px;
+  }
+  input {
+    width: 100px;
+    margin-right: 10px;
   }
 }
