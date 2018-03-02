@@ -63,6 +63,7 @@ class Information extends PureComponent {
     const index = list.findIndex(i => i.get('OrderID') === orderid)
     if (index !== -1) {
       let targetRow = list.get(index)
+      console.log(targetRow.toJS())
       this.setState({
         targetRow,
         changeDiffVol2: targetRow.get('LeavesQty'),
@@ -227,7 +228,12 @@ class Information extends PureComponent {
     return (
       <div className={cx('sticky-table')}>
         <StickyTable stickyColumnCount={0}>{rows}</StickyTable>
-        <PopUp show={this.state.showCancelPopUp} width="300" height="350">
+        <PopUp
+          show={this.state.showCancelPopUp}
+          width="300px"
+          height="350px"
+          top="100%"
+        >
           <div className={validOrderCx('popup')}>
             <div className={validOrderCx('title')}>
               <span>刪單</span>
@@ -287,7 +293,12 @@ class Information extends PureComponent {
             </div>
           </div>
         </PopUp>
-        <PopUp show={this.state.showChangeVolPopUp} width="300" height="350">
+        <PopUp
+          show={this.state.showChangeVolPopUp}
+          width="300px"
+          height="350px"
+          top="100%"
+        >
           <div className={validOrderCx('popup', 'changeVolPop')}>
             <div className={validOrderCx('title')}>
               <span>改量</span>
@@ -361,7 +372,12 @@ class Information extends PureComponent {
             </div>
           </div>
         </PopUp>
-        <PopUp show={this.state.showChangePricePopUp} width="300" height="400">
+        <PopUp
+          show={this.state.showChangePricePopUp}
+          width="300px"
+          height="350px"
+          top="100%"
+        >
           <div className={validOrderCx('popup')}>
             <div className={validOrderCx('title')}>
               <span>改價</span>
@@ -402,7 +418,7 @@ class Information extends PureComponent {
                     <span>原始委託價</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('Price')} 張`}</span>
+                    <span>{`${targetRow.get('Price')} `}</span>
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>

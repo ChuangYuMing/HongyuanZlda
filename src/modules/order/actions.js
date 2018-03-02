@@ -18,7 +18,7 @@ export const order = params => {
         return res.json()
       })
       .then(obj => {
-        console.log(obj)
+        console.log('order', obj)
         let data = formatReponse(obj)[0]
         data = fromJS(data)
         dispatch(newOrder(data))

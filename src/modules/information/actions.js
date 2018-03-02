@@ -20,7 +20,7 @@ export const cancelOrder = params => {
           return res.json()
         })
         .then(obj => {
-          console.log(obj)
+          console.log('cancelOrder', obj)
           dispatch(changeOrderStatus(obj))
           resolve()
         })

@@ -253,8 +253,8 @@ class HkOrder extends PureComponent {
         </div>
         <PopUp
           show={this.state.showPopUP}
-          width="600"
-          height="300"
+          width="600px"
+          height="300px"
           data={this.state.orderParams}
         >
           <div className={cx('order-popup')}>
