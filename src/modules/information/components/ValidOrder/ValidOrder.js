@@ -137,6 +137,9 @@ class Information extends PureComponent {
       })
     }
     list = list.push(hiddenData)
+    for (let index = 0; index < 10; index++) {
+      list = list.push(hiddenData)
+    }
     var rows = []
     var cells = []
     let headers = [

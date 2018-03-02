@@ -8,11 +8,13 @@ import Member from 'modules/member/components/Member'
 import Inventory from 'modules/inventory/components/Inventory'
 import Menu from 'modules/menu/components/Menu'
 import { Redirect } from 'react-router-dom'
+import SplitPane from 'react-split-pane'
 
 let cx = classNames.bind(styles)
 class Main extends Component {
   constructor() {
     super()
+    this.windowWith = document.body.clientWidth
   }
   render() {
     if (!this.props.isLogin) {
@@ -30,16 +32,24 @@ class Main extends Component {
         <div className={cx('menu')}>
           <Menu />
         </div>
-        <div className={cx('information')}>
-          <Information />
-        </div>
-        <div className={cx('middle-wrap')}>
-          <div className={cx('members')}>
-            <Member />
-          </div>
-          <div className={cx('inventory')}>
-            <Inventory />
-          </div>
+        <div className={cx('pane-wrap')}>
+          <SplitPane split="horizontal" minSize={70} defaultSize={190}>
+            <div className={cx('information')}>
+              <Information />
+            </div>
+            <SplitPane
+              split="vertical"
+              minSize={200}
+              defaultSize={this.windowWith / 2}
+            >
+              <div className={cx('members')}>
+                <Member />
+              </div>
+              <div className={cx('inventory')}>
+                <Inventory />
+              </div>
+            </SplitPane>
+          </SplitPane>
         </div>
         <div className={cx('order')}>
           <Order />
