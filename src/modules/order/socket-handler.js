@@ -27,7 +27,7 @@ class SocketHandler {
     })
     quoteObs.subscribe(eventQuotePub, data => {
       let symbol = data['12015'] || data['Symbol']
-      let priceDec = store.getState().order.orderQuote.PriceDec
+      let priceDec = store.getState().order.getIn(['orderQuote', 'PriceDec'])
       // console.log(priceDec)
       let obj = {
         Symbol: symbol,
@@ -63,7 +63,7 @@ class SocketHandler {
     })
     bidAskObs.subscribe(bidAskPub, data => {
       let symbol = data['48']
-      let priceDec = store.getState().order.orderQuote.PriceDec
+      let priceDec = store.getState().order.getIn(['orderQuote', 'PriceDec'])
       // console.log(symbol, priceDec)
       let baObj = {
         Symbol: symbol,

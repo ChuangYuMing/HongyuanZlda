@@ -30,7 +30,7 @@ export default (state = init, action) => {
       return state.update('orderQuote', prev => prev.merge(action.data))
     }
     case types.BID_AND_ASK_TICK: {
-      if (state.orderQuote.get('Symbol') === action.data.get('Symbol')) {
+      if (state.getIn(['orderQuote'], 'Symbol') === action.data.get('Symbol')) {
         return state.update('orderQuote', prev => prev.merge(action.data))
       }
       return state

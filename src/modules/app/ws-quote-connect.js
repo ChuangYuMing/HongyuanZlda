@@ -105,7 +105,7 @@ class WsQuoteConnect {
       }
       if (typeof res['11000'] !== 'undefined' && res['11000'] === 51) {
         // console.log('sock message-tick :', res)
-        let priceDec = store.getState().order.orderQuote.PriceDec
+        let priceDec = store.getState().order.getIn(['orderQuote', 'PriceDec'])
         let symbol = res['48']
         // console.log(priceDec)
         let tickObj = Object.assign(
