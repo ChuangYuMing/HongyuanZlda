@@ -12,7 +12,7 @@ export default (state = init, action) => {
     case types.CHANGE_ORDER_STATUS: {
       let targetIndex = state
         .get('orderList')
-        .findIndex(i => i.get('OrderID') === action.data.get('OrderID'))
+        .findIndex(i => i.get('ClOrdID') === action.data.get('ClOrdID'))
       if (targetIndex !== -1) {
         state = state.updateIn(['orderList', targetIndex], item =>
           item.merge(action.data)

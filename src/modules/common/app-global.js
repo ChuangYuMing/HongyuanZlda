@@ -4,6 +4,7 @@ class AppGlobal {
     // this._apiUrl = 'http://192.168.12.153:8080'
     this._wsQuoteSessionId = ''
     this._userToken = ''
+    this.needingOrderPending = []
   }
   get apiUrl() {
     return this._apiUrl
@@ -13,6 +14,13 @@ class AppGlobal {
   }
   set wsQuoteSessionId(val) {
     this._wsQuoteSessionId = val
+  }
+  addOrderPending(clorderid, callback) {
+    this.needingOrderPending.push({
+      clorderid,
+      callback
+    })
+    console.log(this.needingOrderPending)
   }
 }
 export default new AppGlobal()

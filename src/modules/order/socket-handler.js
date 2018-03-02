@@ -20,7 +20,7 @@ class SocketHandler {
   constructor() {}
   on() {
     orderObs.subscribe(orderPub, data => {
-      dispatch(changeOrderStatus(data))
+      dispatch(changeOrderStatus(data, false))
     })
     ticksObs.subscribe(ticksPub, data => {
       dispatch(updateTick(data))

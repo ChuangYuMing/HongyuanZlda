@@ -6,7 +6,7 @@ let cx = classNames.bind(styles)
 class PopUp extends PureComponent {
   constructor(props) {
     super(props)
-    console.log(props)
+    // console.log(props)
   }
   render() {
     let show = this.props.show

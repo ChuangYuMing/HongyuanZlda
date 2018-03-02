@@ -26,6 +26,7 @@
     "classnames": "2.2.5",
     "immutable": "^3.8.2",
     "lodash": "4.17.4",
+    "node-forge": "^0.7.1",
     "pako": "^1.0.6",
     "postcss-global-import": "^1.0.6",
     "query-string": "4.3.4",

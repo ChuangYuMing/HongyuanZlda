@@ -81,6 +81,9 @@ function formatRequestData(res) {
 }
 function formatReponse(res) {
   // console.log(res)
+  if (Array.isArray(res)) {
+    return res
+  }
   let { fixToName } = fixDataMaping()
   let main = res['30058']
   let dataArr = []
@@ -91,6 +94,8 @@ function formatReponse(res) {
       delete newItem['30058']
       dataArr.push(newItem)
     })
+  } else {
+    dataArr.push(res)
   }
 
   dataArr.forEach(res => {

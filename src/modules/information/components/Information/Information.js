@@ -5,6 +5,7 @@ import classNames from 'classnames/bind'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import ValidOrder from '../ValidOrder/index.js'
 import DealOrder from '../DealOrder/index.js'
+import SocketHandler from '../../socket-handler'
 
 let cx = classNames.bind(styles)
 class Information extends PureComponent {
@@ -14,7 +15,12 @@ class Information extends PureComponent {
       sortByTime: false
     }
   }
-
+  componentDidMount() {
+    SocketHandler.on()
+  }
+  componentWillUnmount() {
+    SocketHandler.off()
+  }
   render() {
     return (
       <div className={cx('information-wrap')}>

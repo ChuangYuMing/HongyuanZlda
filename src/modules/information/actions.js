@@ -26,13 +26,10 @@ export const cancelOrder = params => {
   }
 }
 
-export const changeOrder = ({ targetRow, value, type }) => {
-  return (dispatch, getState, apiUrl) => {
-    // console.log('params', params)
-    cancelOrder(targetRow).then(a => {
-      console.log(a)
-      console.log('1111')
-      // order(params)
-    })
-  }
-}
+// export const changeOrder = ({ targetRow, value, type }) => {
+//   return (dispatch, getState, apiUrl) => {
+//     console.log('params', params)
+//     cancelOrder(targetRow).then(a => {
+//     })
+//   }
+// }

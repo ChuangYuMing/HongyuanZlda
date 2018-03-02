@@ -1,7 +1,6 @@
 import * as types from './action-types'
 import { formatFormData } from 'tools/other.js'
-import { formatReponse } from 'tools/format-res-data.js'
-import { formatRequestData } from 'tools/format-res-data.js'
+import { formatReponse, formatRequestData } from 'tools/format-res-data.js'
 import appGlobal from 'modules/common/app-global.js'
 import { quoteFormatEven } from 'tools/apex-dataformat'
 import { Map } from 'immutable'
@@ -27,9 +26,14 @@ export const order = params => {
   }
 }
 
-export const changeOrderStatus = res => {
-  let data = formatReponse(res)[0]
-  data = fromJS(data)
+export const changeOrderStatus = (res, mappingData = true) => {
+  let data = ''
+  // console.log('mappingData', mappingData)
+  if (mappingData) {
+    data = fromJS(formatReponse(res)[0])
+  } else {
+    data = fromJS(res)
+  }
   return {
     type: types.CHANGE_ORDER_STATUS,
     data

@@ -4,7 +4,8 @@ import pako from 'pako'
 import appGlobal from 'modules/common/app-global.js'
 import { uuid } from 'tools/math'
 import { Utf8ArrayToStr } from 'tools/text-decode'
-import { orderPub } from 'modules/app/publisher'
+import { orderPub, cancelOrderPub } from 'modules/app/publisher'
+import { formatReponse } from 'tools/format-res-data.js'
 
 class WsConnect {
   constructor(userToken) {
@@ -81,6 +82,10 @@ class WsConnect {
         return
       }
       console.log(res)
+      res = formatReponse(res)[0]
+      if (res.ExecType === '4') {
+        cancelOrderPub.trigger(res)
+      }
       orderPub.trigger(res)
     }
   }
