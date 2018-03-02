@@ -179,6 +179,10 @@ class Information extends PureComponent {
         'hidden-row': index + 1 === list.size ? true : false
       })
       let iRow = () => {
+        let TransactTime = item.get('TransactTime')
+        TransactTime = TransactTime
+          ? TransactTime.split('-')[1].split('.')[0]
+          : ''
         return (
           <Row
             className={cxx}
@@ -198,14 +202,7 @@ class Information extends PureComponent {
             </Cell>
             <Cell key="1">{item.get('Account')}</Cell>
             <Cell key="2">{item.get('OrderID')}</Cell>
-            <Cell key="3">
-              {
-                item
-                  .get('TransactTime')
-                  .split('-')[1]
-                  .split('.')[0]
-              }
-            </Cell>
+            <Cell key="3">{TransactTime}</Cell>
             <Cell key="4">{item.get('Symbol')}</Cell>
             <Cell key="5">{item.get('Side')}</Cell>
             <Cell key="6">{item.get('Price')}</Cell>

@@ -19,6 +19,7 @@ export const cancelOrder = params => {
           return res.json()
         })
         .then(obj => {
+          console.log(obj)
           dispatch(changeOrderStatus(obj))
           resolve()
         })

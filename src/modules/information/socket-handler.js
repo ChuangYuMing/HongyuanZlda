@@ -15,7 +15,8 @@ class SocketHandler {
       let clorderid = data.ClOrderID
       let peddingOrder = appGlobal.needingOrderPending
       peddingOrder.forEach(element => {
-        if (element.clorderid === clorderid) {
+        console.log(element.clorderid, clorderid)
+        if (clorderid && element.clorderid === clorderid) {
           element.callback()
         }
       })

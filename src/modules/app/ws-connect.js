@@ -86,7 +86,9 @@ class WsConnect {
       }
       // console.log(res)
       res = formatReponse(res)[0]
+      //刪單回報
       if (res.ExecType === '4') {
+        console.log(res)
         cancelOrderPub.trigger(res)
       }
       orderPub.trigger(res)

@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import Login from './Login'
-import { login } from '../../actions.js'
+import { login, customerInfo } from '../../actions.js'
+import { formatDate } from 'tools/date.js'
 
 const mapStateToProps = state => {
   return {
@@ -10,8 +11,23 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    login: data => {
-      dispatch(login(data))
+    login: async data => {
+      let { token, userId } = await dispatch(login(data))
+      let millss = new Date().getMilliseconds()
+      let params = {
+        MsgSeqNum: 'customerInfo',
+        Mode: '40',
+        TokenID: token,
+        SenderCompID: '',
+        SenderSubID: '',
+        SendingTime: `${formatDate(new Date(), 'yyyyMMdd-HH:MM:ss')}.${millss}`,
+        TargetCompID: '',
+        TargetSubID: '',
+        Username: userId,
+        RMode: '1'
+      }
+      console.log(params)
+      dispatch(customerInfo(params))
     }
   }
 }
