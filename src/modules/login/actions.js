@@ -25,6 +25,19 @@ export const login = params => {
   }
 }
 
+export const customerInfo = params => {
+  return (dispatch, getState, apiUrl) => {
+    let formData = formatFormData(params)
+    return fetch(`${apiUrl}/api/Customer/Info`, {
+      method: 'POST',
+      body: formData
+    })
+      .then(res => {
+        return res.json()
+      })
+      .then(obj => {})
+  }
+}
 export const updateStatus = data => {
   return {
     type: types.UPDATE_STATUS,

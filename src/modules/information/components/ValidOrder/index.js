@@ -7,7 +7,7 @@ import appGlobal from 'modules/common/app-global.js'
 console.log(appGlobal)
 const mapStateToProps = state => {
   return {
-    list: state.order.getIn(['orderList'])
+    // list: state.order.getIn(['orderList'])
   }
 }
 

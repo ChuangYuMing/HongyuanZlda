@@ -65,7 +65,7 @@ class HkOrder extends PureComponent {
       Side: action,
       OrdType: orderType,
       Price: price,
-      OrderQty: volume * 1000,
+      OrderQty: volume,
       Branch: 'branch01',
       Username: this.props.userId
     }

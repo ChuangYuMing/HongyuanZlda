@@ -60,7 +60,6 @@ class WsConnect {
       console.error('sock error', e)
     }
     this.sock.onmessage = e => {
-      // console.log(e.data)
       let res
       let base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
       if (base64regex.test(e.data)) {
@@ -81,7 +80,11 @@ class WsConnect {
       if (res.hasOwnProperty('SessionID')) {
         return
       }
-      console.log(res)
+      if (res['11000'] === '34') {
+        console.log('heartbeat')
+        return
+      }
+      // console.log(res)
       res = formatReponse(res)[0]
       if (res.ExecType === '4') {
         cancelOrderPub.trigger(res)

@@ -57,7 +57,7 @@ class Information extends PureComponent {
     })
   }
   targetRow = e => {
-    let list = this.props.list
+    let list = this.props.data
     const target = e.currentTarget
     let orderid = target.dataset.orderid
     const index = list.findIndex(i => i.get('OrderID') === orderid)
@@ -65,7 +65,7 @@ class Information extends PureComponent {
       let targetRow = list.get(index)
       this.setState({
         targetRow,
-        changeDiffVol2: targetRow.get('LeavesQty') / 1000,
+        changeDiffVol2: targetRow.get('LeavesQty'),
         changeDiffPrice: targetRow.get('Price')
       })
     }
@@ -92,14 +92,14 @@ class Information extends PureComponent {
   }
   changeOrderVol = () => {
     let targetRow = this.state.targetRow
-    let value = this.state.changeDiffVol * 1000
+    let value = this.state.changeDiffVol
     this.props.changeOrderVol({ targetRow, value })
     this.closePopUp()
   }
   changeOrderPrice = () => {
     let targetRow = this.state.targetRow
     let value = {
-      vol: this.state.changeDiffVol2 * 1000,
+      vol: this.state.changeDiffVol2,
       price: this.state.changeDiffPrice
     }
 
@@ -107,7 +107,7 @@ class Information extends PureComponent {
     this.closePopUp()
   }
   render() {
-    let { list } = this.props
+    let list = this.props.data
     let targetRow = this.state.targetRow
     let hiddenData = Map({
       Account: '255428',
@@ -198,15 +198,22 @@ class Information extends PureComponent {
             </Cell>
             <Cell key="1">{item.get('Account')}</Cell>
             <Cell key="2">{item.get('OrderID')}</Cell>
-            <Cell key="3">{item.get('TransactTime')}</Cell>
+            <Cell key="3">
+              {
+                item
+                  .get('TransactTime')
+                  .split('-')[1]
+                  .split('.')[0]
+              }
+            </Cell>
             <Cell key="4">{item.get('Symbol')}</Cell>
             <Cell key="5">{item.get('Side')}</Cell>
             <Cell key="6">{item.get('Price')}</Cell>
-            <Cell key="7">{item.get('OrderQty')}</Cell>
-            <Cell key="8">{item.get('CumQty')}</Cell>
-            <Cell key="9">{item.get('CxlQty')}</Cell>
+            <Cell key="7">{item.get('OrderQty') * 1000}</Cell>
+            <Cell key="8">{item.get('CumQty') * 1000}</Cell>
+            <Cell key="9">{item.get('CxlQty') * 1000}</Cell>
             <Cell key="10">{item.get('LastPx')}</Cell>
-            <Cell key="11">{item.get('LeavesQty')}</Cell>
+            <Cell key="11">{item.get('LeavesQty') * 1000}</Cell>
             <Cell key="12">{orderStatusMaping(item.get('OrdStatus'))}</Cell>
           </Row>
         )
@@ -255,7 +262,7 @@ class Information extends PureComponent {
                     <span>原始委託量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('OrderQty') / 1000} 張`}</span>
+                    <span>{`${targetRow.get('OrderQty')} 張`}</span>
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>
@@ -263,7 +270,7 @@ class Information extends PureComponent {
                     <span>已成交數量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('CumQty') / 1000} 張`}</span>
+                    <span>{`${targetRow.get('CumQty')} 張`}</span>
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>
@@ -271,7 +278,7 @@ class Information extends PureComponent {
                     <span>未成交數量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('LeavesQty') / 1000} 張`}</span>
+                    <span>{`${targetRow.get('LeavesQty')} 張`}</span>
                   </div>
                 </div>
               </div>
@@ -315,7 +322,7 @@ class Information extends PureComponent {
                     <span>原始委託量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('OrderQty') / 1000} 張`}</span>
+                    <span>{`${targetRow.get('OrderQty')} 張`}</span>
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>
@@ -323,7 +330,7 @@ class Information extends PureComponent {
                     <span>已成交數量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('CumQty') / 1000} 張`}</span>
+                    <span>{`${targetRow.get('CumQty')} 張`}</span>
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>
@@ -331,7 +338,7 @@ class Information extends PureComponent {
                     <span>未成交數量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('LeavesQty') / 1000} 張`}</span>
+                    <span>{`${targetRow.get('LeavesQty')} 張`}</span>
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>
@@ -389,7 +396,7 @@ class Information extends PureComponent {
                     <span>未成交數量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('LeavesQty') / 1000} 張`}</span>
+                    <span>{`${targetRow.get('LeavesQty')} 張`}</span>
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>
