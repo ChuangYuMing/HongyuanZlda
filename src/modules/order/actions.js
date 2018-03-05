@@ -4,25 +4,23 @@ import { formatReponse, formatRequestData } from 'tools/format-res-data.js'
 import appGlobal from 'modules/common/app-global.js'
 import { quoteFormatEven } from 'tools/apex-dataformat'
 import { Map } from 'immutable'
+import { callApi } from 'modules/common/api.js'
 
 export const order = params => {
   return (dispatch, getState, apiUrl) => {
+    params.TokenID = getState().app.get('userToken')
     params = formatRequestData(params)
     console.log(params)
     let formData = formatFormData(params)
-    return fetch(`${apiUrl}/api/order`, {
+    callApi('/api/order', {
       method: 'POST',
       body: formData
+    }).then(obj => {
+      console.log('order', obj)
+      let data = formatReponse(obj)[0]
+      data = fromJS(data)
+      dispatch(newOrder(data))
     })
-      .then(res => {
-        return res.json()
-      })
-      .then(obj => {
-        console.log('order', obj)
-        let data = formatReponse(obj)[0]
-        data = fromJS(data)
-        dispatch(newOrder(data))
-      })
   }
 }
 
