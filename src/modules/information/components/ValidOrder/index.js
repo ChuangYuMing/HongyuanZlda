@@ -23,7 +23,7 @@ const mapDispatchToProps = dispatch => {
       let clorderid = targetRow.get('ClOrderID')
 
       let params = {
-        Mode: 22,
+        MsgType: 22,
         Symbol: targetRow.get('Symbol'),
         Account: targetRow.get('Account'),
         Side: targetRow.get('Side'),
@@ -46,7 +46,7 @@ const mapDispatchToProps = dispatch => {
       let clorderid = targetRow.get('ClOrderID')
 
       let params1 = {
-        Mode: 22,
+        MsgType: 22,
         Symbol: targetRow.get('Symbol'),
         Account: targetRow.get('Account'),
         Side: targetRow.get('Side'),
@@ -57,7 +57,7 @@ const mapDispatchToProps = dispatch => {
         Username: targetRow.get('Username')
       }
       let params2 = {
-        Mode: 22,
+        MsgType: 22,
         Symbol: targetRow.get('Symbol'),
         Account: targetRow.get('Account'),
         Side: targetRow.get('Side'),

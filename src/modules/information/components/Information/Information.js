@@ -46,7 +46,7 @@ class Information extends PureComponent {
       }
       return false
     })
-    console.log(ValidList.toJS())
+    // console.log(ValidList.toJS())
     return (
       <div className={cx('information-wrap')}>
         <div className={cx('tabs-wrap')}>

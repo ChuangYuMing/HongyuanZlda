@@ -7,8 +7,8 @@ import { order } from 'modules/order/actions.js'
 
 export const cancelOrder = params => {
   return (dispatch, getState, apiUrl) => {
-    let targetData = params.set('Mode', '26')
-    console.log(targetData.toJS())
+    let targetData = params.set('MsgType', 'F')
+    console.log('params', targetData.toJS())
     targetData = formatRequestData(targetData.toJS())
     let formData = formatFormData(targetData)
     return new Promise(resolve => {

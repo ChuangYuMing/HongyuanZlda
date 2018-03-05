@@ -44,7 +44,7 @@ class UsOrder extends PureComponent {
     let action = e.target.dataset.action
     let { account, symbol, volume, price, orderType, date } = this.state
     let params = {
-      Mode: 22,
+      MsgType: 22,
       Symbol: symbol,
       Account: account,
       Side: action,

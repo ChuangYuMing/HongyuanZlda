@@ -53,13 +53,13 @@ class HkOrder extends PureComponent {
       })
     }
   }
-  // 11000=22&48=FB&553=user01&1=acc01&30056=branch01
+
   handleOrderAction = e => {
     let apiUrl = appGlobal.apiurl
     let action = e.target.dataset.action
     let { account, symbol, volume, price, orderType, date } = this.state
     let params = {
-      Mode: 22,
+      MsgType: 'D',
       Symbol: symbol,
       Account: account,
       Side: action,

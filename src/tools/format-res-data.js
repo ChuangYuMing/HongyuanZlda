@@ -52,15 +52,15 @@ function fixDataMaping() {
     '151': 'LeavesQty',
     '30056': 'Branch',
     '49': 'SenderCompID',
-    '50': 'MSGID',
+    '34': 'MsgSqgNum',
     '52': 'SendingTime',
     '56': 'TargetCompID',
     '57': 'TargetSubID',
     '82': 'NoRpts',
     '553': 'Username',
     '1129': 'TokenID',
-    '11000': 'Mode',
-    '30050': 'SenderSubID'
+    '35': 'MsgType',
+    '50': 'SenderSubID'
   }
   for (const key in fixToName) {
     const element = fixToName[key]

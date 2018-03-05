@@ -80,7 +80,7 @@ class WsConnect {
       if (res.hasOwnProperty('SessionID')) {
         return
       }
-      if (res['11000'] === '34') {
+      if (res['35'] === '0') {
         console.log('heartbeat')
         return
       }

@@ -38,8 +38,8 @@ class Login extends Component {
   login = () => {
     let { userId, pwd } = this.state
     let parms = {
-      '50': '',
-      '11000': '30',
+      '34': '',
+      '35': '30',
       '553': userId,
       '554': pwd,
       '1408': ''

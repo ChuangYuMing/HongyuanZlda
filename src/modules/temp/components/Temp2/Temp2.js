@@ -38,7 +38,7 @@ class Temp2 extends React.Component {
     let action = e.target.dataset.action
     let { account, symbol, volume, price, orderType, date } = this.state
     var formData = new FormData()
-    formData.append('Mode', 22)
+    formData.append('MsgType', 22)
     formData.append('date', date)
     formData.append('lino', 0)
     formData.append('sbdm', 10)
