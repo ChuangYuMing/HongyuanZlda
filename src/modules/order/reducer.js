@@ -38,6 +38,20 @@ export default (state = init, action) => {
     case types.CLEAR_ORDER: {
       return init
     }
+    case types.CHECK_DELETE_ROW: {
+      let { clorderid, value } = action
+      let targetIndex = state
+        .get('orderList')
+        .findIndex(i => i.get('ClOrdID') === clorderid)
+      console.log('123123', clorderid, value, targetIndex)
+      if (targetIndex !== -1) {
+        state = state.updateIn(['orderList', targetIndex], list => {
+          list = list.set('checkToDelete', value)
+          return list
+        })
+      }
+      return state
+    }
     default:
       return state
   }

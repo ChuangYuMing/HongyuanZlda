@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import ValidOrder from './ValidOrder'
 import { cancelOrder, changeOrder } from '../../actions'
-import { order } from 'modules/order/actions.js'
+import { order, checkDeleteRow } from 'modules/order/actions.js'
 import appGlobal from 'modules/common/app-global.js'
 
 console.log(appGlobal)
@@ -20,10 +20,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(cancelOrder(targetRow))
       let price = targetRow.get('Price')
       let volume = value
-      let clorderid = targetRow.get('ClOrderID')
+      let clorderid = targetRow.get('ClOrdID')
 
       let params = {
-        MsgType: 22,
+        MsgType: 'D',
         Symbol: targetRow.get('Symbol'),
         Account: targetRow.get('Account'),
         Side: targetRow.get('Side'),
@@ -37,16 +37,19 @@ const mapDispatchToProps = dispatch => {
         dispatch(order(params))
       })
     },
+    checkDeleteRow: (clorderid, value) => {
+      dispatch(checkDeleteRow(clorderid, value))
+    },
     changeOrderPrice: ({ targetRow, value }) => {
       dispatch(cancelOrder(targetRow))
       let originPrice = targetRow.get('Price')
       let originVol = targetRow.get('LeavesQty')
       let price = value.price
       let volume = value.vol
-      let clorderid = targetRow.get('ClOrderID')
+      let clorderid = targetRow.get('ClOrdID')
 
       let params1 = {
-        MsgType: 22,
+        MsgType: 'D',
         Symbol: targetRow.get('Symbol'),
         Account: targetRow.get('Account'),
         Side: targetRow.get('Side'),
@@ -57,7 +60,7 @@ const mapDispatchToProps = dispatch => {
         Username: targetRow.get('Username')
       }
       let params2 = {
-        MsgType: 22,
+        MsgType: 'D',
         Symbol: targetRow.get('Symbol'),
         Account: targetRow.get('Account'),
         Side: targetRow.get('Side'),

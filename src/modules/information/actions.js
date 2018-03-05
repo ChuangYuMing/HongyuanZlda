@@ -4,34 +4,27 @@ import { formatRequestData } from 'tools/format-res-data.js'
 import { changeOrderStatus } from 'modules/order/actions.js'
 import { formatReponse } from 'tools/format-res-data.js'
 import { order } from 'modules/order/actions.js'
+import { callApi } from 'modules/common/api.js'
 
 export const cancelOrder = params => {
   return (dispatch, getState, apiUrl) => {
+    let tokenID = getState().app.get('userToken')
     let targetData = params.set('MsgType', 'F')
+    targetData = targetData.merge(
+      Map({
+        MsgType: 'F',
+        TokenID: tokenID
+      })
+    )
     console.log('params', targetData.toJS())
     targetData = formatRequestData(targetData.toJS())
     let formData = formatFormData(targetData)
-    return new Promise(resolve => {
-      return fetch(`${apiUrl}/api/cancel`, {
-        method: 'POST',
-        body: formData
-      })
-        .then(res => {
-          return res.json()
-        })
-        .then(obj => {
-          console.log('cancelOrder', obj)
-          dispatch(changeOrderStatus(obj))
-          resolve()
-        })
+    callApi('/api/cancel', {
+      method: 'POST',
+      body: formData
+    }).then(obj => {
+      console.log('cancelOrder', obj)
+      dispatch(changeOrderStatus(obj))
     })
   }
 }
-
-// export const changeOrder = ({ targetRow, value, type }) => {
-//   return (dispatch, getState, apiUrl) => {
-//     console.log('params', params)
-//     cancelOrder(targetRow).then(a => {
-//     })
-//   }
-// }

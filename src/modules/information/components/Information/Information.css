@@ -16,16 +16,19 @@
   .btn {
     cursor: pointer;
     display: inline-block;
-    width: 25%;
+    width: 20%;
     border: solid 1px $table-header-bg;
     border-radius: 3px;
     background-color: white;
     text-align: center;
     color: black;
-    margin-right: 1px;
+    margin-right: 4px;
     &:hover {
       background-color: $table-header-bg;
     }
+  }
+  .checkDelete {
+    margin-right: 3px;
   }
   .header-cell {
     .header1 {
@@ -34,9 +37,9 @@
       .bt2,
       .bt3 {
         display: inline-block;
-        width: 25%;
+        width: 20%;
         text-align: center;
-        margin-right: 1px;
+        margin-right: 5px;
       }
     }
   }
@@ -48,7 +51,7 @@
   :global {
     .sticky-table-x-wrapper {
       .sticky-table-container {
-        width: 200%;
+        width: 150%;
       }
     }
     .sticky-table-header {
@@ -60,6 +63,17 @@
     }
   }
 }
+@media screen and (min-width: 1280px) {
+  .sticky-table {
+    :global {
+      .sticky-table-x-wrapper {
+        .sticky-table-container {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
 .cell-center {
   text-align: center;
 }
@@ -68,4 +82,7 @@
   div {
     opacity: 0;
   }
+}
+.hide {
+  opacity: 0;
 }

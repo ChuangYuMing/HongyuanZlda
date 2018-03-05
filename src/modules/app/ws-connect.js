@@ -80,7 +80,6 @@ class WsConnect {
       if (res.hasOwnProperty('SessionID')) {
         return
       }
-      console.log(res)
       if (res['35'] === '0') {
         console.log('heartbeat')
         return
@@ -89,7 +88,7 @@ class WsConnect {
       res = formatReponse(res)[0]
       //刪單回報
       if (res.ExecType === '4') {
-        console.log(res)
+        console.log('ws刪單回報', res)
         cancelOrderPub.trigger(res)
       }
       orderPub.trigger(res)

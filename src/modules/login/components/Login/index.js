@@ -16,7 +16,7 @@ const mapDispatchToProps = dispatch => {
       let millss = new Date().getMilliseconds()
       let params = {
         MsgSeqNum: 'customerInfo',
-        Mode: '40',
+        MsgType: '40',
         TokenID: token,
         SenderCompID: '',
         SenderSubID: '',

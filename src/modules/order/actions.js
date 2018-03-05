@@ -121,3 +121,11 @@ export const clearOrder = () => {
     type: types.CLEAR_ORDER
   }
 }
+
+export const checkDeleteRow = (clorderid, value) => {
+  return {
+    type: types.CHECK_DELETE_ROW,
+    clorderid,
+    value
+  }
+}

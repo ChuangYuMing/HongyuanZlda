@@ -53,7 +53,10 @@ class Information extends PureComponent {
     this.setState({
       showCancelPopUp: false,
       showChangeVolPopUp: false,
-      showChangePricePopUp: false
+      showChangePricePopUp: false,
+      changeDiffVol: '',
+      changeDiffVol2: '',
+      changeDiffPrice: ''
     })
   }
   targetRow = e => {
@@ -106,6 +109,12 @@ class Information extends PureComponent {
 
     this.props.changeOrderPrice({ targetRow, value })
     this.closePopUp()
+  }
+  handleCheckDelete = event => {
+    const target = event.target
+    const value = target.checked
+    let clorderid = target.dataset.clorderid
+    this.props.checkDeleteRow(clorderid, value)
   }
   render() {
     let list = this.props.data
@@ -161,6 +170,7 @@ class Information extends PureComponent {
         <Cell className={cx('header-cell')} key={i}>
           {i == 0 ? (
             <div className={cx('header1')}>
+              <input type="checkbox" name="checkDelete" checked readOnly />
               <span className={cx('bt1')}>刪</span>
               <span className={cx('bt2')}>改</span>
               <span className={cx('bt3')}>價</span>
@@ -184,7 +194,7 @@ class Information extends PureComponent {
         let TransactTime = item.get('TransactTime')
         TransactTime = TransactTime
           ? TransactTime.split('-')[1].split('.')[0]
-          : ''
+          : 0
         return (
           <Row
             className={cxx}
@@ -192,6 +202,19 @@ class Information extends PureComponent {
             onClick={this.targetRow}
           >
             <Cell key="0">
+              <input
+                className={
+                  item.get('OrdStatus') !== '0'
+                    ? cx('checkDelete', 'hide')
+                    : cx('checkDelete')
+                }
+                type="checkbox"
+                name={item.get('ClOrdID')}
+                data-clorderid={item.get('ClOrdID')}
+                data-ordstatus={item.get('OrdStatus')}
+                onChange={this.handleCheckDelete}
+                checked={item.get('checkToDelete')}
+              />
               <span onClick={this.showCancelPopUp} className={cx('btn')}>
                 刪
               </span>
@@ -208,11 +231,11 @@ class Information extends PureComponent {
             <Cell key="4">{item.get('Symbol')}</Cell>
             <Cell key="5">{item.get('Side')}</Cell>
             <Cell key="6">{item.get('Price')}</Cell>
-            <Cell key="7">{item.get('OrderQty') * 1000}</Cell>
-            <Cell key="8">{item.get('CumQty') * 1000}</Cell>
-            <Cell key="9">{item.get('CxlQty') * 1000}</Cell>
+            <Cell key="7">{item.get('OrderQty')}</Cell>
+            <Cell key="8">{item.get('CumQty')}</Cell>
+            <Cell key="9">{item.get('CxlQty')}</Cell>
             <Cell key="10">{item.get('LastPx')}</Cell>
-            <Cell key="11">{item.get('LeavesQty') * 1000}</Cell>
+            <Cell key="11">{item.get('LeavesQty')}</Cell>
             <Cell key="12">{orderStatusMaping(item.get('OrdStatus'))}</Cell>
           </Row>
         )

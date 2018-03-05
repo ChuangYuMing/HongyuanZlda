@@ -12,7 +12,7 @@ class SocketHandler {
   constructor() {}
   on() {
     cancelOrderObs.subscribe(cancelOrderPub, data => {
-      let clorderid = data.ClOrderID
+      let clorderid = data.ClOrdID
       let peddingOrder = appGlobal.needingOrderPending
       peddingOrder.forEach(element => {
         console.log(element.clorderid, clorderid)

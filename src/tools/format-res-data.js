@@ -75,9 +75,11 @@ function formatRequestData(res) {
   for (const key in res) {
     const element = res[key]
     let fix = NameToFix[key]
-    formatObj[fix] = element
+    if (fix) {
+      formatObj[fix] = element
+    }
   }
-  // console.log('foramtobj', formatObj)
+  console.log('foramtobj', formatObj)
   return formatObj
 }
 function formatReponse(res) {
