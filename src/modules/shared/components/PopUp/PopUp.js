@@ -10,11 +10,13 @@ class PopUp extends PureComponent {
   }
   render() {
     let show = this.props.show
-    let { width, height, top } = this.props
+    let { width, height, top, zIndex, bottom } = this.props
     let style = {
       width,
       height,
-      top
+      top,
+      zIndex,
+      bottom
     }
     return (
       <div className={show ? cx('popup-wrap') : cx('hide')} style={style}>

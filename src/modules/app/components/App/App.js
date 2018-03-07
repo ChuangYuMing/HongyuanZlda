@@ -33,15 +33,11 @@ class App extends React.PureComponent {
     this.WsQuoteConnect.close()
   }
   componentDidMount() {
-    if (this.props.isLogin) {
-      let Ws = new WsConnect(this.props.userToken)
-      Ws.connect()
-      WsQuoteConnect.connect()
-    }
     this.props.getClientIP()
   }
   render() {
     let { rehydrated } = this.props
+
     if (!rehydrated) {
       return <Loading />
     } else {
@@ -53,7 +49,6 @@ class App extends React.PureComponent {
             <Route exact path={'/temp2'} component={Temp2} />
             <Route exact path={'/login'} component={Login} />
           </Switch>
-          <div id="popupContainer" />
         </div>
       )
     }

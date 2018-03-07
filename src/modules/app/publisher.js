@@ -5,5 +5,13 @@ const ticksPub = new Publisher()
 const eventQuotePub = new Publisher()
 const bidAskPub = new Publisher()
 const cancelOrderPub = new Publisher()
+const mainPopUpPub = new Publisher()
 
-export { orderPub, ticksPub, eventQuotePub, bidAskPub, cancelOrderPub }
+export {
+  orderPub,
+  ticksPub,
+  eventQuotePub,
+  bidAskPub,
+  cancelOrderPub,
+  mainPopUpPub
+}

@@ -59,6 +59,7 @@ function fixDataMaping() {
     '150': 'ExecType',
     '151': 'LeavesQty',
     '273': 'Timestamp',
+    '434': 'CxlRejResponseTo',
     '553': 'Username',
     '1129': 'TokenID',
     '30056': 'Branch'
@@ -134,6 +135,17 @@ function orderStatusMaping(status) {
   }
   return msg[status]
 }
+function orderTypeMaping(status) {
+  let res = ''
+  let msg = {
+    '1': '市價',
+    '2': '限價',
+    '3': '停損/利(stop)',
+    '4': '停損/利限價(stop limit)',
+    E: '增強限價單'
+  }
+  return msg[status]
+}
 function orderErrorMaping(status) {
   let res = ''
   let msg = {
@@ -159,5 +171,6 @@ export {
   numFormat,
   orderStatusMaping,
   orderErrorMaping,
-  formatRequestData
+  formatRequestData,
+  orderTypeMaping
 }

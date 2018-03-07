@@ -1,16 +1,18 @@
 import { connect } from 'react-redux'
 import Main from './Main'
+import { closeMainPopup } from '../../actions.js'
 
 const mapStateToProps = state => {
   return {
-    isLogin: state.app.get('isLogin')
+    isLogin: state.app.get('isLogin'),
+    mainPopupMsg: state.main.get('mainPopupMsg')
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onTest: () => {
-      alert('test')
+    closeMainPopup: id => {
+      dispatch(closeMainPopup(id))
     }
   }
 }

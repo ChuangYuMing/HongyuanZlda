@@ -30,7 +30,7 @@ class HkOrder extends PureComponent {
       symbol: '',
       volume: 1,
       price: '',
-      orderType: '0',
+      orderType: '2',
       date: 20180131,
       items: [],
       showPopUP: false,
@@ -178,11 +178,8 @@ class HkOrder extends PureComponent {
                 value={this.state.orderType}
                 onChange={this.handleInputChange}
               >
-                <option key="1" value="0">
-                  現價
-                </option>
-                <option key="2" value="E">
-                  增強限價盤
+                <option key="1" value="2">
+                  限價
                 </option>
               </select>
             </div>
@@ -255,6 +252,7 @@ class HkOrder extends PureComponent {
           show={this.state.showPopUP}
           width="600px"
           height="300px"
+          zIndex="11"
           data={this.state.orderParams}
         >
           <div className={cx('order-popup')}>
@@ -282,7 +280,7 @@ class HkOrder extends PureComponent {
                   <span className={cx('s1')}>{symbol}</span>
                 </div>
                 <div className={cx('item')}>
-                  <span className={cx('s1')}>{volume * 1000}</span>
+                  <span className={cx('s1')}>{volume}</span>
                   <span className={cx('s2')}>股</span>
                 </div>
                 <div className={cx('item')}>

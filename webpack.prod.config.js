@@ -70,6 +70,9 @@ module.exports = {
       Map: ['immutable', 'Map'],
       List: ['immutable', 'List'],
       fromJS: ['immutable', 'fromJS']
+    }),
+    new webpack.DefinePlugin({
+      PRODUCTION: JSON.stringify(true)
     })
   ],
   module: {

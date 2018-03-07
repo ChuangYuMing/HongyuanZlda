@@ -1,7 +1,11 @@
 class AppGlobal {
   constructor() {
-    this._apiUrl = 'http://192.168.12.134:8080'
-    // this._apiUrl = 'http://192.168.12.153:8080'
+    if (PRODUCTION) {
+      this._apiUrl = window.location.origin
+    } else {
+      this._apiUrl = 'http://192.168.12.134:8080'
+      // this._apiUrl = 'http://192.168.12.153:8080'
+    }
     this._wsQuoteSessionId = ''
     this._userToken = ''
     this.needingOrderPending = []

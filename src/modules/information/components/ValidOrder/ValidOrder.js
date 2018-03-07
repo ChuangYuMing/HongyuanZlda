@@ -181,7 +181,6 @@ class Information extends PureComponent {
         </Cell>
       )
     }
-
     rows.push(<Row key={0}>{cells}</Row>)
     let mainDatas = list.map((item, index) => {
       let cells = []

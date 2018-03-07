@@ -75,7 +75,7 @@ class WsQuoteConnect {
           res = JSON.parse(Utf8ArrayToStr(result))
           // console.log(res)
         } catch (err) {
-          console.log(err)
+          // console.log(err)
         }
       } else {
         res = JSON.parse(e.data)
@@ -84,10 +84,14 @@ class WsQuoteConnect {
           // console.log('heartbeat')
         }
       }
+      if (!res) {
+        return
+      }
       if (res.hasOwnProperty('SessionID')) {
         appGlobal.wsQuoteSessionId = res.SessionID
         return
       }
+
       if (typeof res['11000'] !== 'undefined' && res['11000'] === 53) {
         // UPDATE BA
         // console.log('sock message-BA :', res)
