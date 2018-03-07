@@ -52,6 +52,34 @@ export default (state = init, action) => {
       }
       return state
     }
+    case types.ADD_DEAL_HISTORY: {
+      let targetIndex = state
+        .get('orderList')
+        .findIndex(i => i.get('ClOrdID') === action.data.get('ClOrdID'))
+      let target = state.getIn(['orderList', targetIndex])
+      if (target.has('dealHistory')) {
+        state = state.updateIn(['orderList', targetIndex], i =>
+          i.update('dealHistory', item => item.push(action.data))
+        )
+      } else {
+        state = state.updateIn(['orderList', targetIndex], i =>
+          i
+            .set('dealHistory', List([]).push(action.data))
+            .set('inflatDealHistory', false)
+        )
+      }
+      return state
+    }
+    case types.INFLAT_DEAL_HISTORY: {
+      console.log(action.flag)
+      let targetIndex = state
+        .get('orderList')
+        .findIndex(i => i.get('ClOrdID') === action.id)
+      state = state.updateIn(['orderList', targetIndex], i =>
+        i.set('inflatDealHistory', action.flag)
+      )
+      return state
+    }
     default:
       return state
   }

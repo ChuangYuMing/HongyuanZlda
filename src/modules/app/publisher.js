@@ -6,6 +6,7 @@ const eventQuotePub = new Publisher()
 const bidAskPub = new Publisher()
 const cancelOrderPub = new Publisher()
 const mainPopUpPub = new Publisher()
+const dealHistoryPub = new Publisher()
 
 export {
   orderPub,
@@ -13,5 +14,6 @@ export {
   eventQuotePub,
   bidAskPub,
   cancelOrderPub,
-  mainPopUpPub
+  mainPopUpPub,
+  dealHistoryPub
 }

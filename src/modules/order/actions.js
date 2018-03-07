@@ -60,7 +60,7 @@ export const getQuote = (symbols, options = {}) => {
       })
       .then(obj => {
         // console.log('getQuote:', obj)
-        if (obj.Prods === null) {
+        if (!obj.Prods) {
           return
         }
         let quote = obj.Prods[0].Quote
@@ -127,5 +127,21 @@ export const checkDeleteRow = (clorderid, value) => {
     type: types.CHECK_DELETE_ROW,
     clorderid,
     value
+  }
+}
+
+export const addDealHistory = data => {
+  data = Map(data)
+  return {
+    type: types.ADD_DEAL_HISTORY,
+    data
+  }
+}
+
+export const inflatDealHistory = (id, flag) => {
+  return {
+    type: types.INFLAT_DEAL_HISTORY,
+    id,
+    flag
   }
 }

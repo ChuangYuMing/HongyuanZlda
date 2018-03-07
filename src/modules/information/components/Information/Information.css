@@ -83,6 +83,57 @@
     opacity: 0;
   }
 }
+.dealHistory {
+  color: darkseagreen !important;
+}
+.error {
+  color: red;
+}
+.allDeal {
+  color: #ffae4b;
+}
 .hide {
   opacity: 0;
+}
+
+.inflate-btn {
+  position: absolute;
+  top: 1px;
+  width: 15px;
+  height: 15px;
+  background: transparent;
+  border: 1px solid white;
+  cursor: pointer;
+  display: inline-block;
+  &:before {
+    left: 50%;
+    top: 50%;
+    margin-left: -7px;
+    margin-top: -1px;
+    width: 12px;
+    height: 1px;
+    background-color: white;
+    content: '';
+    position: absolute;
+  }
+  &:after {
+    width: 12px;
+    height: 1px;
+    background-color: white;
+    content: '';
+    left: 50%;
+    top: 50%;
+    margin-left: -7px;
+    margin-top: -2px;
+    position: absolute;
+    transform: rotate(-90deg);
+  }
+}
+
+.account-wrap {
+  width: 100%;
+  position: relative;
+  .bt1 {
+    padding-left: 20px;
+  }
 }

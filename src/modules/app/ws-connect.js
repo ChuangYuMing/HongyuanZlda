@@ -4,7 +4,12 @@ import pako from 'pako'
 import appGlobal from 'modules/common/app-global.js'
 import { uuid } from 'tools/math'
 import { Utf8ArrayToStr } from 'tools/text-decode'
-import { orderPub, cancelOrderPub, mainPopUpPub } from 'modules/app/publisher'
+import {
+  orderPub,
+  cancelOrderPub,
+  mainPopUpPub,
+  dealHistoryPub
+} from 'modules/app/publisher'
 import { formatReponse } from 'tools/format-res-data.js'
 
 class WsConnect {
@@ -84,16 +89,24 @@ class WsConnect {
         console.log('heartbeat')
         return
       }
+      console.log('---------------------------')
       console.log(res)
       res = formatReponse(res)[0]
-      //刪單回報
+      console.log(res)
+      console.log('---------------------------')
+
+      orderPub.trigger(res)
+      mainPopUpPub.trigger(res)
+
       if (res.ExecType === '4') {
+        //刪單回報
         console.log('ws刪單回報', res)
         cancelOrderPub.trigger(res)
       }
-      console.log(res)
-      orderPub.trigger(res)
-      mainPopUpPub.trigger(res)
+      if (res.ExecType === 'F') {
+        console.log('ws成交回報', res)
+        dealHistoryPub.trigger(res)
+      }
     }
   }
   close() {

@@ -1,7 +1,11 @@
 import { connect } from 'react-redux'
 import ValidOrder from './ValidOrder'
 import { cancelOrder, changeOrder } from '../../actions'
-import { order, checkDeleteRow } from 'modules/order/actions.js'
+import {
+  order,
+  checkDeleteRow,
+  inflatDealHistory
+} from 'modules/order/actions.js'
 import appGlobal from 'modules/common/app-global.js'
 
 console.log(appGlobal)
@@ -39,6 +43,9 @@ const mapDispatchToProps = dispatch => {
     },
     checkDeleteRow: (clorderid, value) => {
       dispatch(checkDeleteRow(clorderid, value))
+    },
+    inflatDealHistory: (clorderid, flag) => {
+      dispatch(inflatDealHistory(clorderid, flag))
     },
     changeOrderPrice: ({ targetRow, value }) => {
       dispatch(cancelOrder(targetRow))

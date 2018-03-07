@@ -66,7 +66,7 @@ class Information extends PureComponent {
     const index = list.findIndex(i => i.get('OrderID') === orderid)
     if (index !== -1) {
       let targetRow = list.get(index)
-      console.log(targetRow.toJS())
+      // console.log(targetRow.toJS())
       this.setState({
         targetRow,
         changeDiffVol2: targetRow.get('LeavesQty'),
@@ -116,6 +116,17 @@ class Information extends PureComponent {
     let clorderid = target.dataset.clorderid
     this.props.checkDeleteRow(clorderid, value)
   }
+  inflatDealHistory = e => {
+    let target = e.target
+    let clorderid = target.dataset.clorderid
+    let flag = target.dataset.flag
+    if (flag === undefined) {
+      return
+    } else {
+      flag = flag === 'true' ? false : true
+    }
+    this.props.inflatDealHistory(clorderid, flag)
+  }
   render() {
     let list = this.props.data
     let targetRow = this.state.targetRow
@@ -147,7 +158,20 @@ class Information extends PureComponent {
       })
     }
     list = list.push(hiddenData)
-
+    let inflatList = List([])
+    list.forEach(item => {
+      inflatList = inflatList.push(item)
+      if (
+        item.has('inflatDealHistory') &&
+        item.get('inflatDealHistory') === true
+      ) {
+        let history = item.get('dealHistory')
+        history.forEach(h => {
+          h = h.set('isHistory', true)
+          inflatList = inflatList.push(h)
+        })
+      }
+    })
     var rows = []
     var cells = []
     let headers = [
@@ -166,34 +190,57 @@ class Information extends PureComponent {
       '狀態'
     ]
     for (let i = 0; i < headers.length; i++) {
+      let cellData = ''
+      if (i == 0) {
+        cellData = (
+          <div className={cx('header1')}>
+            <input type="checkbox" name="checkDelete" checked readOnly />
+            <span className={cx('bt1')}>刪</span>
+            <span className={cx('bt2')}>改</span>
+            <span className={cx('bt3')}>價</span>
+          </div>
+        )
+      } else if (i == 1) {
+        cellData = (
+          <div className={cx('account-wrap')}>
+            <a className={cx('inflate-btn', 'hide')} />
+            <span className={cx('bt1')}>{headers[i]}</span>
+          </div>
+        )
+      } else {
+        cellData = headers[i]
+      }
       cells.push(
         <Cell className={cx('header-cell')} key={i}>
-          {i == 0 ? (
-            <div className={cx('header1')}>
-              <input type="checkbox" name="checkDelete" checked readOnly />
-              <span className={cx('bt1')}>刪</span>
-              <span className={cx('bt2')}>改</span>
-              <span className={cx('bt3')}>價</span>
-            </div>
-          ) : (
-            headers[i]
-          )}
+          {cellData}
         </Cell>
       )
     }
     rows.push(<Row key={0}>{cells}</Row>)
-    let mainDatas = list.map((item, index) => {
+    let mainDatas = inflatList.map((item, index) => {
       let cells = []
       item.get('Side') == 1 ? '買' : '賣'
       let cxx = cx({
         'cell-right': true,
-        'hidden-row': index + 1 === list.size ? true : false
+        'hidden-row': index + 1 === inflatList.size ? true : false,
+        error: item.get('OrdStatus') == '8',
+        allDeal: item.get('OrdStatus') == '2',
+        dealHistory: item.get('isHistory')
       })
       let iRow = () => {
         let TransactTime = item.get('TransactTime')
         TransactTime = TransactTime
           ? TransactTime.split('-')[1].split('.')[0]
           : 0
+        let showActionWrap = false
+        if (item.get('isHistory') == true) {
+          showActionWrap = false
+        } else if (
+          item.get('OrdStatus') == '0' ||
+          item.get('OrdStatus') == '1'
+        ) {
+          showActionWrap = true
+        }
         return (
           <Row
             className={cxx}
@@ -201,37 +248,62 @@ class Information extends PureComponent {
             onClick={this.targetRow}
           >
             <Cell key="0">
-              <input
-                className={
-                  item.get('OrdStatus') !== '0'
-                    ? cx('checkDelete', 'hide')
-                    : cx('checkDelete')
-                }
-                type="checkbox"
-                name={item.get('ClOrdID')}
-                data-clorderid={item.get('ClOrdID')}
-                data-ordstatus={item.get('OrdStatus')}
-                onChange={this.handleCheckDelete}
-                checked={item.get('checkToDelete')}
-              />
-              <span onClick={this.showCancelPopUp} className={cx('btn')}>
-                刪
-              </span>
-              <span onClick={this.showChangeVolPopUp} className={cx('btn')}>
-                量
-              </span>
-              <span onClick={this.showChangePricePopUp} className={cx('btn')}>
-                價
-              </span>
+              {!showActionWrap ? (
+                <span />
+              ) : (
+                <div>
+                  <input
+                    className={
+                      item.get('OrdStatus') !== '0'
+                        ? cx('checkDelete', 'hide')
+                        : cx('checkDelete')
+                    }
+                    type="checkbox"
+                    name={item.get('ClOrdID')}
+                    data-clorderid={item.get('ClOrdID')}
+                    data-ordstatus={item.get('OrdStatus')}
+                    onChange={this.handleCheckDelete}
+                    checked={item.get('checkToDelete')}
+                  />
+                  <span onClick={this.showCancelPopUp} className={cx('btn')}>
+                    刪
+                  </span>
+                  <span onClick={this.showChangeVolPopUp} className={cx('btn')}>
+                    量
+                  </span>
+                  <span
+                    onClick={this.showChangePricePopUp}
+                    className={cx('btn')}
+                  >
+                    價
+                  </span>
+                </div>
+              )}
             </Cell>
-            <Cell key="1">{item.get('Account')}</Cell>
+            <Cell key="1">
+              <div className={cx('account-wrap')}>
+                <a
+                  data-clorderid={item.get('ClOrdID')}
+                  data-flag={item.get('inflatDealHistory')}
+                  onClick={this.inflatDealHistory}
+                  className={
+                    item.has('inflatDealHistory')
+                      ? cx('inflate-btn')
+                      : cx('inflate-btn', 'hide')
+                  }
+                />
+                <span className={cx('bt1')}>{item.get('Account')}</span>
+              </div>
+            </Cell>
             <Cell key="2">{item.get('OrderID')}</Cell>
             <Cell key="3">{TransactTime}</Cell>
             <Cell key="4">{item.get('Symbol')}</Cell>
             <Cell key="5">{item.get('Side')}</Cell>
             <Cell key="6">{item.get('Price')}</Cell>
             <Cell key="7">{item.get('OrderQty')}</Cell>
-            <Cell key="8">{item.get('CumQty')}</Cell>
+            <Cell key="8">
+              {item.get('isHistory') ? item.get('LastQty') : item.get('CumQty')}
+            </Cell>
             <Cell key="9">{item.get('CxlQty')}</Cell>
             <Cell key="10">{item.get('LastPx')}</Cell>
             <Cell key="11">{item.get('LeavesQty')}</Cell>
