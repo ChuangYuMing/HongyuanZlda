@@ -1,7 +1,8 @@
 import * as types from './action-types'
 
-let init = fromJS({
-  mainPopupMsg: []
+let init = Map({
+  mainPopupMsg: List([]),
+  prodList: {}
 })
 export default (state = init, action) => {
   switch (action.type) {
@@ -20,6 +21,9 @@ export default (state = init, action) => {
         list.filter(i => i.get('id') !== action.id)
       )
       return state
+    }
+    case types.UPDATE_PRODLIST: {
+      return state.update('prodList', i => action.data)
     }
     default:
       return state

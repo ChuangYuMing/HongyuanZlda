@@ -19,6 +19,16 @@ class Main extends Component {
     this.windowWith = document.body.clientWidth
   }
   componentDidMount() {
+    this.props.getProds(['US', 'HK'])
+
+    // Promise.all(promises)
+    //   .then(res => {
+    //     console.log('res', res)
+    //     console.log('finish')
+    //   })
+    //   .catch(e => {
+    //     console.log(e)
+    //   })
     SocketHandler.on()
   }
   componentWillUnmount() {
@@ -30,6 +40,8 @@ class Main extends Component {
     this.props.closeMainPopup(id)
   }
   render() {
+    let { prodList } = this.props
+    let gotProdList = Object.keys(prodList).length > 0
     if (!this.props.isLogin) {
       return (
         <Redirect
@@ -39,6 +51,9 @@ class Main extends Component {
           }}
         />
       )
+    }
+    if (!gotProdList) {
+      return <div />
     }
     let popup = []
     let { mainPopupMsg } = this.props

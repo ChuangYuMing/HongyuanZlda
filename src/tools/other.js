@@ -74,11 +74,29 @@ function priceStyle(target, prePrice) {
     }
   }
 }
+
+const keyWordStockFilter = (list, keyword) => {
+  console.log(list, keyword)
+  var len = list.length
+  var arr = []
+  var reg = new RegExp(keyword)
+  for (var i = 0; i < len; i++) {
+    //如果字符串中不包含目标字符会返回-1
+    if (list[i]['Symbol'].match(reg)) {
+      if (arr.length > 100) {
+        break
+      }
+      arr.push(list[i])
+    }
+  }
+  return arr
+}
 export {
   sleep,
   getClientOffset,
   searchMinDiffItem,
   getSiblings,
   formatFormData,
-  priceStyle
+  priceStyle,
+  keyWordStockFilter
 }

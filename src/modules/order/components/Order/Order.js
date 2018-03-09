@@ -23,6 +23,7 @@ class Order extends Component {
   }
 
   render() {
+    let prodList = this.props.prodList
     return (
       <div className={cx('order-wrap')}>
         <div className={cx('setting-wrap')}>
@@ -39,12 +40,16 @@ class Order extends Component {
 
             <TabPanel>
               <HkOrder
+                country="HK"
+                prodList={prodList['HK']}
                 order={this.props.order}
                 getQuote={this.props.getQuote}
               />
             </TabPanel>
             <TabPanel>
-              <UsOrder
+              <HkOrder
+                country="US"
+                prodList={prodList['US']}
                 order={this.props.order}
                 getQuote={this.props.getQuote}
               />

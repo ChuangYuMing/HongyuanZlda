@@ -10,6 +10,9 @@ import i2 from 'static/image/i2.png'
 import throttle from 'lodash/throttle'
 import { priceStyle } from 'tools/other.js'
 import PopUp from 'modules/shared/components/PopUp/PopUp.js'
+import FilterSearch from '../FilterSearch/FilterSearch.js'
+import { Observable } from 'rxjs'
+import { keyWordStockFilter } from 'tools/other.js'
 
 let cx = classNames.bind(styles)
 let updtProdThrottle = throttle(
@@ -35,23 +38,20 @@ class HkOrder extends PureComponent {
       items: [],
       showPopUP: false,
       action: '',
-      orderParams: {}
+      orderParams: {},
+      symbolFilterList: [],
+      showSymbolFilter: false
     }
+    this.prodList = this.props.prodList
   }
   handleInputChange = e => {
     // console.log(this)
     const target = e.target
     let value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
-    if (parseInt(value)) {
-      this.setState({
-        [name]: parseInt(value)
-      })
-    } else {
-      this.setState({
-        [name]: value
-      })
-    }
+    this.setState({
+      [name]: value
+    })
   }
 
   handleOrderAction = e => {
@@ -86,19 +86,75 @@ class HkOrder extends PureComponent {
       showPopUP: false
     })
   }
-  getQuote = e => {
-    const target = e.target
-    const name = target.name
-    let value = target.value
+  // getQuote = e => {
+  //   console.log('getquote')
+  //   let country = this.props.country
+  //   const target = e.target
+  //   const name = target.name
+  //   let value = target.value
+  //   this.setState({
+  //     [name]: value
+  //   })
+  //   let symbol = [`${value}.${country}`]
+  //   updtProdThrottle(() => {
+  //     this.props.getQuote(symbol)
+  //   })
+  // }
+  targetSearchSymbol = e => {
+    let country = this.props.country
+    let target = e.currentTarget
+    let symbol = target.dataset.symbol
     this.setState({
-      [name]: value
+      symbol
     })
-    let symbol = [`${value}.US`]
-    updtProdThrottle(() => {
-      this.props.getQuote(symbol)
+    this.props.getQuote([`${symbol}.${country}`])
+  }
+  componentDidMount() {
+    let prodList = this.prodList
+    let symbolSearch = this.inputSymbol
+    let suggestList = this.suggestList
+    let suggestWrap = document.getElementById('orderStockFilter')
+    let keyword = Observable.fromEvent(symbolSearch, 'input')
+    let focus = Observable.fromEvent(symbolSearch, 'focus')
+    let unfocus = Observable.fromEvent(symbolSearch, 'focusout')
+    let wheelSuggest = Observable.fromEvent(suggestWrap, 'wheel')
+    let scrollSuggest = Observable.fromEvent(suggestWrap, 'scroll', {
+      passive: true
+    })
+    let targetValue = ''
+    focus.map(e => e).subscribe(res => {
+      console.log(res)
+      this.setState({
+        showSymbolFilter: true
+      })
+    })
+    unfocus.map(e => e).subscribe(res => {
+      console.log(res)
+      this.setState({
+        showSymbolFilter: false
+      })
+    })
+    keyword
+      .debounceTime(100)
+      .switchMap(e => {
+        targetValue = e.target.value
+        return Observable.create(observer => {
+          let list = keyWordStockFilter(prodList, targetValue)
+          observer.next(list)
+        })
+      }, (e, res) => res)
+      .subscribe(list => {
+        this.filterSearch.updateData(list)
+      })
+
+    let a = scrollSuggest.throttleTime(100).map(e => e)
+    a.subscribe(res => {
+      console.log(res)
     })
   }
   render() {
+    console.log('main render')
+    let prodList = this.props.prodList || []
     let quote = this.props.quote
     let Symbol = quote.get('Symbol')
     let Name = quote.get('Name')
@@ -140,13 +196,31 @@ class HkOrder extends PureComponent {
             </div>
             <div className={cx('item-wrap', 't2')}>
               <span>股票：</span>
-              <input
-                type="text"
-                name="symbol"
-                value={this.state.symbol}
-                onChange={this.getQuote}
-                ref="symbol"
-              />
+              <div className={cx('stock-input-wrap')}>
+                <input
+                  type="text"
+                  name="symbol"
+                  value={this.state.symbol}
+                  onChange={this.handleInputChange}
+                  ref={input => {
+                    this.inputSymbol = input
+                  }}
+                />
+                <div
+                  id="orderStockFilter"
+                  className={
+                    this.state.showSymbolFilter
+                      ? cx('stock-filter')
+                      : cx('stock-filter', 'hide')
+                  }
+                >
+                  <FilterSearch
+                    onClick={this.targetSearchSymbol}
+                    listRef={list => (this.suggestList = list)}
+                    ref={e => (this.filterSearch = e)}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className={cx('item-wrap', 't3')}>

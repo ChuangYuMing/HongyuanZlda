@@ -50,26 +50,19 @@ export const getQuote = (symbols, options = {}) => {
     let sessionId = appGlobal.wsQuoteSessionId
     let operate = options.operate || 'replace'
     // let symbols = options.symbol
-
-    return fetch(`${apiUrl}/api/quote`, {
-      method: 'post',
+    callApi('/api/quote', {
+      method: 'POST',
       body: JSON.stringify({ SessionID: sessionId, Prods: symbols })
+    }).then(obj => {
+      if (!obj.Prods) {
+        return
+      }
+      let quote = obj.Prods[0].Quote
+      let symbol = quote['48']
+      let iob = Map(quoteFormatEven(symbol, quote))
+      dispatch(show(iob))
+      dispatch(registerTick(sessionId, symbols))
     })
-      .then(res => {
-        return res.json()
-      })
-      .then(obj => {
-        // console.log('getQuote:', obj)
-        if (!obj.Prods) {
-          return
-        }
-        let quote = obj.Prods[0].Quote
-        let symbol = quote['48']
-        let iob = Map(quoteFormatEven(symbol, quote))
-        // console.log(iob)
-        dispatch(show(iob))
-        dispatch(registerTick(sessionId, symbols))
-      })
   }
 }
 

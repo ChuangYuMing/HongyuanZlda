@@ -37,7 +37,6 @@ class App extends React.PureComponent {
   }
   render() {
     let { rehydrated } = this.props
-
     if (!rehydrated) {
       return <Loading />
     } else {

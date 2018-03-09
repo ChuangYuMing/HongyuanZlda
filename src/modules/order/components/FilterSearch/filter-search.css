@@ -1,0 +1,8 @@
+@import 'helpers/_mixins.css';
+
+.filter-wrap {
+  span {
+    display: inline-block;
+    padding-right: 5px;
+  }
+}
