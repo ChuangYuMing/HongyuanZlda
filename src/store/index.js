@@ -6,8 +6,8 @@ import reducers from '../reducers'
 import appGlobal from 'modules/common/app-global.js'
 import immutableTransform from 'redux-persist-transform-immutable'
 
-const apiUrl = appGlobal.apiUrl
-
+// const apiUrl = appGlobal.apiUrl
+let something = ''
 const persistConfig = {
   transforms: [immutableTransform()],
   key: 'root',
@@ -20,7 +20,7 @@ const store = createStore(
   persistedReducer,
   undefined,
   compose(
-    applyMiddleware(thunk.withExtraArgument(apiUrl)),
+    applyMiddleware(thunk.withExtraArgument(something)),
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )
 )

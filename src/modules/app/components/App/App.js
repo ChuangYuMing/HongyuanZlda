@@ -8,8 +8,6 @@ import Temp2 from 'modules/temp/components/Temp2'
 import Main from 'modules/main/components/Main'
 import Loading from '../Loading/Loading.js'
 import Login from 'modules//login/components/Login'
-import WsConnect from 'modules/app/ws-connect.js'
-import WsQuoteConnect from 'modules/app/ws-quote-connect.js'
 
 let cx = classNames.bind(styles)
 class App extends React.PureComponent {
@@ -19,34 +17,24 @@ class App extends React.PureComponent {
     this.WsConnect = ''
     this.WsQuoteConnect = ''
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.isLogin && this.props.isLogin !== nextProps.isLogin) {
-      // console.log(nextProps.userToken)
-      this.WsConnect = new WsConnect(nextProps.userToken)
-      this.WsQuoteConnect = new WsQuoteConnect()
-      this.WsConnect.connect()
-      this.WsQuoteConnect.connect()
-    }
-  }
-  componentWillUnmount() {
-    this.WsConnect.close()
-    this.WsQuoteConnect.close()
-  }
+
   componentDidMount() {
     this.props.getClientIP()
+    this.props.getApiUrl()
   }
   render() {
-    let { rehydrated } = this.props
-    if (!rehydrated) {
+    let { rehydrated, fetchApiUrl } = this.props
+    console.log('fetchApiUrl', fetchApiUrl)
+    if (!rehydrated || !fetchApiUrl) {
       return <Loading />
     } else {
       return (
         <div>
           <Switch>
-            <Route exact path={'/'} component={Main} />
+            <Route exact path={'/order'} component={Main} />
             <Route exact path={'/temp'} component={Temp} />
             <Route exact path={'/temp2'} component={Temp2} />
-            <Route exact path={'/login'} component={Login} />
+            <Route exact path={'/order/login'} component={Login} />
           </Switch>
         </div>
       )

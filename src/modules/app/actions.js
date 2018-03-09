@@ -1,5 +1,8 @@
 import * as types from './action-types'
 import { Map } from 'immutable'
+import appGlobal from 'modules/common/app-global.js'
+import { updateApiUrl } from 'modules/main/actions.js'
+
 export const tempTest = value => {
   return {
     type: types.TEMP_TEST,
@@ -8,7 +11,7 @@ export const tempTest = value => {
 }
 
 export const getClientIP = () => {
-  return (dispatch, getState, apiUrl) => {
+  return (dispatch, getState) => {
     return new Promise((resolve, reject) => {
       fetch(`https://api.ipify.org?format=json`)
         .then(res => {
@@ -34,5 +37,23 @@ export const updateAppInfo = data => {
   return {
     type: types.UPDATE_APP_INFO,
     data
+  }
+}
+
+export const getApiUrl = () => {
+  return (dispatch, getState) => {
+    let url = appGlobal.apiUrl
+    return fetch(`${url}/api/sysinfo`, {
+      method: 'GET'
+    })
+      .then(res => {
+        return res.json()
+      })
+      .then(obj => {
+        console.log(obj)
+        appGlobal.orderApiUrl = `http://${obj.ClientOrderAPIServer}`
+        appGlobal.quoteApiUrl = `http://${obj.ClientQuoteAPIServer}`
+        dispatch(updateApiUrl(true))
+      })
   }
 }

@@ -6,7 +6,8 @@ const mapStateToProps = state => {
   return {
     isLogin: state.app.get('isLogin'),
     mainPopupMsg: state.main.get('mainPopupMsg'),
-    prodList: state.main.get('prodList')
+    prodList: state.main.get('prodList'),
+    userToken: state.app.get('userToken')
   }
 }
 

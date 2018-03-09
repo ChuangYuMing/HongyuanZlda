@@ -1,4 +1,4 @@
-import { store, apiUrl } from 'store'
+import { store } from 'store'
 import SockJS from 'sockjs-client'
 import pako from 'pako'
 import appGlobal from 'modules/common/app-global.js'
@@ -18,7 +18,7 @@ class WsQuoteConnect {
     this.sock = ''
     this.shouldReload = false //畫面重整
     this.reConnectCount = 0
-    this.apiUrl = appGlobal.apiUrl
+    this.apiUrl = appGlobal.quoteApiUrl
   }
   creatSessionId() {
     this.sessionId = window.btoa(uuid() + '$' + 'apex@tw')

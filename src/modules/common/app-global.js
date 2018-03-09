@@ -5,8 +5,10 @@ class AppGlobal {
     } else {
       // this._apiUrl = 'http://192.168.12.134:8080'
       this._apiUrl = 'http://192.168.12.24:8008'
-      // this._apiUrl = 'http://192.168.12.153:8080'
+      // this._apiUrl = 'http://192.168.12.153:8008'
     }
+    this._orderApiUrl = ''
+    this._quoteApiUrl = ''
     this._wsQuoteSessionId = ''
     this._userToken = ''
     this._prodList = {}
@@ -14,6 +16,21 @@ class AppGlobal {
   }
   get apiUrl() {
     return this._apiUrl
+  }
+  set apiUrl(val) {
+    this._apiUrl = val
+  }
+  get orderApiUrl() {
+    return this._orderApiUrl
+  }
+  set orderApiUrl(val) {
+    this._orderApiUrl = val
+  }
+  get quoteApiUrl() {
+    return this._quoteApiUrl
+  }
+  set quoteApiUrl(val) {
+    this._quoteApiUrl = val
   }
   get wsQuoteSessionId() {
     return this._wsQuoteSessionId

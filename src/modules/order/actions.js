@@ -7,15 +7,20 @@ import { Map } from 'immutable'
 import { callApi } from 'modules/common/api.js'
 
 export const order = params => {
-  return (dispatch, getState, apiUrl) => {
+  return (dispatch, getState) => {
     params.TokenID = getState().app.get('userToken')
     params = formatRequestData(params)
     console.log(params)
     let formData = formatFormData(params)
-    callApi('/api/order', {
-      method: 'POST',
-      body: formData
-    }).then(obj => {
+    let apiUrl = appGlobal.orderApiUrl
+    callApi(
+      '/api/order',
+      {
+        method: 'POST',
+        body: formData
+      },
+      apiUrl
+    ).then(obj => {
       console.log('order', obj)
       let data = formatReponse(obj)[0]
       data = fromJS(data)
@@ -45,15 +50,19 @@ export const newOrder = data => {
 }
 
 export const getQuote = (symbols, options = {}) => {
-  return (dispatch, getState, apiUrl) => {
+  return (dispatch, getState) => {
     let state = getState()
     let sessionId = appGlobal.wsQuoteSessionId
     let operate = options.operate || 'replace'
-    // let symbols = options.symbol
-    callApi('/api/quote', {
-      method: 'POST',
-      body: JSON.stringify({ SessionID: sessionId, Prods: symbols })
-    }).then(obj => {
+    let apiUrl = appGlobal.quoteApiUrl
+    callApi(
+      '/api/quote',
+      {
+        method: 'POST',
+        body: JSON.stringify({ SessionID: sessionId, Prods: symbols })
+      },
+      apiUrl
+    ).then(obj => {
       if (!obj.Prods) {
         return
       }
@@ -78,21 +87,22 @@ function registerTick(sessionId, symbol) {
   if (typeof symbol === 'string') {
     symbol = new Array(symbol)
   }
-  return (dispatch, getState, apiUrl) => {
-    return fetch(`${apiUrl}/api/reg`, {
-      method: 'post',
-      body: JSON.stringify({
-        SessionID: sessionId,
-        Prods: symbol,
-        Types: ['Tick', 'UE', 'BA']
-      })
+  return (dispatch, getState) => {
+    let apiUrl = appGlobal.quoteApiUrl
+    callApi(
+      '/api/reg',
+      {
+        method: 'post',
+        body: JSON.stringify({
+          SessionID: sessionId,
+          Prods: symbol,
+          Types: ['Tick', 'UE', 'BA']
+        })
+      },
+      apiUrl
+    ).then(obj => {
+      console.log('registerTick: ', obj)
     })
-      .then(res => {
-        return res.json()
-      })
-      .then(obj => {
-        console.log('registerTick: ', obj)
-      })
   }
 }
 export const bidAndAskTick = data => {

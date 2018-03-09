@@ -11,6 +11,8 @@ import { Redirect } from 'react-router-dom'
 import SplitPane from 'react-split-pane'
 import PopUp from 'modules/shared/components/PopUp/PopUp.js'
 import SocketHandler from '../../socket-handler'
+import WsConnect from 'modules/app/ws-connect.js'
+import WsQuoteConnect from 'modules/app/ws-quote-connect.js'
 
 let cx = classNames.bind(styles)
 class Main extends Component {
@@ -20,18 +22,15 @@ class Main extends Component {
   }
   componentDidMount() {
     this.props.getProds(['US', 'HK'])
-
-    // Promise.all(promises)
-    //   .then(res => {
-    //     console.log('res', res)
-    //     console.log('finish')
-    //   })
-    //   .catch(e => {
-    //     console.log(e)
-    //   })
+    this.WsConnect = new WsConnect(this.props.userToken)
+    this.WsQuoteConnect = new WsQuoteConnect()
+    this.WsConnect.connect()
+    this.WsQuoteConnect.connect()
     SocketHandler.on()
   }
   componentWillUnmount() {
+    this.WsConnect.close()
+    this.WsQuoteConnect.close()
     SocketHandler.off()
   }
   closeMainPopup = e => {
@@ -40,13 +39,14 @@ class Main extends Component {
     this.props.closeMainPopup(id)
   }
   render() {
+    console.log('Main')
     let { prodList } = this.props
     let gotProdList = Object.keys(prodList).length > 0
     if (!this.props.isLogin) {
       return (
         <Redirect
           to={{
-            pathname: '/login',
+            pathname: '/order/login',
             state: { from: this.props.location }
           }}
         />

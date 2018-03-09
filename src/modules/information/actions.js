@@ -7,7 +7,7 @@ import { order } from 'modules/order/actions.js'
 import { callApi } from 'modules/common/api.js'
 
 export const cancelOrder = params => {
-  return (dispatch, getState, apiUrl) => {
+  return (dispatch, getState) => {
     let tokenID = getState().app.get('userToken')
     let targetData = params.set('MsgType', 'F')
     targetData = targetData.merge(

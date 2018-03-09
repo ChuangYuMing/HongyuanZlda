@@ -1,5 +1,6 @@
 import * as types from './action-types'
 import { callApi } from 'modules/common/api.js'
+import appGlobal from 'modules/common/app-global.js'
 
 export const updateMainPopUpMsg = (data, status) => {
   return {
@@ -17,11 +18,17 @@ export const closeMainPopup = data => {
 }
 
 export const getProds = country => {
-  return (dispatch, getState, apiUrl) => {
+  console.log('getprods')
+  return (dispatch, getState) => {
+    let apiUrl = appGlobal.quoteApiUrl
     return new Promise((resolve, reject) => {
-      callApi(`/api/prod?country=${country}`, {
-        method: 'GET'
-      }).then(obj => {
+      callApi(
+        `/api/prod?country=${country}`,
+        {
+          method: 'GET'
+        },
+        apiUrl
+      ).then(obj => {
         // console.log('getProds:', obj)
         obj.forEach((item, index) => {
           obj[index]['subSymbol'] = item.Symbol.slice(0, -3)
@@ -38,6 +45,13 @@ export const getProds = country => {
 export const updateProdList = data => {
   return {
     type: types.UPDATE_PRODLIST,
+    data
+  }
+}
+
+export const updateApiUrl = data => {
+  return {
+    type: types.UPDATE_FETCH_APIURL,
     data
   }
 }

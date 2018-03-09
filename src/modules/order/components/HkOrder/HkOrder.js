@@ -55,7 +55,6 @@ class HkOrder extends PureComponent {
   }
 
   handleOrderAction = e => {
-    let apiUrl = appGlobal.apiurl
     let action = e.target.dataset.action
     let { account, symbol, volume, price, orderType, date } = this.state
     let params = {

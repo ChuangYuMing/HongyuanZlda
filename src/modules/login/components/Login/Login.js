@@ -17,7 +17,7 @@ class Login extends Component {
   componentDidUpdate() {
     console.log(this.props.isLogin)
     if (this.props.isLogin) {
-      this.props.history.replace('/')
+      this.props.history.replace('/order')
     }
   }
   handleInputChange = e => {
@@ -35,6 +35,7 @@ class Login extends Component {
       })
     }
   }
+
   login = () => {
     let { userId, pwd } = this.state
     let parms = {
