@@ -1,8 +1,9 @@
 import appGlobal from './app-global.js'
 
-const apiUrl = appGlobal.orderApiUrl
-
-const callApi = (endpoint, config, url = apiUrl) => {
+const callApi = (endpoint, config, url) => {
+  if (!url) {
+    url = appGlobal.orderApiUrl
+  }
   return fetch(`${url}${endpoint}`, config)
     .then(res => {
       return res.json()
