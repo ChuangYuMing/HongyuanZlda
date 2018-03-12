@@ -37,7 +37,7 @@
   :global {
     .sticky-table-x-wrapper {
       .sticky-table-container {
-        width: 200%;
+        width: 100%;
       }
     }
     .sticky-table-header {

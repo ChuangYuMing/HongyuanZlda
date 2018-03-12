@@ -15,28 +15,10 @@ class Inventory extends PureComponent {
     lists = [...lists, ...lists]
     var rows = []
     var cells = []
-    let headers = [
-      '清',
-      '帳號',
-      '股名',
-      '買/賣',
-      '種類',
-      '清倉股數',
-      '當沖股數',
-      '前日股數',
-      '委買',
-      '委賣',
-      '當日買進',
-      '當日賣出'
-    ]
+    let headers = ['帳號', '股名', '種類', '前日股數', '當日買進']
     for (let i = 0; i < headers.length; i++) {
       cells.push(
-        <Cell
-          className={
-            i == 2 ? cx('header-cell', 'cell-center') : cx('header-cell')
-          }
-          key={i}
-        >
+        <Cell className={cx('header-cell')} key={i}>
           {headers[i]}
         </Cell>
       )
@@ -56,13 +38,6 @@ class Inventory extends PureComponent {
           <Cell key="2">cell</Cell>
           <Cell key="3">cell</Cell>
           <Cell key="4">cell</Cell>
-          <Cell key="5">cell</Cell>
-          <Cell key="6">cell</Cell>
-          <Cell key="7">cell</Cell>
-          <Cell key="8">cell</Cell>
-          <Cell key="9">cell</Cell>
-          <Cell key="10">cell</Cell>
-          <Cell key="11">cell</Cell>
         </Row>
       )
     })

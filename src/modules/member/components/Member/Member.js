@@ -15,7 +15,7 @@ class Member extends PureComponent {
     lists = [...lists, ...lists]
     var rows = []
     var cells = []
-    let headers = ['帳號', '名稱', '刪委託', '現沖', '融沖', '   ']
+    let headers = ['帳號', '名稱', '   ']
     for (let i = 0; i < headers.length; i++) {
       cells.push(
         <Cell
@@ -40,13 +40,8 @@ class Member extends PureComponent {
         >
           <Cell key="0">cell</Cell>
           <Cell key="1">cell</Cell>
-          <Cell className={cx('cell-center')} key="2">
-            <span className={cx('btn', 'delete-btn')}>刪委託</span>
-          </Cell>
-          <Cell key="3">cell</Cell>
-          <Cell key="4">cell</Cell>
-          <Cell key="5">
-            <span className={cx('btn', 'info-btn')}>維持率查詢</span>
+          <Cell key="2">
+            <span className={cx('btn', 'info-btn')}>購買力查詢</span>
           </Cell>
         </Row>
       )
