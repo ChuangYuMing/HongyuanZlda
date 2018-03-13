@@ -220,16 +220,3 @@
 .hide {
   opacity: 0;
 }
-:global {
-  #a {
-    width: 100px;
-    height: 100px;
-    background-color: red;
-    overflow: auto;
-  }
-  #b {
-    width: 100px;
-    height: 30000px;
-    background-color: blue '';
-  }
-}

@@ -11,9 +11,10 @@ class FilterSearch extends PureComponent {
       list: []
     }
   }
-  updateData = list => {
+  updateData = (list, endIndex) => {
+    console.log('@', list.length, endIndex)
     this.setState({
-      list
+      list: list.slice(0, endIndex)
     })
   }
   render() {

@@ -39,10 +39,11 @@ class HkOrder extends PureComponent {
       showPopUP: false,
       action: '',
       orderParams: {},
-      symbolFilterList: [],
       showSymbolFilter: false
     }
     this.prodList = this.props.prodList
+    this.endIndexSymbolFilter = 100
+    this.symbolFilterList = []
   }
   handleInputChange = e => {
     // console.log(this)
@@ -112,14 +113,13 @@ class HkOrder extends PureComponent {
     let prodList = this.prodList
     let symbolSearch = this.inputSymbol
     let suggestList = this.suggestList
-    let suggestWrap = document.getElementById('orderStockFilter')
+    let suggestWrap = this.orderStockFilter
     let keyword = Observable.fromEvent(symbolSearch, 'input')
     let focus = Observable.fromEvent(symbolSearch, 'focus')
     let unfocus = Observable.fromEvent(symbolSearch, 'focusout')
     let wheelSuggest = Observable.fromEvent(suggestWrap, 'wheel')
-    let scrollSuggest = Observable.fromEvent(suggestWrap, 'scroll', {
-      passive: true
-    })
+    let scrollSuggest = Observable.fromEvent(suggestWrap, 'scroll')
+    let scrollMerge = Observable.merge(wheelSuggest, scrollSuggest)
     let targetValue = ''
     focus.map(e => e).subscribe(res => {
       console.log(res)
@@ -143,13 +143,31 @@ class HkOrder extends PureComponent {
         })
       }, (e, res) => res)
       .subscribe(list => {
-        this.filterSearch.updateData(list)
+        let endIndex = this.endIndexSymbolFilter
+        this.symbolFilterList = list
+        this.endIndexSymbolFilter = 100
+        this.filterSearch.updateData(list, endIndex)
       })
 
-    let a = scrollSuggest.throttleTime(100).map(e => e)
-    a.subscribe(res => {
-      console.log(res)
-    })
+    scrollMerge
+      .auditTime(1000)
+      .map(e => e)
+      .subscribe(res => {
+        let wrapHeight = this.endIndexSymbolFilter * 19
+        console.log(wrapHeight)
+        let leavePxToBottom = wrapHeight - suggestWrap.scrollTop
+        console.log(wrapHeight, leavePxToBottom)
+        if (leavePxToBottom < 1000) {
+          this.endIndexSymbolFilter = this.endIndexSymbolFilter + 200
+          this.filterSearch.updateData(
+            this.symbolFilterList,
+            this.endIndexSymbolFilter
+          )
+        }
+        // console.log(res)
+        // console.log(suggestList.clientHeight)
+        // console.log(suggestWrap.scrollTop)
+      })
   }
   render() {
     console.log('main render')
@@ -207,6 +225,7 @@ class HkOrder extends PureComponent {
                 />
                 <div
                   id="orderStockFilter"
+                  ref={e => (this.orderStockFilter = e)}
                   className={
                     this.state.showSymbolFilter
                       ? cx('stock-filter')

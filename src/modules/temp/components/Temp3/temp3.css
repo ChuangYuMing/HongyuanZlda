@@ -1,0 +1,15 @@
+:global {
+  #a {
+    position: absolute;
+    top: 0px;
+    width: 100px;
+    height: 100px !important;
+    background-color: red;
+    overflow: auto;
+  }
+  #b {
+    width: 100px;
+    height: 30000px;
+    background-color: blue '';
+  }
+}

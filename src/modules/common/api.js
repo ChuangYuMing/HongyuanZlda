@@ -17,18 +17,3 @@ const callApi = (endpoint, config, url) => {
     })
 }
 export { callApi }
-// const callApi = (endpoint, config) => {
-//     return new Promise((resolve, reject) => {
-//         return fetch(`${apiUrl}${endpoint}`, config)
-//         .then(res => {
-//           return res.json()
-//         })
-//         .then(obj => {
-//             return Promise.resolve(obj)
-//         })
-//         .catch(e => {
-//             console.log(e)
-//             console.log(`%c ${e.message} `, 'background: #ff1801; color: #fffefe')
-//           })
-//     })
-// }

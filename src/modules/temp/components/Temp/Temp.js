@@ -9,7 +9,7 @@ import image from 'static/image/icons/booking.png'
 import image2 from 'static/image/ct2.png'
 import { fromJS } from 'immutable'
 import forge, { pkcs7 } from 'node-forge'
-import { Observable } from 'rxjs'
+// import Rx from 'rxjs'
 
 console.log(forge)
 let cx = classNames.bind(styles)
@@ -80,12 +80,6 @@ class Temp extends React.PureComponent {
   }
   componentDidMount() {
     this.pkcs7()
-
-    let a = document.getElementById('a')
-    var source = Observable.fromEvent(a, 'scroll')
-    var example = source.throttleTime(100).map(e => e)
-
-    example.subscribe(() => console.log(1))
   }
   test = () => {
     var formData = new FormData()
@@ -163,10 +157,6 @@ class Temp extends React.PureComponent {
         {/* <div style={{ width: '100%', height: '200px' }}>
           <StickyTable stickyColumnCount={0}>{rows}</StickyTable>
         </div> */}
-
-        <div id="a">
-          <div id="b">123</div>
-        </div>
       </div>
     )
   }

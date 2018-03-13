@@ -5,6 +5,7 @@ import classNames from 'classnames/bind'
 import styles from './App.css'
 import Temp from 'modules/temp/components/Temp'
 import Temp2 from 'modules/temp/components/Temp2'
+import Temp3 from 'modules/temp/components/Temp3/Temp3.js'
 import Main from 'modules/main/components/Main'
 import Loading from '../Loading/Loading.js'
 import Login from 'modules//login/components/Login'
@@ -34,6 +35,7 @@ class App extends React.PureComponent {
             <Route exact path={'/order'} component={Main} />
             <Route exact path={'/temp'} component={Temp} />
             <Route exact path={'/temp2'} component={Temp2} />
+            <Route exact path={'/temp3'} component={Temp3} />
             <Route exact path={'/order/login'} component={Login} />
           </Switch>
         </div>
