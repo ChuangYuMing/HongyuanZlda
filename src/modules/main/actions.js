@@ -6,6 +6,7 @@ import { formatGetRequestData } from 'tools/other.js'
 import { getDateFromFormat } from 'tools/date.js'
 import { updateOrderListHistory } from 'modules/order/actions.js'
 import { fromJS } from 'immutable'
+import { formatFormData } from 'tools/other.js'
 
 export const updateMainPopUpMsg = (data, status) => {
   return {
@@ -153,5 +154,32 @@ export const targetAccount = account => {
   return {
     type: types.TARGET_ACCOUNT,
     account
+  }
+}
+
+export const toggleChangePwdPopup = data => {
+  return {
+    type: types.TOGGLE_CHANGE_POPUP,
+    data
+  }
+}
+
+export const ds = params => {
+  return (dispatch, getState) => {}
+}
+
+export const updatePwd = params => {
+  return (dispatch, getState) => {
+    return new Promise((resolve, reject) => {
+      params = formatRequestData(params)
+      let formData = formatFormData(params)
+      callApi(`/api/billing/change/pwd`, {
+        method: 'POST',
+        body: formData
+      }).then(obj => {
+        let res = obj['30059']
+        resolve(res)
+      })
+    })
   }
 }

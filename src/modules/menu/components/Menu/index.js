@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import Menu from './Menu'
 import { updateAppInfo } from 'modules/app/actions.js'
 import { clearOrder } from 'modules/order/actions.js'
-import { targetAccount } from 'modules/main/actions.js'
+import { targetAccount, toggleChangePwdPopup } from 'modules/main/actions.js'
 
 const mapStateToProps = state => {
   return {
@@ -41,6 +41,9 @@ const mapDispatchToProps = dispatch => {
     },
     changeTargetAccount: account => {
       dispatch(targetAccount(account))
+    },
+    showChangePwd: () => {
+      dispatch(toggleChangePwdPopup(true))
     }
   }
 }

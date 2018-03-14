@@ -27,7 +27,11 @@ export const login = params => {
           dispatch(
             updateAppInfo(Map({ userToken: token, isLogin: true, userId }))
           )
+          dispatch(updateErrorMsg(''))
           resolve({ token, userId })
+        } else {
+          let errorMsg = obj['12017']
+          dispatch(updateErrorMsg(errorMsg))
         }
       })
     })
@@ -37,6 +41,13 @@ export const login = params => {
 export const updateStatus = data => {
   return {
     type: types.UPDATE_STATUS,
+    data
+  }
+}
+
+export const updateErrorMsg = data => {
+  return {
+    type: types.UPDATE_ERROR_MSG,
     data
   }
 }

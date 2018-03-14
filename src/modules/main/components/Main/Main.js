@@ -14,6 +14,7 @@ import SocketHandler from '../../socket-handler'
 import WsConnect from 'modules/app/ws-connect.js'
 import WsQuoteConnect from 'modules/app/ws-quote-connect.js'
 import Loading from 'modules/shared/components/Loading2/Loading2.js'
+import ChangePwd from '../ChangePwd/index.js'
 
 let cx = classNames.bind(styles)
 class Main extends Component {
@@ -27,12 +28,12 @@ class Main extends Component {
   componentDidMount() {
     let promise1 = this.props.getProds(['US', 'HK'])
     let promise2 = this.props.getCustomerInfo({
-      Username: 'J220160286',
+      Username: this.props.userId,
       TokenID: this.props.userToken
     })
 
     let promise3 = this.props.getOrderStatus({
-      Username: 'A123456789',
+      Username: this.props.userId,
       TokenID: this.props.userToken
     })
     Promise.all([promise1, promise2, promise3]).then(res => {
@@ -137,6 +138,7 @@ class Main extends Component {
           <Order />
         </div>
         {popup}
+        <ChangePwd />
       </div>
     )
   }

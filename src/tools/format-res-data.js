@@ -33,7 +33,7 @@ function fixDataMaping() {
     '17': 'ExecID',
     '31': 'LastPx',
     '32': 'LastQty',
-    '34': 'MsgSqgNum',
+    '34': 'MsgSeqNum',
     '35': 'MsgType',
     '37': 'OrderID',
     '38': 'OrderQty',
@@ -61,6 +61,7 @@ function fixDataMaping() {
     '273': 'Timestamp',
     '434': 'CxlRejResponseTo',
     '553': 'Username',
+    '554': 'Password',
     '1129': 'TokenID',
     '30056': 'Branch',
     '30057': 'RMode',
@@ -85,6 +86,8 @@ function formatRequestData(res) {
     let fix = NameToFix[key]
     if (fix) {
       formatObj[fix] = element
+    } else {
+      console.log('not mapping key', key)
     }
   }
   console.log('foramtobj', formatObj)

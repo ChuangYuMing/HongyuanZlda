@@ -10,7 +10,8 @@ class Login extends Component {
     super(props)
     this.state = {
       userId: '',
-      pwd: ''
+      pwd: '',
+      disableSubmit: false
     }
     this.isLogin = props.isLogin
   }
@@ -35,8 +36,15 @@ class Login extends Component {
       })
     }
   }
-
-  login = () => {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errorMsg !== '') {
+      this.setState({
+        disableSubmit: false
+      })
+    }
+  }
+  handleSubmit = e => {
+    e.preventDefault()
     let { userId, pwd } = this.state
     let parms = {
       '34': '',
@@ -45,15 +53,24 @@ class Login extends Component {
       '554': pwd,
       '1408': ''
     }
-    this.props.login(parms)
+    this.setState({
+      disableSubmit: true
+    })
+    setTimeout(() => {
+      this.props.login(parms)
+    }, 5000)
   }
   render() {
+    let { errorMsg } = this.props
     return (
       <div className={cx('main')}>
-        <div className={cx('login-wrap')}>
+        <form className={cx('login-wrap')} onSubmit={this.handleSubmit}>
           <img className={cx('logo')} src={Logo} alt="logo" />
           <span className={cx('title')}>自打登入</span>
           <div className={cx('input-wrap')}>
+            <span className={errorMsg !== '' ? cx('error') : cx('hide')}>
+              {`<${errorMsg}>`}
+            </span>
             <div className={cx('item')}>
               <label htmlFor="userId">帳號：</label>
               <input
@@ -67,18 +84,22 @@ class Login extends Component {
             <div className={cx('item')}>
               <label htmlFor="pwd">密碼：</label>
               <input
-                type="text"
+                type="password"
                 id="pwd"
                 name="pwd"
                 value={this.state.pwd}
                 onChange={this.handleInputChange}
               />
             </div>
-            <span onClick={this.login} className={cx('btn')}>
+            <button
+              disabled={this.state.disableSubmit}
+              type="submit"
+              className={cx('btn')}
+            >
               登入
-            </span>
+            </button>
           </div>
-        </div>
+        </form>
       </div>
     )
   }

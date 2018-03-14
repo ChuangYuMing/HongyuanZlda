@@ -5,14 +5,15 @@ import { formatDate } from 'tools/date.js'
 
 const mapStateToProps = state => {
   return {
-    isLogin: state.app.get('isLogin')
+    isLogin: state.app.get('isLogin'),
+    errorMsg: state.login.get('errorMsg')
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    login: async data => {
-      let { token, userId } = await dispatch(login(data))
+    login: data => {
+      dispatch(login(data))
     }
   }
 }

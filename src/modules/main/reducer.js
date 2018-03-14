@@ -5,7 +5,8 @@ let init = Map({
   prodList: {},
   fetchApiUrl: false,
   customerInfo: List([]),
-  targetAccount: ''
+  targetAccount: '',
+  showChangePwd: false
 })
 export default (state = init, action) => {
   switch (action.type) {
@@ -36,6 +37,9 @@ export default (state = init, action) => {
     }
     case types.TARGET_ACCOUNT: {
       return state.set('targetAccount', action.account)
+    }
+    case types.TOGGLE_CHANGE_POPUP: {
+      return state.update('showChangePwd', i => action.data)
     }
     default:
       return state

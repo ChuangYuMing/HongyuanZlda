@@ -18,6 +18,9 @@ class Menu extends PureComponent {
     console.log('value', value)
     this.props.changeTargetAccount(value)
   }
+  showChangePwd = () => {
+    this.props.showChangePwd()
+  }
   render() {
     let { customerInfo } = this.props
     let accountList = customerInfo.map((item, index) => {
@@ -66,7 +69,9 @@ class Menu extends PureComponent {
           <select name="acc">
             <option value="1">帳務視窗</option>
           </select>
-          <span className={cx('btn', 'inline-bk')}>另存條件</span>
+          <span onClick={this.showChangePwd} className={cx('btn', 'inline-bk')}>
+            修改密碼
+          </span>
         </div>
         <span onClick={this.logout} className={cx('logout')}>
           登出
