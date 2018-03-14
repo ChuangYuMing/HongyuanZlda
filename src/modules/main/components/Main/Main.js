@@ -27,7 +27,7 @@ class Main extends Component {
   componentDidMount() {
     let promise1 = this.props.getProds(['US', 'HK'])
     let promise2 = this.props.getCustomerInfo({
-      Username: 'A123456789',
+      Username: 'J220160286',
       TokenID: this.props.userToken
     })
 

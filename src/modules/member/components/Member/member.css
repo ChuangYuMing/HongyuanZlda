@@ -42,3 +42,7 @@
 .cell-center {
   text-align: center;
 }
+
+.focus {
+  color: yellow;
+}

@@ -1,16 +1,18 @@
 import { connect } from 'react-redux'
 import Member from './Member'
+import { targetAccount } from 'modules/main/actions.js'
 
 const mapStateToProps = state => {
   return {
-    customerInfo: state.main.get('customerInfo')
+    customerInfo: state.main.get('customerInfo'),
+    targetAccount: state.main.get('targetAccount')
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onTest: () => {
-      alert('test')
+    changeTargetAccount: account => {
+      dispatch(targetAccount(account))
     }
   }
 }

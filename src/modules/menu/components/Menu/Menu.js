@@ -5,14 +5,28 @@ import classNames from 'classnames/bind'
 
 let cx = classNames.bind(styles)
 class Menu extends PureComponent {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
   }
   logout = () => {
     this.props.logout()
     // this.props.history.replace('/login')
   }
+  changeTargetAccount = e => {
+    let target = e.target
+    let value = target.value
+    console.log('value', value)
+    this.props.changeTargetAccount(value)
+  }
   render() {
+    let { customerInfo } = this.props
+    let accountList = customerInfo.map((item, index) => {
+      return (
+        <option key={index} value={item.get('Account')}>
+          {item.get('Account')}
+        </option>
+      )
+    })
     return (
       <div className={cx('menu-wrap')}>
         <div className={cx('item-wrap', 't1')}>
@@ -20,8 +34,13 @@ class Menu extends PureComponent {
         </div>
         <div className={cx('item-wrap', 't2')}>
           <span>選取帳號</span>
-          <select name="acc">
-            <option value="1">255428</option>
+          <select
+            onChange={this.changeTargetAccount}
+            name="acc"
+            value={this.props.targetAccount}
+          >
+            <option value="">全部帳號</option>
+            {accountList}
           </select>
         </div>
         <div className={cx('item-wrap', 't3')}>

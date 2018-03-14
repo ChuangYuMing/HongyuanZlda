@@ -71,6 +71,12 @@ export const getCustomerInfo = params => {
       }).then(obj => {
         console.log('CustomerInfo', obj)
         let res = formatReponse(obj)
+        let res2 = JSON.parse(JSON.stringify(res))
+        res = [...res, ...res2]
+        res[0].Account = 'acc01'
+        res[1].Account = 'A2'
+
+        res = fromJS(res)
         dispatch(updateCustomerInfo(res))
         resolve(true)
       })
@@ -140,5 +146,12 @@ export const updateCustomerInfo = data => {
   return {
     type: types.UPDATE_CUSTOMER_INFO,
     data
+  }
+}
+
+export const targetAccount = account => {
+  return {
+    type: types.TARGET_ACCOUNT,
+    account
   }
 }

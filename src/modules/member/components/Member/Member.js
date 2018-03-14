@@ -9,9 +9,13 @@ class Member extends PureComponent {
   constructor() {
     super()
   }
+  changeTargetAccount = e => {
+    let target = e.currentTarget
+    let account = target.dataset.account
+    this.props.changeTargetAccount(account)
+  }
   render() {
     let lists = this.props.customerInfo
-    let { Account, CName } = lists
     var rows = []
     var cells = []
     let headers = ['帳號', '名稱', '   ']
@@ -30,15 +34,25 @@ class Member extends PureComponent {
     rows.push(<Row key={0}>{cells}</Row>)
     let mainDatas = lists.map((item, index) => {
       let cells = []
+      let Account = item.get('Account')
+      let CName = item.get('CName')
+      let cc = cx({
+        focus: this.props.targetAccount === Account
+      })
       return (
         <Row
           className={cx('cell-right')}
           key={index + 1}
           data-id={item.assetCode}
-          onClick={this.order}
+          data-account={Account}
+          onDoubleClick={this.changeTargetAccount}
         >
-          <Cell key="0">{`${Account}${index}`}</Cell>
-          <Cell key="1">{`${CName}${index}`}</Cell>
+          <Cell className={cc} key="0">
+            {Account}
+          </Cell>
+          <Cell className={cc} key="1">
+            {CName}
+          </Cell>
           <Cell key="2">
             <span className={cx('btn', 'info-btn')}>購買力查詢</span>
           </Cell>

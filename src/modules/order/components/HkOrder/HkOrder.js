@@ -29,7 +29,7 @@ class HkOrder extends PureComponent {
     super(props)
     this.state = {
       data: {},
-      account: 'acc01',
+      account: props.targetAccount,
       symbol: '',
       volume: 1,
       price: '',
@@ -54,10 +54,19 @@ class HkOrder extends PureComponent {
       [name]: value
     })
   }
-
+  componentWillReceiveProps(nextProps) {
+    let account = this.state.account
+    let newTarget = nextProps.targetAccount
+    if (account !== newTarget) {
+      this.setState({
+        account: newTarget
+      })
+    }
+  }
   handleOrderAction = e => {
     let action = e.target.dataset.action
     let { account, symbol, volume, price, orderType, date } = this.state
+    // let account = this.props.targetAccount
     let params = {
       MsgType: 'D',
       Symbol: symbol,
@@ -168,7 +177,6 @@ class HkOrder extends PureComponent {
       })
   }
   render() {
-    console.log('main render')
     let prodList = this.props.prodList || []
     let quote = this.props.quote
     let Symbol = quote.get('Symbol')
@@ -192,6 +200,8 @@ class HkOrder extends PureComponent {
     let limitHighStyle = priceStyle(99999, PrePrice)
     let limitLowStyle = priceStyle(0, PrePrice)
     let { account, symbol, volume, price, orderType, date, action } = this.state
+    // let { targetAccount: account } = this.props
+    console.log(account)
     return (
       <div className={cx('usorder-wrap')}>
         <div className={cx('action-wrap')}>
@@ -201,7 +211,7 @@ class HkOrder extends PureComponent {
               <input
                 type="text"
                 name="account"
-                value={this.state.account}
+                value={account}
                 onChange={this.handleInputChange}
                 ref="account"
               />

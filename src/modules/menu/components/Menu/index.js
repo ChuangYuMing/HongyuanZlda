@@ -2,10 +2,12 @@ import { connect } from 'react-redux'
 import Menu from './Menu'
 import { updateAppInfo } from 'modules/app/actions.js'
 import { clearOrder } from 'modules/order/actions.js'
+import { targetAccount } from 'modules/main/actions.js'
 
 const mapStateToProps = state => {
   return {
-    test: state.app
+    customerInfo: state.main.get('customerInfo'),
+    targetAccount: state.main.get('targetAccount')
   }
 }
 
@@ -36,6 +38,9 @@ const mapDispatchToProps = dispatch => {
       })
       dispatch(updateAppInfo(data))
       dispatch(clearOrder())
+    },
+    changeTargetAccount: account => {
+      dispatch(targetAccount(account))
     }
   }
 }

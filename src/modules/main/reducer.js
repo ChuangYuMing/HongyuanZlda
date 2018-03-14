@@ -4,7 +4,8 @@ let init = Map({
   mainPopupMsg: List([]),
   prodList: {},
   fetchApiUrl: false,
-  customerInfo: List([])
+  customerInfo: List([]),
+  targetAccount: ''
 })
 export default (state = init, action) => {
   switch (action.type) {
@@ -32,6 +33,9 @@ export default (state = init, action) => {
     }
     case types.UPDATE_CUSTOMER_INFO: {
       return state.update('customerInfo', i => action.data)
+    }
+    case types.TARGET_ACCOUNT: {
+      return state.set('targetAccount', action.account)
     }
     default:
       return state
