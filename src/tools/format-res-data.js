@@ -62,7 +62,14 @@ function fixDataMaping() {
     '434': 'CxlRejResponseTo',
     '553': 'Username',
     '1129': 'TokenID',
-    '30056': 'Branch'
+    '30056': 'Branch',
+    '30057': 'RMode',
+    '30061': 'Address',
+    '30062': 'Phone',
+    '30063': 'Email',
+    '30064': 'DayTrade',
+    '30065': 'Professional',
+    '30066': 'Artificial'
   }
   for (const key in fixToName) {
     const element = fixToName[key]

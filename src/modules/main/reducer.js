@@ -3,7 +3,8 @@ import * as types from './action-types'
 let init = Map({
   mainPopupMsg: List([]),
   prodList: {},
-  fetchApiUrl: false
+  fetchApiUrl: false,
+  customerInfo: List([])
 })
 export default (state = init, action) => {
   switch (action.type) {
@@ -28,6 +29,9 @@ export default (state = init, action) => {
     }
     case types.UPDATE_FETCH_APIURL: {
       return state.update('fetchApiUrl', i => action.data)
+    }
+    case types.UPDATE_CUSTOMER_INFO: {
+      return state.update('customerInfo', i => action.data)
     }
     default:
       return state

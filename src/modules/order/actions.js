@@ -148,3 +148,10 @@ export const inflatDealHistory = (id, flag) => {
     flag
   }
 }
+
+export const updateOrderListHistory = data => {
+  return {
+    type: types.UPDATE_ORDER_LIST_HISTORY,
+    data
+  }
+}

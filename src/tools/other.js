@@ -1,3 +1,5 @@
+import queryString from 'query-string'
+
 function sleep(milliseconds) {
   var start = new Date().getTime()
   while (new Date().getTime() - start < milliseconds) {}
@@ -57,6 +59,10 @@ function formatFormData(params) {
   }
   return formData
 }
+function formatGetRequestData(params) {
+  params = queryString.stringify(params)
+  return params
+}
 function priceStyle(target, prePrice) {
   target = parseFloat(target)
   prePrice = parseFloat(prePrice)
@@ -76,7 +82,7 @@ function priceStyle(target, prePrice) {
 }
 
 const keyWordStockFilter = (list, keyword) => {
-  console.log(list, keyword)
+  // console.log(list, keyword)
   var len = list.length
   var arr = []
   var reg = new RegExp(keyword)
@@ -98,5 +104,6 @@ export {
   getSiblings,
   formatFormData,
   priceStyle,
-  keyWordStockFilter
+  keyWordStockFilter,
+  formatGetRequestData
 }

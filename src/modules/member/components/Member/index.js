@@ -3,7 +3,7 @@ import Member from './Member'
 
 const mapStateToProps = state => {
   return {
-    test: state.app
+    customerInfo: state.main.get('customerInfo')
   }
 }
 

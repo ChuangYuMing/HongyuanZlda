@@ -1,13 +1,20 @@
 import { connect } from 'react-redux'
 import Main from './Main'
-import { closeMainPopup, getProds, updateProdList } from '../../actions.js'
+import {
+  closeMainPopup,
+  getProds,
+  updateProdList,
+  getCustomerInfo,
+  getOrderStatus
+} from '../../actions.js'
 
 const mapStateToProps = state => {
   return {
     isLogin: state.app.get('isLogin'),
     mainPopupMsg: state.main.get('mainPopupMsg'),
     prodList: state.main.get('prodList'),
-    userToken: state.app.get('userToken')
+    userToken: state.app.get('userToken'),
+    userId: state.app.get('userId')
   }
 }
 
@@ -32,6 +39,12 @@ const mapDispatchToProps = dispatch => {
         .catch(e => {
           console.log(e)
         })
+    },
+    getCustomerInfo: params => {
+      dispatch(getCustomerInfo(params))
+    },
+    getOrderStatus: params => {
+      dispatch(getOrderStatus(params))
     }
   }
 }

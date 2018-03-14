@@ -80,6 +80,9 @@ export default (state = init, action) => {
       )
       return state
     }
+    case types.UPDATE_ORDER_LIST_HISTORY: {
+      return state.update('orderList', i => action.data)
+    }
     default:
       return state
   }

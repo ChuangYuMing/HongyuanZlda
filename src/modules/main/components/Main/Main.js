@@ -22,6 +22,14 @@ class Main extends Component {
   }
   componentDidMount() {
     this.props.getProds(['US', 'HK'])
+    this.props.getCustomerInfo({
+      Username: 'A123456789',
+      TokenID: this.props.userToken
+    })
+    this.props.getOrderStatus({
+      Username: 'A123456789',
+      TokenID: this.props.userToken
+    })
     this.WsConnect = new WsConnect(this.props.userToken)
     this.WsQuoteConnect = new WsQuoteConnect()
     this.WsConnect.connect()

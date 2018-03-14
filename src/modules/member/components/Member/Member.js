@@ -10,9 +10,8 @@ class Member extends PureComponent {
     super()
   }
   render() {
-    let lists = [1, 2, 3, 4]
-    lists = [...lists, ...lists]
-    lists = [...lists, ...lists]
+    let lists = this.props.customerInfo
+    let { Account, CName } = lists
     var rows = []
     var cells = []
     let headers = ['帳號', '名稱', '   ']
@@ -38,8 +37,8 @@ class Member extends PureComponent {
           data-id={item.assetCode}
           onClick={this.order}
         >
-          <Cell key="0">cell</Cell>
-          <Cell key="1">cell</Cell>
+          <Cell key="0">{Account}</Cell>
+          <Cell key="1">{CName}</Cell>
           <Cell key="2">
             <span className={cx('btn', 'info-btn')}>購買力查詢</span>
           </Cell>

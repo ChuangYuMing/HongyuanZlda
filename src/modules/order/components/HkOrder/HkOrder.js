@@ -122,16 +122,19 @@ class HkOrder extends PureComponent {
     let scrollMerge = Observable.merge(wheelSuggest, scrollSuggest)
     let targetValue = ''
     focus.map(e => e).subscribe(res => {
-      console.log(res)
+      // console.log(res)
       this.setState({
         showSymbolFilter: true
       })
     })
     unfocus.map(e => e).subscribe(res => {
-      console.log(res)
+      // console.log(res)
       this.setState({
         showSymbolFilter: false
       })
+      let { symbol } = this.state
+      let { country } = this.props
+      this.props.getQuote([`${symbol}.${country}`])
     })
     keyword
       .debounceTime(100)
@@ -154,9 +157,7 @@ class HkOrder extends PureComponent {
       .map(e => e)
       .subscribe(res => {
         let wrapHeight = this.endIndexSymbolFilter * 19
-        console.log(wrapHeight)
         let leavePxToBottom = wrapHeight - suggestWrap.scrollTop
-        console.log(wrapHeight, leavePxToBottom)
         if (leavePxToBottom < 1000) {
           this.endIndexSymbolFilter = this.endIndexSymbolFilter + 200
           this.filterSearch.updateData(
@@ -164,9 +165,6 @@ class HkOrder extends PureComponent {
             this.endIndexSymbolFilter
           )
         }
-        // console.log(res)
-        // console.log(suggestList.clientHeight)
-        // console.log(suggestWrap.scrollTop)
       })
   }
   render() {
