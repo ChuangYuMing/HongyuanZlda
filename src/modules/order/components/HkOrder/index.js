@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import HkOrder from './HkOrder'
-import { order, getQuote } from '../../actions.js'
+import { order, getQuote, registerTick, clearQuote } from '../../actions.js'
+import appGlobal from 'modules/common/app-global.js'
 
 const mapStateToProps = state => {
   return {
@@ -11,7 +12,15 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return {}
+  return {
+    resetData: () => {
+      let sessionId = appGlobal.wsQuoteSessionId
+      dispatch(clearQuote())
+      // unregisterTick
+      dispatch(registerTick(sessionId, ''))
+      console.log('resetData')
+    }
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HkOrder)

@@ -41,6 +41,7 @@ class HkOrder extends PureComponent {
       orderParams: {},
       showSymbolFilter: false
     }
+    props.resetData()
     this.prodList = this.props.prodList
     this.endIndexSymbolFilter = 100
     this.symbolFilterList = []

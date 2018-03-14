@@ -83,7 +83,7 @@ export const show = data => {
   }
 }
 
-function registerTick(sessionId, symbol) {
+export const registerTick = (sessionId, symbol) => {
   if (typeof symbol === 'string') {
     symbol = new Array(symbol)
   }
@@ -153,5 +153,11 @@ export const updateOrderListHistory = data => {
   return {
     type: types.UPDATE_ORDER_LIST_HISTORY,
     data
+  }
+}
+
+export const clearQuote = () => {
+  return {
+    type: types.CLEAR_QUOTE
   }
 }

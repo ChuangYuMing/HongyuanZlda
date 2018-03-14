@@ -83,6 +83,9 @@ export default (state = init, action) => {
     case types.UPDATE_ORDER_LIST_HISTORY: {
       return state.update('orderList', i => action.data)
     }
+    case types.CLEAR_QUOTE: {
+      return state.update('orderQuote', i => Map())
+    }
     default:
       return state
   }
