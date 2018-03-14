@@ -72,6 +72,7 @@ export const getCustomerInfo = params => {
         console.log('CustomerInfo', obj)
         let res = formatReponse(obj)
         dispatch(updateCustomerInfo(res))
+        resolve(true)
       })
     })
   }
@@ -129,6 +130,7 @@ export const getOrderStatus = params => {
         }
         // console.log('orderList', orderList.toJS())
         dispatch(updateOrderListHistory(orderList))
+        resolve(true)
       })
     })
   }

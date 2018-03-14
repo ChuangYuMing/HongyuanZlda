@@ -13,22 +13,32 @@ import PopUp from 'modules/shared/components/PopUp/PopUp.js'
 import SocketHandler from '../../socket-handler'
 import WsConnect from 'modules/app/ws-connect.js'
 import WsQuoteConnect from 'modules/app/ws-quote-connect.js'
+import Loading from 'modules/shared/components/Loading2/Loading2.js'
 
 let cx = classNames.bind(styles)
 class Main extends Component {
   constructor() {
     super()
     this.windowWith = document.body.clientWidth
+    this.state = {
+      hasLoadData: false
+    }
   }
   componentDidMount() {
-    this.props.getProds(['US', 'HK'])
-    this.props.getCustomerInfo({
+    let promise1 = this.props.getProds(['US', 'HK'])
+    let promise2 = this.props.getCustomerInfo({
       Username: 'A123456789',
       TokenID: this.props.userToken
     })
-    this.props.getOrderStatus({
+
+    let promise3 = this.props.getOrderStatus({
       Username: 'A123456789',
       TokenID: this.props.userToken
+    })
+    Promise.all([promise1, promise2, promise3]).then(res => {
+      this.setState({
+        hasLoadData: true
+      })
     })
     this.WsConnect = new WsConnect(this.props.userToken)
     this.WsQuoteConnect = new WsQuoteConnect()
@@ -60,8 +70,8 @@ class Main extends Component {
         />
       )
     }
-    if (!gotProdList) {
-      return <div />
+    if (!this.state.hasLoadData) {
+      return <Loading />
     }
     let popup = []
     let { mainPopupMsg } = this.props

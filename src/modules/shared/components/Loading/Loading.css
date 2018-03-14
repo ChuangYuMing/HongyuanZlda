@@ -1,8 +1,5 @@
-/*
-  Set the color of the icon
-*/
 .loading path {
-  fill: #FF6700;
+  fill: #ff6700;
 }
 
 .absolute {

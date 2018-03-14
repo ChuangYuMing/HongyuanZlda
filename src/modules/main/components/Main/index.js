@@ -28,23 +28,34 @@ const mapDispatchToProps = dispatch => {
       let promises = countrys.map(item => {
         return dispatch(getProds(item))
       })
-      Promise.all(promises)
-        .then(res => {
-          res.forEach((item, i) => {
-            prodList[countrys[i]] = res[i]
+      return new Promise(resolve => {
+        Promise.all(promises)
+          .then(res => {
+            res.forEach((item, i) => {
+              prodList[countrys[i]] = res[i]
+            })
+            dispatch(updateProdList(prodList))
+            console.log('prodList: ', prodList)
+            resolve(true)
           })
-          dispatch(updateProdList(prodList))
-          console.log('prodList: ', prodList)
-        })
-        .catch(e => {
-          console.log(e)
-        })
+          .catch(e => {
+            console.log(e)
+          })
+      })
     },
     getCustomerInfo: params => {
-      dispatch(getCustomerInfo(params))
+      return new Promise(resolve => {
+        dispatch(getCustomerInfo(params)).then(res => {
+          resolve(true)
+        })
+      })
     },
     getOrderStatus: params => {
-      dispatch(getOrderStatus(params))
+      return new Promise(resolve => {
+        dispatch(getOrderStatus(params)).then(res => {
+          resolve(true)
+        })
+      })
     }
   }
 }

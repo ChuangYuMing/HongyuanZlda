@@ -27,7 +27,7 @@ class App extends React.PureComponent {
     let { rehydrated, fetchApiUrl } = this.props
     console.log('fetchApiUrl', fetchApiUrl)
     if (!rehydrated || !fetchApiUrl) {
-      return <Loading />
+      return <div />
     } else {
       return (
         <div>

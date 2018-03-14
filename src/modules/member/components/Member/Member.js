@@ -37,8 +37,8 @@ class Member extends PureComponent {
           data-id={item.assetCode}
           onClick={this.order}
         >
-          <Cell key="0">{Account}</Cell>
-          <Cell key="1">{CName}</Cell>
+          <Cell key="0">{`${Account}${index}`}</Cell>
+          <Cell key="1">{`${CName}${index}`}</Cell>
           <Cell key="2">
             <span className={cx('btn', 'info-btn')}>購買力查詢</span>
           </Cell>
