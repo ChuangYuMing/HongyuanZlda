@@ -152,6 +152,7 @@ class HkOrder extends PureComponent {
         targetValue = e.target.value
         return Observable.create(observer => {
           let list = keyWordStockFilter(prodList, targetValue)
+          // console.log(list)
           observer.next(list)
         })
       }, (e, res) => res)
@@ -160,6 +161,7 @@ class HkOrder extends PureComponent {
         this.symbolFilterList = list
         this.endIndexSymbolFilter = 100
         this.filterSearch.updateData(list, endIndex)
+        this.orderStockFilter.scrollTop = 0
       })
 
     scrollMerge

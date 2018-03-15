@@ -81,21 +81,33 @@ function priceStyle(target, prePrice) {
   }
 }
 
-const keyWordStockFilter = (list, keyword) => {
-  // console.log(list, keyword)
-  var len = list.length
-  var arr = []
-  var reg = new RegExp(keyword)
-  for (var i = 0; i < len; i++) {
+const keyWordStockFilter = (list, key) => {
+  // console.log(list, key)
+  let len = list.length
+  let arr = []
+  let topShowFilter = []
+  for (let i = 0; i < len; i++) {
+    let symbol = list[i]['subSymbol']
+    let targetIndex = symbol.indexOf(key)
     //如果字符串中不包含目标字符会返回-1
-    if (list[i]['Symbol'].match(reg)) {
-      // if (arr.length > 100) {
-      //   break
-      // }
-      arr.push(list[i])
+    if (targetIndex !== -1) {
+      // console.log(symbol)
+      let firstHalf = symbol.slice(0, targetIndex)
+      let secondHalf = symbol.slice(targetIndex + key.length, symbol.length)
+      let obj = {
+        firstHalf,
+        secondHalf,
+        key
+      }
+      list[i].filterInfo = obj
+      if (firstHalf === '') {
+        topShowFilter.push(list[i])
+      } else {
+        arr.push(list[i])
+      }
     }
   }
-  return arr
+  return [...topShowFilter, ...arr]
 }
 export {
   sleep,

@@ -20,10 +20,15 @@ class FilterSearch extends PureComponent {
     let { keyword, type, onClick, listRef } = this.props
     let { list } = this.state
     let items = list.map((item, index) => {
-      let { subSymbol, Name } = item
+      let { subSymbol, Name, filterInfo } = item
+      let { firstHalf, secondHalf, key } = filterInfo
       return (
         <li onClick={onClick} data-symbol={subSymbol} key={index}>
-          <span>{subSymbol}</span>
+          <div className={cx('symbol-wrap')}>
+            {firstHalf}
+            <span className={cx('key')}>{key}</span>
+            {secondHalf}
+          </div>
           <span>{Name}</span>
         </li>
       )
