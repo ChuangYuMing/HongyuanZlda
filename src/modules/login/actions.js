@@ -4,9 +4,11 @@ import appGlobal from 'modules/common/app-global.js'
 import { updateAppInfo } from 'modules/app/actions.js'
 import { formatRequestData } from 'tools/format-res-data.js'
 import { callApi } from 'modules/common/api.js'
+import { toggleChangePwdPopup } from 'modules/main/actions.js'
 
 export const login = params => {
   let userId = params['553']
+  let pwd = params['554']
   return (dispatch, getState) => {
     let formData = formatFormData(params)
     let apiUrl = appGlobal.orderApiUrl
@@ -28,6 +30,11 @@ export const login = params => {
             updateAppInfo(Map({ userToken: token, isLogin: true, userId }))
           )
           dispatch(updateErrorMsg(''))
+          console.log('pwd', pwd)
+          if (pwd === '') {
+            dispatch(toggleChangePwdPopup(true))
+            dispatch(forceUpdatePwd(true))
+          }
           resolve({ token, userId })
         } else {
           let errorMsg = obj['12017']
@@ -48,6 +55,13 @@ export const updateStatus = data => {
 export const updateErrorMsg = data => {
   return {
     type: types.UPDATE_ERROR_MSG,
+    data
+  }
+}
+
+export const forceUpdatePwd = data => {
+  return {
+    type: types.FORCE_UPDATE_PWD,
     data
   }
 }

@@ -201,8 +201,7 @@ class HkOrder extends PureComponent {
     let limitHighStyle = priceStyle(99999, PrePrice)
     let limitLowStyle = priceStyle(0, PrePrice)
     let { account, symbol, volume, price, orderType, date, action } = this.state
-    // let { targetAccount: account } = this.props
-    console.log(account)
+
     return (
       <div className={cx('usorder-wrap')}>
         <div className={cx('action-wrap')}>

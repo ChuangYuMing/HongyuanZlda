@@ -46,12 +46,11 @@ class ChangePwd extends PureComponent {
     this.props.updatePwd(params).then(res => {
       let info = ''
       let msg = document.getElementsByClassName(styles['msg'])[0]
-      info = res === '1' ? '更新成功！' : '更新失敗！'
-      msg.textContent = info
+      msg.textContent = res
     })
   }
   render() {
-    let { showChangePwd } = this.props
+    let { showChangePwd, forceUpdatePwd } = this.props
     console.log('showChangePwd', showChangePwd)
     return (
       <div className={showChangePwd ? cx('wrap') : cx('hide')}>
@@ -66,6 +65,9 @@ class ChangePwd extends PureComponent {
               type="text"
               value={this.state.pwd}
             />
+            <span className={forceUpdatePwd ? cx('msg2') : cx('hide')}>
+              {`<第一次登入請修改密碼>`}
+            </span>
           </div>
           <span onClick={this.hidePopup} className={cx('btn', 'cancel')}>
             關閉

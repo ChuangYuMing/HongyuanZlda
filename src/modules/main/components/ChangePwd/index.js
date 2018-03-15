@@ -6,7 +6,8 @@ const mapStateToProps = state => {
   return {
     showChangePwd: state.main.get('showChangePwd'),
     tokenId: state.app.get('userToken'),
-    userId: state.app.get('userId')
+    userId: state.app.get('userId'),
+    forceUpdatePwd: state.login.get('forceUpdatePwd')
   }
 }
 
@@ -15,9 +16,12 @@ const mapDispatchToProps = dispatch => {
     hidePopup: id => {
       dispatch(toggleChangePwdPopup(false))
     },
-    updatePwd: pwd => {
+    updatePwd: params => {
       return new Promise(resolve => {
-        dispatch(updatePwd(pwd)).then(res => {
+        if (params['Password'] === '') {
+          resolve('不能為空值')
+        }
+        dispatch(updatePwd(params)).then(res => {
           resolve(res)
         })
       })

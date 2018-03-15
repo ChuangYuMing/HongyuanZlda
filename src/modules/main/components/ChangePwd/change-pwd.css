@@ -25,6 +25,11 @@
     color: red;
     padding: 3px 0px;
   }
+  .msg2 {
+    display: block;
+    color: red;
+    padding: 3px 0px;
+  }
   .title {
     display: block;
     font-size: 20px;

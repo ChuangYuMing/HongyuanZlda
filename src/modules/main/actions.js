@@ -7,6 +7,7 @@ import { getDateFromFormat } from 'tools/date.js'
 import { updateOrderListHistory } from 'modules/order/actions.js'
 import { fromJS } from 'immutable'
 import { formatFormData } from 'tools/other.js'
+import { forceUpdatePwd } from 'modules/login/actions.js'
 
 export const updateMainPopUpMsg = (data, status) => {
   return {
@@ -178,7 +179,12 @@ export const updatePwd = params => {
         body: formData
       }).then(obj => {
         let res = obj['30059']
-        resolve(res)
+        if (res === '1') {
+          dispatch(forceUpdatePwd(false))
+          resolve('更新成功')
+        } else {
+          resolve('更新失敗！')
+        }
       })
     })
   }
