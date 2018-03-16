@@ -10,10 +10,17 @@ class Member extends PureComponent {
     super()
   }
   changeTargetAccount = e => {
+    let { userToken } = this.props
     let target = e.currentTarget
     let account = target.dataset.account
     let branch = target.dataset.branch
+    let prams = {
+      Account: account,
+      Branch: branch,
+      TokenId: userToken
+    }
     this.props.changeTargetAccount({ account, branch })
+    this.props.getInventory(prams)
   }
   render() {
     let lists = this.props.customerInfo

@@ -3,10 +3,10 @@ import { callApi } from 'modules/common/api.js'
 import appGlobal from 'modules/common/app-global.js'
 import { formatReponse, formatRequestData } from 'tools/format-res-data.js'
 import { formatGetRequestData } from 'tools/other.js'
+import { formatFormData } from 'tools/other.js'
 import { getDateFromFormat } from 'tools/date.js'
 import { updateOrderListHistory } from 'modules/order/actions.js'
 import { fromJS } from 'immutable'
-import { formatFormData } from 'tools/other.js'
 import { forceUpdatePwd } from 'modules/login/actions.js'
 
 export const updateMainPopUpMsg = (data, status) => {
@@ -36,7 +36,7 @@ export const getProds = country => {
         },
         apiUrl
       ).then(obj => {
-        // console.log('getProds:', obj)
+        console.log('getProds:', obj)
         obj.forEach((item, index) => {
           obj[index]['subSymbol'] = item.Symbol.slice(0, -3)
         })

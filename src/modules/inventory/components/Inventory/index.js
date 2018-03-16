@@ -3,7 +3,8 @@ import Inventory from './Inventory'
 
 const mapStateToProps = state => {
   return {
-    test: state.app
+    targetAccount: state.main.get('targetAccount'),
+    customerInfo: state.main.get('customerInfo')
   }
 }
 

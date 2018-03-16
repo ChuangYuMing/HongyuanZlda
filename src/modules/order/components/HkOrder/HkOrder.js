@@ -67,7 +67,7 @@ class HkOrder extends PureComponent {
   handleOrderAction = e => {
     let action = e.target.dataset.action
     let { account, symbol, volume, price, orderType, date } = this.state
-    let { targetAccount, userId } = this.props
+    let { targetAccount, userId, userToken } = this.props
     let params = {
       MsgType: 'D',
       Symbol: symbol,
@@ -77,7 +77,8 @@ class HkOrder extends PureComponent {
       Price: price,
       OrderQty: volume,
       Branch: targetAccount.get('branch'),
-      Username: userId
+      Username: userId,
+      TokenID: userToken
     }
     this.setState({
       showPopUP: true,
@@ -152,7 +153,7 @@ class HkOrder extends PureComponent {
         targetValue = e.target.value
         return Observable.create(observer => {
           let list = keyWordStockFilter(prodList, targetValue)
-          // console.log(list)
+          console.log(list)
           observer.next(list)
         })
       }, (e, res) => res)

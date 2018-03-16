@@ -7,7 +7,8 @@ const mapStateToProps = state => {
   return {
     quote: state.order.getIn(['orderQuote']),
     userId: state.app.get('userId'),
-    targetAccount: state.main.get('targetAccount')
+    targetAccount: state.main.get('targetAccount'),
+    userToken: state.app.get('userToken')
   }
 }
 

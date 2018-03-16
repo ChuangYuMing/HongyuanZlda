@@ -112,7 +112,9 @@ function formatReponse(res) {
   } else {
     dataArr.push(res)
   }
-
+  function formatInventoryReponse(res) {
+    return res
+  }
   dataArr.forEach(res => {
     let itemData = {}
     for (const key in res) {
