@@ -73,10 +73,10 @@ export const getCustomerInfo = params => {
       }).then(obj => {
         console.log('CustomerInfo', obj)
         let res = formatReponse(obj)
-        let res2 = JSON.parse(JSON.stringify(res))
-        res = [...res, ...res2]
-        res[0].Account = 'acc01'
-        res[1].Account = 'A2'
+        // let res2 = JSON.parse(JSON.stringify(res))
+        // res = [...res, ...res2]
+        // res[0].Account = 'acc01'
+        // res[1].Account = 'A2'
 
         res = fromJS(res)
         dispatch(updateCustomerInfo(res))
@@ -95,9 +95,14 @@ export const getOrderStatus = params => {
         method: 'GET'
       }).then(obj => {
         console.log('OrderStatus', obj)
+        if (!obj['30058']) {
+          resolve(true)
+          return
+        }
         let res = formatReponse(obj)
         let groupData = {}
         let orderList = List([])
+        //get group data
         res.forEach((element, index) => {
           let ClOrdID = element['ClOrdID']
           if (!groupData[ClOrdID]) {
@@ -106,6 +111,7 @@ export const getOrderStatus = params => {
             groupData[ClOrdID].push(element)
           }
         })
+        //sort data
         for (const key in groupData) {
           let list = groupData[key]
           let item
@@ -118,7 +124,7 @@ export const getOrderStatus = params => {
             bdatetime = bdatetime + parseInt(btime[1])
             return adatetime - bdatetime
           })
-          // groupData[key] = list
+
           item = Map(list[list.length - 1])
           list.forEach(element => {
             if (element['OrdStatus'] === '2' || element['OrdStatus'] === '1') {
@@ -136,7 +142,7 @@ export const getOrderStatus = params => {
           })
           orderList = orderList.push(fromJS(item))
         }
-        // console.log('orderList', orderList.toJS())
+        console.log('orderList', orderList.toJS())
         dispatch(updateOrderListHistory(orderList))
         resolve(true)
       })
@@ -151,10 +157,11 @@ export const updateCustomerInfo = data => {
   }
 }
 
-export const targetAccount = account => {
+export const changeTargetAccount = data => {
+  data = Map(data)
   return {
     type: types.TARGET_ACCOUNT,
-    account
+    data
   }
 }
 
@@ -163,10 +170,6 @@ export const toggleChangePwdPopup = data => {
     type: types.TOGGLE_CHANGE_POPUP,
     data
   }
-}
-
-export const ds = params => {
-  return (dispatch, getState) => {}
 }
 
 export const updatePwd = params => {

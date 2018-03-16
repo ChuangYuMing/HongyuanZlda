@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import Member from './Member'
-import { targetAccount } from 'modules/main/actions.js'
+import { changeTargetAccount } from 'modules/main/actions.js'
 
 const mapStateToProps = state => {
   return {
@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     changeTargetAccount: account => {
-      dispatch(targetAccount(account))
+      dispatch(changeTargetAccount(account))
     }
   }
 }

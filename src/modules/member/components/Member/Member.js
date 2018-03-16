@@ -12,13 +12,15 @@ class Member extends PureComponent {
   changeTargetAccount = e => {
     let target = e.currentTarget
     let account = target.dataset.account
-    this.props.changeTargetAccount(account)
+    let branch = target.dataset.branch
+    this.props.changeTargetAccount({ account, branch })
   }
   render() {
     let lists = this.props.customerInfo
     var rows = []
     var cells = []
     let headers = ['帳號', '名稱', '   ']
+    let { targetAccount } = this.props
     for (let i = 0; i < headers.length; i++) {
       cells.push(
         <Cell
@@ -35,9 +37,10 @@ class Member extends PureComponent {
     let mainDatas = lists.map((item, index) => {
       let cells = []
       let Account = item.get('Account')
+      let Branch = item.get('Branch')
       let CName = item.get('CName')
       let cc = cx({
-        focus: this.props.targetAccount === Account
+        focus: targetAccount.get('account') === Account
       })
       return (
         <Row
@@ -45,6 +48,7 @@ class Member extends PureComponent {
           key={index + 1}
           data-id={item.assetCode}
           data-account={Account}
+          data-branch={Branch}
           onDoubleClick={this.changeTargetAccount}
         >
           <Cell className={cc} key="0">

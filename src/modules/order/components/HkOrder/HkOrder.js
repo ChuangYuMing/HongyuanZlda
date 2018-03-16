@@ -29,7 +29,7 @@ class HkOrder extends PureComponent {
     super(props)
     this.state = {
       data: {},
-      account: props.targetAccount,
+      account: props.targetAccount.get('account') || '',
       symbol: '',
       volume: 1,
       price: '',
@@ -57,17 +57,17 @@ class HkOrder extends PureComponent {
   }
   componentWillReceiveProps(nextProps) {
     let account = this.state.account
-    let newTarget = nextProps.targetAccount
-    if (account !== newTarget) {
+    let newTargetAcc = nextProps.targetAccount.get('account') || ''
+    if (account !== newTargetAcc) {
       this.setState({
-        account: newTarget
+        account: newTargetAcc
       })
     }
   }
   handleOrderAction = e => {
     let action = e.target.dataset.action
     let { account, symbol, volume, price, orderType, date } = this.state
-    // let account = this.props.targetAccount
+    let { targetAccount, userId } = this.props
     let params = {
       MsgType: 'D',
       Symbol: symbol,
@@ -76,8 +76,8 @@ class HkOrder extends PureComponent {
       OrdType: orderType,
       Price: price,
       OrderQty: volume,
-      Branch: 'branch01',
-      Username: this.props.userId
+      Branch: targetAccount.get('branch'),
+      Username: userId
     }
     this.setState({
       showPopUP: true,
@@ -111,6 +111,7 @@ class HkOrder extends PureComponent {
   //   })
   // }
   targetSearchSymbol = e => {
+    console.log('targetSearchSymbol')
     let country = this.props.country
     let target = e.currentTarget
     let symbol = target.dataset.symbol
@@ -132,13 +133,12 @@ class HkOrder extends PureComponent {
     let scrollMerge = Observable.merge(wheelSuggest, scrollSuggest)
     let targetValue = ''
     focus.map(e => e).subscribe(res => {
-      // console.log(res)
       this.setState({
         showSymbolFilter: true
       })
     })
     unfocus.map(e => e).subscribe(res => {
-      // console.log(res)
+      console.log(res)
       this.setState({
         showSymbolFilter: false
       })

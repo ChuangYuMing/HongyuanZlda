@@ -22,7 +22,7 @@ class Menu extends PureComponent {
     this.props.showChangePwd()
   }
   render() {
-    let { customerInfo } = this.props
+    let { customerInfo, targetAccount } = this.props
     let accountList = customerInfo.map((item, index) => {
       return (
         <option key={index} value={item.get('Account')}>
@@ -40,7 +40,7 @@ class Menu extends PureComponent {
           <select
             onChange={this.changeTargetAccount}
             name="acc"
-            value={this.props.targetAccount}
+            value={targetAccount.get('account')}
           >
             <option value="">全部帳號</option>
             {accountList}

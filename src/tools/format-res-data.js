@@ -70,7 +70,8 @@ function fixDataMaping() {
     '30063': 'Email',
     '30064': 'DayTrade',
     '30065': 'Professional',
-    '30066': 'Artificial'
+    '30066': 'Artificial',
+    '30072': 'CName'
   }
   for (const key in fixToName) {
     const element = fixToName[key]

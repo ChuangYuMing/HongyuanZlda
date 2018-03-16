@@ -10,7 +10,7 @@ export const order = params => {
   return (dispatch, getState) => {
     params.TokenID = getState().app.get('userToken')
     params = formatRequestData(params)
-    console.log(params)
+    console.log('order params', params)
     let formData = formatFormData(params)
     let apiUrl = appGlobal.orderApiUrl
     callApi(
@@ -21,7 +21,7 @@ export const order = params => {
       },
       apiUrl
     ).then(obj => {
-      console.log('order', obj)
+      console.log('order response', obj)
       let data = formatReponse(obj)[0]
       data = fromJS(data)
       dispatch(newOrder(data))
