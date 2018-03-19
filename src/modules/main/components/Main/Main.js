@@ -27,7 +27,7 @@ class Main extends Component {
   }
   componentDidMount() {
     let { userToken } = this.props
-    let promise1 = this.props.getProds(['US', 'HK'])
+    // let promise1 = this.props.getProds(['US', 'HK'])
     let promise2 = this.props.getCustomerInfo({
       Username: this.props.userId,
       TokenID: this.props.userToken

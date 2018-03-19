@@ -6,7 +6,8 @@ let init = Map({
   fetchApiUrl: false,
   customerInfo: List([]),
   targetAccount: Map({}),
-  showChangePwd: false
+  showChangePwd: false,
+  exchange: Map({})
 })
 export default (state = init, action) => {
   switch (action.type) {
@@ -40,6 +41,9 @@ export default (state = init, action) => {
     }
     case types.TOGGLE_CHANGE_POPUP: {
       return state.update('showChangePwd', i => action.data)
+    }
+    case types.UPDATE_EXCHANGE: {
+      return state.update('exchange', i => action.data)
     }
     default:
       return state

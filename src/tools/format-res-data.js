@@ -56,12 +56,18 @@ function fixDataMaping() {
     '100': 'ExDestination',
     '103': 'OrdRejReason',
     '120': 'SettlCurrency',
+    '128': 'DeliverToCompID',
     '150': 'ExecType',
     '151': 'LeavesQty',
+    '268': 'NoMDEntries',
     '269': 'MDEntryType',
     '270': 'MDEntryPx',
     '271': 'MDEntrySize',
     '273': 'Timestamp',
+    '340': 'Status',
+    '342': 'OpenTime',
+    '344': 'CloseTime',
+    '421': 'Market',
     '434': 'CxlRejResponseTo',
     '553': 'Username',
     '554': 'Password',
@@ -74,7 +80,10 @@ function fixDataMaping() {
     '30064': 'DayTrade',
     '30065': 'Professional',
     '30066': 'Artificial',
-    '30072': 'CName'
+    '30069': 'TradeUnit',
+    '30072': 'CName',
+    '30073': 'EName',
+    '30074': 'SName'
   }
   for (const key in fixToName) {
     const element = fixToName[key]
@@ -134,7 +143,7 @@ function formatReponse(res, dataKey = '30058') {
     }
     finalArr.push(itemData)
   })
-  console.log(finalArr)
+  // console.log(finalArr)
   return finalArr
 }
 

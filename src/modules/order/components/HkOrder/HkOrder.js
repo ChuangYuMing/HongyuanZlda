@@ -42,7 +42,6 @@ class HkOrder extends PureComponent {
       showSymbolFilter: false
     }
     props.resetData()
-    this.prodList = this.props.prodList
     this.endIndexSymbolFilter = 100
     this.symbolFilterList = []
   }
@@ -122,7 +121,6 @@ class HkOrder extends PureComponent {
     this.props.getQuote([`${symbol}.${country}`])
   }
   componentDidMount() {
-    let prodList = this.prodList
     let symbolSearch = this.inputSymbol
     let suggestList = this.suggestList
     let suggestWrap = this.orderStockFilter
@@ -155,6 +153,7 @@ class HkOrder extends PureComponent {
       .switchMap(e => {
         targetValue = e.target.value
         return Observable.create(observer => {
+          let prodList = this.props.prodList
           let list = keyWordStockFilter(prodList, targetValue)
           console.log(list)
           observer.next(list)

@@ -82,12 +82,12 @@ function priceStyle(target, prePrice) {
 }
 
 const keyWordStockFilter = (list, key) => {
-  // console.log(list, key)
+  console.log(list, key)
   let len = list.length
   let arr = []
   let topShowFilter = []
   for (let i = 0; i < len; i++) {
-    let symbol = list[i]['subSymbol']
+    let symbol = list[i]['Symbol']
     let targetIndex = symbol.indexOf(key)
     //如果字符串中不包含目标字符会返回-1
     if (targetIndex !== -1) {
@@ -109,6 +109,20 @@ const keyWordStockFilter = (list, key) => {
   }
   return [...topShowFilter, ...arr]
 }
+
+function text_truncate(str, length, ending = '...') {
+  if (length == null) {
+    length = 100
+  }
+  if (ending == null) {
+    ending = '...'
+  }
+  if (str.length > length) {
+    return str.substring(0, length - ending.length) + ending
+  } else {
+    return str
+  }
+}
 export {
   sleep,
   getClientOffset,
@@ -117,5 +131,6 @@ export {
   formatFormData,
   priceStyle,
   keyWordStockFilter,
-  formatGetRequestData
+  formatGetRequestData,
+  text_truncate
 }

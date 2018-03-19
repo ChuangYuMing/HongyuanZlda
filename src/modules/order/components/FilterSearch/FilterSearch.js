@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import styles from './filter-search.css'
 import classNames from 'classnames/bind'
-import { keyWordStockFilter } from 'tools/other.js'
+import { keyWordStockFilter, text_truncate } from 'tools/other.js'
 
 let cx = classNames.bind(styles)
 class FilterSearch extends PureComponent {
@@ -20,16 +20,16 @@ class FilterSearch extends PureComponent {
     let { keyword, type, onClick, listRef } = this.props
     let { list } = this.state
     let items = list.map((item, index) => {
-      let { subSymbol, Name, filterInfo } = item
+      let { Symbol, SName, filterInfo } = item
       let { firstHalf, secondHalf, key } = filterInfo
       return (
-        <li onClick={onClick} data-symbol={subSymbol} key={index}>
+        <li onClick={onClick} data-symbol={Symbol} key={index}>
           <div className={cx('symbol-wrap')}>
             {firstHalf}
             <span className={cx('key')}>{key}</span>
             {secondHalf}
           </div>
-          <span>{Name}</span>
+          <span title={SName}>{text_truncate(SName, 15)}</span>
         </li>
       )
     })

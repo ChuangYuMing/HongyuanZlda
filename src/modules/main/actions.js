@@ -139,7 +139,6 @@ export const getOrderStatus = params => {
         }
         console.log('orderList', orderList.toJS())
         orderList = orderList.sort((a, b) => {
-          console.log('aaaa', a)
           let atime = a.get('TransactTime').split('.')
           let btime = b.get('TransactTime').split('.')
           let adatetime = getDateFromFormat(atime[0], 'yMMdd-HH:mm:ss')
@@ -201,18 +200,50 @@ export const updatePwd = params => {
 export const getExchange = params => {
   return (dispatch, getState) => {
     return new Promise((resolve, reject) => {
+      let tokenId = getState().app.get('userToken')
       params = formatRequestData(params)
       let formData = formatFormData(params)
-      console.log('formData', formData)
+      // console.log('formData', formData)
       callApi(`/api/billing/trade/exchange`, {
         method: 'POST',
         body: formData
       }).then(obj => {
+        let finalRes = {}
         console.log('getExchange', obj)
-        // let res = formatReponse(obj)
-        // res = fromJS(res)
-        // dispatch(updateCustomerInfo(res))
-        resolve(true)
+        let res = formatReponse(obj)
+        console.log(res)
+        res.forEach(item => {
+          let market = item.Market
+          if (finalRes[market] === undefined) {
+            finalRes[market] = [item]
+          } else {
+            finalRes[market].push(item)
+          }
+        })
+        console.log(finalRes)
+        finalRes = fromJS(finalRes)
+        dispatch(updateExchange(finalRes))
+        const [...markets] = finalRes.keys()
+        let promises = markets.map(item => {
+          let params = {
+            TokenID: tokenId,
+            Market: item
+          }
+          return dispatch(getProds2(params))
+        })
+        let prodList = {}
+        Promise.all(promises)
+          .then(res => {
+            res.forEach((item, i) => {
+              prodList[markets[i]] = res[i]
+            })
+            dispatch(updateProdList(prodList))
+            console.log('prodList: ', prodList)
+            resolve(true)
+          })
+          .catch(e => {
+            console.log(e)
+          })
       })
     })
   }
@@ -228,11 +259,16 @@ export const getProds2 = params => {
         body: formData
       }).then(obj => {
         console.log('getProds2', obj)
-        // let res = formatReponse(obj)
-        // res = fromJS(res)
-        // dispatch(updateCustomerInfo(res))
-        resolve(true)
+        let res = formatReponse(obj)
+        resolve(res)
       })
     })
+  }
+}
+
+export const updateExchange = data => {
+  return {
+    type: types.UPDATE_EXCHANGE,
+    data
   }
 }
