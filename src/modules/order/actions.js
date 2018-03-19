@@ -5,6 +5,7 @@ import appGlobal from 'modules/common/app-global.js'
 import { quoteFormatEven } from 'tools/apex-dataformat'
 import { Map } from 'immutable'
 import { callApi } from 'modules/common/api.js'
+import { updateMainPopUpMsg } from 'modules/main/actions.js'
 
 export const order = params => {
   return (dispatch, getState) => {
@@ -22,6 +23,13 @@ export const order = params => {
       apiUrl
     ).then(obj => {
       console.log('order response', obj)
+      if (obj.hasOwnProperty('373')) {
+        let status = 'error'
+        let errMsg = `發生錯誤, error code: ${obj['373']}`
+        let popupMsg = `<span>${errMsg}</span>`
+        dispatch(updateMainPopUpMsg(popupMsg, status))
+        return
+      }
       let data = formatReponse(obj)[0]
       data = fromJS(data)
       dispatch(newOrder(data))

@@ -123,6 +123,20 @@ function text_truncate(str, length, ending = '...') {
     return str
   }
 }
+
+function searchProperty(source = [], property = [], symbol = '') {
+  let res = {}
+  for (let index = 0; index < source.length; index++) {
+    const item = source[index]
+    if (symbol === item['Symbol']) {
+      property.forEach(p => {
+        res[p] = item[p]
+      })
+      break
+    }
+  }
+  return res
+}
 export {
   sleep,
   getClientOffset,
@@ -132,5 +146,6 @@ export {
   priceStyle,
   keyWordStockFilter,
   formatGetRequestData,
-  text_truncate
+  text_truncate,
+  searchProperty
 }

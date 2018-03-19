@@ -12,7 +12,7 @@ import { priceStyle } from 'tools/other.js'
 import PopUp from 'modules/shared/components/PopUp/PopUp.js'
 import FilterSearch from '../FilterSearch/FilterSearch.js'
 import { Observable } from 'rxjs'
-import { keyWordStockFilter } from 'tools/other.js'
+import { keyWordStockFilter, searchProperty } from 'tools/other.js'
 
 let cx = classNames.bind(styles)
 let updtProdThrottle = throttle(
@@ -67,6 +67,12 @@ class HkOrder extends PureComponent {
     let action = e.target.dataset.action
     let { account, symbol, volume, price, orderType, date } = this.state
     let { targetAccount, userId, userToken } = this.props
+    let { prodList } = this.props
+    let { ExDestination, DeliverToCompID } = searchProperty(
+      prodList,
+      ['ExDestination', 'DeliverToCompID'],
+      symbol
+    )
     let params = {
       MsgType: 'D',
       Symbol: symbol,
@@ -77,7 +83,9 @@ class HkOrder extends PureComponent {
       OrderQty: volume,
       Branch: targetAccount.get('branch'),
       Username: userId,
-      TokenID: userToken
+      TokenID: userToken,
+      ExDestination,
+      DeliverToCompID
     }
     this.setState({
       showPopUP: true,
