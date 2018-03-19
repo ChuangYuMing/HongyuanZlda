@@ -133,10 +133,13 @@ class HkOrder extends PureComponent {
     let scrollSuggest = Observable.fromEvent(suggestWrap, 'scroll')
     let scrollMerge = Observable.merge(wheelSuggest, scrollSuggest)
     let targetValue = ''
+    let orderWrap = document.getElementById('orderWrap')
+
     focus.map(e => e).subscribe(res => {
       this.setState({
         showSymbolFilter: true
       })
+      console.log(orderWrap)
     })
     unfocus.map(e => e).subscribe(res => {
       console.log(res)
@@ -145,7 +148,7 @@ class HkOrder extends PureComponent {
       })
       let { symbol } = this.state
       let { country } = this.props
-      this.props.getQuote([`${symbol}.${country}`])
+      // this.props.getQuote([`${symbol}.${country}`])
     })
     keyword
       .debounceTime(100)

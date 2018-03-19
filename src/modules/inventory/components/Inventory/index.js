@@ -4,7 +4,8 @@ import Inventory from './Inventory'
 const mapStateToProps = state => {
   return {
     targetAccount: state.main.get('targetAccount'),
-    customerInfo: state.main.get('customerInfo')
+    customerInfo: state.main.get('customerInfo'),
+    inventory: state.inventory.get('inventory')
   }
 }
 

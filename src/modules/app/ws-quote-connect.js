@@ -43,8 +43,8 @@ class WsQuoteConnect {
       }
     })
     this.sock.onopen = () => {
-      console.log('connect ing!!!')
-      console.log('sock open ' + this.sock._transport.url)
+      // console.log('connect ing!!!')
+      // console.log('sock open ' + this.sock._transport.url)
       if (this.shouldReload) {
         this.shouldReload = false
         location.reload()

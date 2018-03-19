@@ -137,3 +137,10 @@
     padding-left: 20px;
   }
 }
+
+.side-buy {
+  color: red;
+}
+.side-sell {
+  color: green;
+}

@@ -25,7 +25,7 @@ class Order extends Component {
   render() {
     let prodList = this.props.prodList
     return (
-      <div className={cx('order-wrap')}>
+      <div id="orderWrap" className={cx('order-wrap')}>
         <div className={cx('setting-wrap')}>
           <span className={cx('env')}>測試環境下單</span>
           <img src={i1} alt="清除欄位" />

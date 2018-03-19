@@ -17,7 +17,7 @@ class Member extends PureComponent {
     let prams = {
       Account: account,
       Branch: branch,
-      TokenId: userToken
+      TokenID: userToken
     }
     this.props.changeTargetAccount({ account, branch })
     this.props.getInventory(prams)

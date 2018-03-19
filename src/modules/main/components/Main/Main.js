@@ -26,6 +26,7 @@ class Main extends Component {
     }
   }
   componentDidMount() {
+    let { userToken } = this.props
     let promise1 = this.props.getProds(['US', 'HK'])
     let promise2 = this.props.getCustomerInfo({
       Username: this.props.userId,
@@ -36,7 +37,9 @@ class Main extends Component {
       Username: this.props.userId,
       TokenID: this.props.userToken
     })
-    Promise.all([promise1, promise2, promise3]).then(res => {
+    let promise4 = this.props.getExchange({ TokenID: userToken })
+    let promise5 = this.props.getProd2({ TokenID: userToken })
+    Promise.all([promise2, promise3, promise4]).then(res => {
       this.setState({
         hasLoadData: true
       })

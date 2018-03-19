@@ -5,7 +5,9 @@ import {
   getProds,
   updateProdList,
   getCustomerInfo,
-  getOrderStatus
+  getOrderStatus,
+  getExchange,
+  getProds2
 } from '../../actions.js'
 
 const mapStateToProps = state => {
@@ -56,6 +58,12 @@ const mapDispatchToProps = dispatch => {
           resolve(true)
         })
       })
+    },
+    getExchange: params => {
+      dispatch(getExchange(params))
+    },
+    getProd2: params => {
+      dispatch(getProds2(params))
     }
   }
 }

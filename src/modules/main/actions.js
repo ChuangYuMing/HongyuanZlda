@@ -73,11 +73,6 @@ export const getCustomerInfo = params => {
       }).then(obj => {
         console.log('CustomerInfo', obj)
         let res = formatReponse(obj)
-        // let res2 = JSON.parse(JSON.stringify(res))
-        // res = [...res, ...res2]
-        // res[0].Account = 'acc01'
-        // res[1].Account = 'A2'
-
         res = fromJS(res)
         dispatch(updateCustomerInfo(res))
         resolve(true)
@@ -143,6 +138,16 @@ export const getOrderStatus = params => {
           orderList = orderList.push(fromJS(item))
         }
         console.log('orderList', orderList.toJS())
+        orderList = orderList.sort((a, b) => {
+          console.log('aaaa', a)
+          let atime = a.get('TransactTime').split('.')
+          let btime = b.get('TransactTime').split('.')
+          let adatetime = getDateFromFormat(atime[0], 'yMMdd-HH:mm:ss')
+          let bdatetime = getDateFromFormat(btime[0], 'yMMdd-HH:mm:ss')
+          adatetime = adatetime + parseInt(atime[1])
+          bdatetime = bdatetime + parseInt(btime[1])
+          return bdatetime - adatetime
+        })
         dispatch(updateOrderListHistory(orderList))
         resolve(true)
       })
@@ -188,6 +193,45 @@ export const updatePwd = params => {
         } else {
           resolve('更新失敗！')
         }
+      })
+    })
+  }
+}
+
+export const getExchange = params => {
+  return (dispatch, getState) => {
+    return new Promise((resolve, reject) => {
+      params = formatRequestData(params)
+      let formData = formatFormData(params)
+      console.log('formData', formData)
+      callApi(`/api/billing/trade/exchange`, {
+        method: 'POST',
+        body: formData
+      }).then(obj => {
+        console.log('getExchange', obj)
+        // let res = formatReponse(obj)
+        // res = fromJS(res)
+        // dispatch(updateCustomerInfo(res))
+        resolve(true)
+      })
+    })
+  }
+}
+
+export const getProds2 = params => {
+  return (dispatch, getState) => {
+    return new Promise((resolve, reject) => {
+      params = formatRequestData(params)
+      let formData = formatFormData(params)
+      callApi(`/api/billing/trade/symbol`, {
+        method: 'POST',
+        body: formData
+      }).then(obj => {
+        console.log('getProds2', obj)
+        // let res = formatReponse(obj)
+        // res = fromJS(res)
+        // dispatch(updateCustomerInfo(res))
+        resolve(true)
       })
     })
   }

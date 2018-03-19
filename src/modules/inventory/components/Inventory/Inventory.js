@@ -10,12 +10,10 @@ class Inventory extends PureComponent {
     super()
   }
   render() {
-    let lists = [1, 2, 3, 4]
-    lists = [...lists, ...lists]
-    lists = [...lists, ...lists]
+    let lists = this.props.inventory
     var rows = []
     var cells = []
-    let headers = ['帳號', '股名', '種類', '前日股數', '當日買進']
+    let headers = ['帳號', '股名', '種類', '前日股數', '當日買進', '當日賣出']
     for (let i = 0; i < headers.length; i++) {
       cells.push(
         <Cell className={cx('header-cell')} key={i}>
@@ -27,17 +25,13 @@ class Inventory extends PureComponent {
     let mainDatas = lists.map((item, index) => {
       let cells = []
       return (
-        <Row
-          className={cx('cell-right')}
-          key={index + 1}
-          data-id={item.assetCode}
-          onClick={this.order}
-        >
-          <Cell key="0">cell</Cell>
-          <Cell key="1">cell</Cell>
-          <Cell key="2">cell</Cell>
-          <Cell key="3">cell</Cell>
-          <Cell key="4">cell</Cell>
+        <Row className={cx('cell-right')} key={index + 1}>
+          <Cell key="0">{item.get('Account')}</Cell>
+          <Cell key="1">{item.get('Symbol')}</Cell>
+          <Cell key="2">{''}</Cell>
+          <Cell key="3">{parseFloat(item.getIn(['100', 'MDEntrySize']))}</Cell>
+          <Cell key="4">{parseFloat(item.getIn(['201', 'MDEntrySize']))}</Cell>
+          <Cell key="5">{parseFloat(item.getIn(['301', 'MDEntrySize']))}</Cell>
         </Row>
       )
     })

@@ -58,6 +58,9 @@ function fixDataMaping() {
     '120': 'SettlCurrency',
     '150': 'ExecType',
     '151': 'LeavesQty',
+    '269': 'MDEntryType',
+    '270': 'MDEntryPx',
+    '271': 'MDEntrySize',
     '273': 'Timestamp',
     '434': 'CxlRejResponseTo',
     '553': 'Username',
@@ -88,32 +91,72 @@ function formatRequestData(res) {
     if (fix) {
       formatObj[fix] = element
     } else {
-      console.log('not mapping key', key)
+      console.log(
+        `%c not mapping key: ${key} `,
+        'background: #ff1801; color: #fffefe'
+      )
     }
   }
   console.log('foramtobj', formatObj)
   return formatObj
 }
-function formatReponse(res) {
+function formatReponse(res, dataKey = '30058') {
   // console.log(res)
   if (Array.isArray(res)) {
     return res
   }
   let { fixToName } = fixDataMaping()
-  let main = res['30058']
+  let main = res[dataKey]
   let dataArr = []
   let finalArr = []
   if (main) {
     main.forEach(item => {
       let newItem = Object.assign({}, res, item)
-      delete newItem['30058']
+      delete newItem[dataKey]
       dataArr.push(newItem)
     })
   } else {
     dataArr.push(res)
   }
-  function formatInventoryReponse(res) {
-    return res
+
+  dataArr.forEach(res => {
+    let itemData = {}
+    for (const key in res) {
+      const element = res[key]
+      let attrName = fixToName[key]
+      if (!attrName) {
+        console.log(
+          `%c not mapping key: ${key} `,
+          'background: #ff1801; color: #fffefe'
+        )
+      }
+      itemData[attrName] = element
+    }
+    finalArr.push(itemData)
+  })
+  console.log(finalArr)
+  return finalArr
+}
+
+function formatInventoryReponse(res) {
+  let dataKey = '268'
+  let { fixToName } = fixDataMaping()
+  let main = res[dataKey]
+  let dataArr = []
+  let formatArr = []
+  let symbolList = []
+  if (main) {
+    main.forEach(item => {
+      let newItem = Object.assign({}, res, item)
+      let symbol = newItem['48']
+      if (symbolList.indexOf(symbol) === -1) {
+        symbolList.push(symbol)
+      }
+      delete newItem[dataKey]
+      dataArr.push(newItem)
+    })
+  } else {
+    dataArr.push(res)
   }
   dataArr.forEach(res => {
     let itemData = {}
@@ -121,16 +164,39 @@ function formatReponse(res) {
       const element = res[key]
       let attrName = fixToName[key]
       if (!attrName) {
-        console.log('not mapping key', key)
+        console.log(
+          `%c not mapping key: ${key} `,
+          'background: #ff1801; color: #fffefe'
+        )
       }
       itemData[attrName] = element
     }
-    finalArr.push(itemData)
+    formatArr.push(itemData)
+  })
+  // console.log('formatArr', formatArr)
+  // console.log('symbolList', symbolList)
+  let finalArr = []
+
+  symbolList.forEach(sym => {
+    let inventoryItem = {}
+    formatArr.forEach(item => {
+      if (sym === item['Symbol']) {
+        if (Object.keys(inventoryItem).length === 0) {
+          inventoryItem = item
+        }
+        inventoryItem[item['MDEntryType']] = {
+          MDEntryPx: item['MDEntryPx'],
+          MDEntrySize: item['MDEntrySize']
+        }
+      }
+    })
+    finalArr.push(inventoryItem)
   })
 
-  console.log(finalArr)
+  console.log('formatInventoryReponse', finalArr)
   return finalArr
 }
+
 function orderStatusMaping(status) {
   let res = ''
   let msg = {
@@ -185,5 +251,6 @@ export {
   orderStatusMaping,
   orderErrorMaping,
   formatRequestData,
-  orderTypeMaping
+  orderTypeMaping,
+  formatInventoryReponse
 }

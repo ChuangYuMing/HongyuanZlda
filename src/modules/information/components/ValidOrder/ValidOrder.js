@@ -219,13 +219,17 @@ class Information extends PureComponent {
     rows.push(<Row key={0}>{cells}</Row>)
     let mainDatas = inflatList.map((item, index) => {
       let cells = []
-      item.get('Side') == 1 ? '買' : '賣'
+      item = item.update('Side', i => (i == 1 ? '買' : '賣'))
       let cxx = cx({
         'cell-right': true,
         'hidden-row': index + 1 === inflatList.size ? true : false,
         error: item.get('OrdStatus') == '8',
         allDeal: item.get('OrdStatus') == '2',
         dealHistory: item.get('isHistory')
+      })
+      let sideCx = cx({
+        'side-buy': item.get('Side') == '買',
+        'side-sell': item.get('Side') == '賣'
       })
       let iRow = () => {
         let TransactTime = item.get('TransactTime')
@@ -298,7 +302,9 @@ class Information extends PureComponent {
             <Cell key="2">{item.get('OrderID')}</Cell>
             <Cell key="3">{TransactTime}</Cell>
             <Cell key="4">{item.get('Symbol')}</Cell>
-            <Cell key="5">{item.get('Side')}</Cell>
+            <Cell className={sideCx} key="5">
+              {item.get('Side')}
+            </Cell>
             <Cell key="6">{item.get('Price')}</Cell>
             <Cell key="7">{item.get('OrderQty')}</Cell>
             <Cell key="8">
