@@ -3,11 +3,15 @@ import PropTypes from 'prop-types'
 import styles from './member.css'
 import classNames from 'classnames/bind'
 import { StickyTable, Row, Cell } from 'react-sticky-table'
+import PopUp from 'modules/shared/components/PopUp/PopUp.js'
 
 let cx = classNames.bind(styles)
 class Member extends PureComponent {
   constructor() {
     super()
+    this.state = {
+      showPurchasing: false
+    }
   }
   changeTargetAccount = e => {
     let { userToken } = this.props
@@ -21,6 +25,23 @@ class Member extends PureComponent {
     }
     this.props.changeTargetAccount({ account, branch })
     this.props.getInventory(prams)
+  }
+  closePurchasing = () => {
+    this.setState({
+      showPurchasing: false
+    })
+  }
+  getPurchasing = e => {
+    let target = e.target
+    let { account, branch } = target.dataset
+    let params = {
+      Account: account,
+      Branch: branch
+    }
+    this.setState({
+      showPurchasing: true
+    })
+    this.props.getPurchasing(params)
   }
   componentDidUpdate() {
     let wrap = document.getElementById('member-table')
@@ -79,7 +100,14 @@ class Member extends PureComponent {
             {CName}
           </Cell>
           <Cell key="2">
-            <span className={cx('btn', 'info-btn')}>購買力查詢</span>
+            <span
+              data-account={Account}
+              data-branch={Branch}
+              onClick={this.getPurchasing}
+              className={cx('btn', 'info-btn')}
+            >
+              購買力查詢
+            </span>
           </Cell>
         </Row>
       )
@@ -92,6 +120,57 @@ class Member extends PureComponent {
         <div id="member-table" className={cx('sticky-table')}>
           <StickyTable stickyColumnCount={0}>{rows}</StickyTable>
         </div>
+        <PopUp
+          show={this.state.showPurchasing}
+          width="600px"
+          height="300px"
+          zIndex="10"
+          data={this.state.orderParams}
+        >
+          <div className={cx('purchasing-popup')}>
+            <div className={cx('top')}>
+              <span>帳戶：(複委託) 123</span>
+              <span className={cx('refersh', 'btn')}>更新</span>
+              <a onClick={this.closePurchasing} className={cx('boxclose')} />
+            </div>
+            <div className={cx('main')}>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>幣別</th>
+                    <th>HKD</th>
+                    <th>USA</th>
+                  </tr>
+                  <tr>
+                    <td>當日委賣</td>
+                    <td>123</td>
+                    <td>123</td>
+                  </tr>
+                  <tr>
+                    <td>當日委買</td>
+                    <td>123</td>
+                    <td>123</td>
+                  </tr>
+                  <tr>
+                    <td>在途資金</td>
+                    <td>123</td>
+                    <td>123</td>
+                  </tr>
+                  <tr>
+                    <td>可出金</td>
+                    <td>123</td>
+                    <td>123</td>
+                  </tr>
+                  <tr>
+                    <td>總可用</td>
+                    <td>123</td>
+                    <td>123</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </PopUp>
       </div>
     )
   }

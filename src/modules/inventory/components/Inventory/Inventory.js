@@ -3,11 +3,18 @@ import PropTypes from 'prop-types'
 import styles from './inventory.css'
 import classNames from 'classnames/bind'
 import { StickyTable, Row, Cell } from 'react-sticky-table'
+import SocketHandler from '../../socket-handler'
 
 let cx = classNames.bind(styles)
 class Inventory extends PureComponent {
   constructor() {
     super()
+  }
+  componentDidMount() {
+    SocketHandler.on()
+  }
+  componentWillUnmount() {
+    SocketHandler.off()
   }
   render() {
     let lists = this.props.inventory
@@ -29,9 +36,15 @@ class Inventory extends PureComponent {
           <Cell key="0">{item.get('Account')}</Cell>
           <Cell key="1">{item.get('Symbol')}</Cell>
           <Cell key="2">{''}</Cell>
-          <Cell key="3">{parseFloat(item.getIn(['100', 'MDEntrySize']))}</Cell>
-          <Cell key="4">{parseFloat(item.getIn(['201', 'MDEntrySize']))}</Cell>
-          <Cell key="5">{parseFloat(item.getIn(['301', 'MDEntrySize']))}</Cell>
+          <Cell key="3">
+            {parseFloat(item.getIn(['100', 'MDEntrySize'])) || 0}
+          </Cell>
+          <Cell key="4">
+            {parseFloat(item.getIn(['201', 'MDEntrySize'])) || 0}
+          </Cell>
+          <Cell key="5">
+            {parseFloat(item.getIn(['301', 'MDEntrySize'])) || 0}
+          </Cell>
         </Row>
       )
     })

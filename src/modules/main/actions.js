@@ -72,19 +72,18 @@ export const getCustomerInfo = params => {
         method: 'GET'
       }).then(obj => {
         console.log('CustomerInfo', obj)
-        let res = formatReponse(obj)
-        let tempArr = []
-        for (let index = 0; index < 100; index++) {
-          let temp = JSON.parse(JSON.stringify(res[0]))
-          temp.Account = `${res[0].Account}-${index}`
-          tempArr.push(temp)
+        if (!obj['30058']) {
+          resolve(true)
+          return
         }
-        res = res.concat(tempArr)
-        // res = [...res, ...res, ...res]
-        // res = res.map((item, index) => {
-        //   item.Account = `${item.Account}-${index}`
-        //   return item
-        // })
+        let res = formatReponse(obj)
+        // let tempArr = []
+        // for (let index = 0; index < 100; index++) {
+        //   let temp = JSON.parse(JSON.stringify(res[0]))
+        //   temp.Account = `${res[0].Account}-${index}`
+        //   tempArr.push(temp)
+        // }
+        // res = res.concat(tempArr)
         console.log(res)
         res = fromJS(res)
         dispatch(updateCustomerInfo(res))

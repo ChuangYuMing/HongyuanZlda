@@ -1,1 +1,19 @@
 import * as types from './action-types'
+import { formatReponse, formatRequestData } from 'tools/format-res-data.js'
+import { formatFormData } from 'tools/other.js'
+import { callApi } from 'modules/common/api.js'
+
+export const getPurchasing = params => {
+  return (dispatch, getState) => {
+    let tokenId = getState().app.get('userToken')
+    params['TokenID'] = tokenId
+    params = formatRequestData(params)
+    let formData = formatFormData(params)
+    callApi(`/api/billing/customer/purchasing`, {
+      method: 'POST',
+      body: formData
+    }).then(obj => {
+      console.log(obj)
+    })
+  }
+}

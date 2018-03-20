@@ -30,7 +30,7 @@
     }
     .sticky-table-x-wrapper {
       .sticky-table-container {
-        width: 200%;
+        width: 100%;
       }
     }
     .sticky-table-header {
@@ -48,4 +48,74 @@
 
 .focus {
   color: yellow;
+}
+
+.purchasing-popup {
+  border-radius: 5px;
+  border: solid 2px #636060;
+  .top {
+    color: black;
+    background-color: #999393;
+    padding: 10px 10px;
+    .refersh {
+      display: inline-block;
+      margin-left: 20px;
+      padding: 3px 10px;
+    }
+  }
+  .main {
+    color: white;
+    background-color: $bg;
+  }
+  td,
+  th {
+    padding: 10px;
+  }
+  td:nth-child(1),
+  th:nth-child(1) {
+    text-align: left;
+  }
+  td:nth-child(2),
+  td:nth-child(3),
+  th:nth-child(3),
+  th:nth-child(3) {
+    text-align: right;
+  }
+}
+
+.boxclose {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-block;
+  &:before {
+    left: 50%;
+    top: 50%;
+    margin-left: -7px;
+    margin-top: -1px;
+    width: 13px;
+    height: 2px;
+    background-color: white;
+    content: '';
+    position: absolute;
+    transform: rotate(45deg);
+  }
+  &:after {
+    width: 13px;
+    height: 2px;
+    background-color: white;
+    content: '';
+    left: 50%;
+    top: 50%;
+    margin-left: -7px;
+    margin-top: -2px;
+    position: absolute;
+    transform: rotate(-45deg);
+  }
 }

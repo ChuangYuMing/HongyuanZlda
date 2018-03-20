@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import Member from './Member'
 import { changeTargetAccount } from 'modules/main/actions.js'
 import { getInventory } from 'modules/inventory/actions.js'
+import { getPurchasing } from '../../actions.js'
 
 const mapStateToProps = state => {
   return {
@@ -18,6 +19,9 @@ const mapDispatchToProps = dispatch => {
     },
     getInventory: params => {
       dispatch(getInventory(params))
+    },
+    getPurchasing: params => {
+      dispatch(getPurchasing(params))
     }
   }
 }

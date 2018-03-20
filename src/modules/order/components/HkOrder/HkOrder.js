@@ -50,6 +50,9 @@ class HkOrder extends PureComponent {
     const target = e.target
     let value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
+    if (name === 'symbol') {
+      value = value.toUpperCase()
+    }
     this.setState({
       [name]: value
     })
@@ -159,11 +162,11 @@ class HkOrder extends PureComponent {
     keyword
       .debounceTime(100)
       .switchMap(e => {
-        targetValue = e.target.value
+        targetValue = e.target.value.toUpperCase()
         return Observable.create(observer => {
           let prodList = this.props.prodList
           let list = keyWordStockFilter(prodList, targetValue)
-          console.log(list)
+          // console.log(list)
           observer.next(list)
         })
       }, (e, res) => res)

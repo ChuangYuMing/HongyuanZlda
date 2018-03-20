@@ -17,6 +17,15 @@ export const getInventory = params => {
     }).then(obj => {
       console.log('getInventory', obj)
       let res = formatInventoryReponse(obj, '268')
+      res = res.filter((item, index) => {
+        if (
+          item.hasOwnProperty('100') ||
+          item.hasOwnProperty('201') ||
+          item.hasOwnProperty('301')
+        ) {
+          return item
+        }
+      })
       dispatch(updateInventory(fromJS(res)))
     })
   }
