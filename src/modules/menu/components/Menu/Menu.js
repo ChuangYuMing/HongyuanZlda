@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import styles from './menu.css'
 import classNames from 'classnames/bind'
+import { searchProperty } from 'tools/other.js'
 
 let cx = classNames.bind(styles)
 class Menu extends PureComponent {
@@ -14,9 +15,14 @@ class Menu extends PureComponent {
   }
   changeTargetAccount = e => {
     let target = e.target
-    let value = target.value
-    console.log('value', value)
-    this.props.changeTargetAccount(value)
+    let account = target.value
+    let { Branch: branch } = searchProperty(
+      this.props.member,
+      ['Branch'],
+      ['Account', account]
+    )
+    console.log('Branch', branch)
+    this.props.changeTargetAccount({ account, branch })
   }
   showChangePwd = () => {
     this.props.showChangePwd()

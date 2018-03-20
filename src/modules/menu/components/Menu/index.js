@@ -2,12 +2,16 @@ import { connect } from 'react-redux'
 import Menu from './Menu'
 import { updateAppInfo } from 'modules/app/actions.js'
 import { clearOrder } from 'modules/order/actions.js'
-import { targetAccount, toggleChangePwdPopup } from 'modules/main/actions.js'
+import {
+  changeTargetAccount,
+  toggleChangePwdPopup
+} from 'modules/main/actions.js'
 
 const mapStateToProps = state => {
   return {
     customerInfo: state.main.get('customerInfo'),
-    targetAccount: state.main.get('targetAccount')
+    targetAccount: state.main.get('targetAccount'),
+    member: state.main.get('customerInfo')
   }
 }
 
@@ -40,7 +44,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(clearOrder())
     },
     changeTargetAccount: account => {
-      dispatch(targetAccount(account))
+      dispatch(changeTargetAccount(account))
     },
     showChangePwd: () => {
       dispatch(toggleChangePwdPopup(true))

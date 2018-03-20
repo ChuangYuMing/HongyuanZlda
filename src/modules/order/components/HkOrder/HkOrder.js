@@ -71,7 +71,7 @@ class HkOrder extends PureComponent {
     let { ExDestination, DeliverToCompID } = searchProperty(
       prodList,
       ['ExDestination', 'DeliverToCompID'],
-      symbol
+      ['Symbol', symbol]
     )
     let params = {
       MsgType: 'D',

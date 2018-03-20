@@ -1,4 +1,5 @@
 import queryString from 'query-string'
+import { isImmutable } from 'immutable'
 
 function sleep(milliseconds) {
   var start = new Date().getTime()
@@ -124,11 +125,24 @@ function text_truncate(str, length, ending = '...') {
   }
 }
 
-function searchProperty(source = [], property = [], symbol = '') {
+function searchProperty(source = [], property = [], filter = []) {
   let res = {}
+  //for immutable
+  if (List.isList(source)) {
+    for (let index = 0; index < source.size; index++) {
+      const item = source.get(index)
+      if (filter[1] === item.get(filter[0])) {
+        property.forEach(p => {
+          res[p] = item.get(p)
+        })
+        break
+      }
+    }
+    return res
+  }
   for (let index = 0; index < source.length; index++) {
     const item = source[index]
-    if (symbol === item['Symbol']) {
+    if (filter[1] === item[filter[0]]) {
       property.forEach(p => {
         res[p] = item[p]
       })

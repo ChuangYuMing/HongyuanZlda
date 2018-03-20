@@ -106,7 +106,7 @@ function formatRequestData(res) {
       )
     }
   }
-  console.log('foramtobj', formatObj)
+  // console.log('foramtobj', formatObj)
   return formatObj
 }
 function formatReponse(res, dataKey = '30058') {

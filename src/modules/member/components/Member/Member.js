@@ -22,6 +22,20 @@ class Member extends PureComponent {
     this.props.changeTargetAccount({ account, branch })
     this.props.getInventory(prams)
   }
+  componentDidUpdate() {
+    let wrap = document.getElementById('member-table')
+    let target = wrap.querySelector(`.${[styles['focus']]}`)
+    if (target) {
+      let parent = target.offsetParent
+      let table = wrap.querySelector('#sticky-table-y-wrapper')
+      let offset = target.offsetTop - table.clientHeight / 2
+      if (offset > 0) {
+        table.scrollTop = offset
+      } else {
+        table.scrollTop = 0
+      }
+    }
+  }
   render() {
     let lists = this.props.customerInfo
     var rows = []
@@ -75,7 +89,7 @@ class Member extends PureComponent {
     }
     return (
       <div className={cx('member-wrap')}>
-        <div className={cx('sticky-table')}>
+        <div id="member-table" className={cx('sticky-table')}>
           <StickyTable stickyColumnCount={0}>{rows}</StickyTable>
         </div>
       </div>
