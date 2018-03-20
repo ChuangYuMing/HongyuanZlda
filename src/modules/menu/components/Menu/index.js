@@ -6,6 +6,8 @@ import {
   changeTargetAccount,
   toggleChangePwdPopup
 } from 'modules/main/actions.js'
+import { logout } from '../../actions.js'
+import { history } from '../../../../history.js'
 
 const mapStateToProps = state => {
   return {
@@ -36,12 +38,14 @@ const mapDispatchToProps = dispatch => {
   })
   return {
     logout: () => {
-      let data = Map({
-        isLogin: false,
-        userToken: ''
-      })
-      dispatch(updateAppInfo(data))
-      dispatch(clearOrder())
+      // let data = Map({
+      //   isLogin: false,
+      //   userToken: ''
+      // })
+      // dispatch(updateAppInfo(data))
+      // dispatch(clearOrder())
+      dispatch(logout())
+      window.location.replace('/order/login')
     },
     changeTargetAccount: account => {
       dispatch(changeTargetAccount(account))

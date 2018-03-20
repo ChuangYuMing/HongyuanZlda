@@ -7,8 +7,9 @@ import order from 'modules/order'
 import login from 'modules/login'
 import main from 'modules/main'
 import inventory from 'modules/inventory'
+import { LOG_OUT } from 'modules/menu/action-types.js'
 
-const manipulator = combineReducers({
+const appReducer = combineReducers({
   [app.constants.NAME]: app.reducer,
   [order.constants.NAME]: order.reducer,
   [login.constants.NAME]: login.reducer,
@@ -16,4 +17,12 @@ const manipulator = combineReducers({
   [inventory.constants.NAME]: inventory.reducer
 })
 
-export default manipulator
+const rootReducer = (state, action) => {
+  if (action.type === LOG_OUT) {
+    state = undefined
+  }
+
+  return appReducer(state, action)
+}
+
+export default rootReducer
