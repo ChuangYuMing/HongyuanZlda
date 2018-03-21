@@ -156,13 +156,20 @@ class Member extends PureComponent {
     for (const key in currency) {
       const e = currency[key]
       let total = Decimal(0)
-      total = total
-        .plus(e.TransitMoney)
-        .plus(e.TodayBuy)
-        .plus(e.TodaySell)
-        .plus(e.BankMoney)
-        .plus(e.BankMeta)
-        .minus(e.ReFund)
+      try {
+        total = total
+          .plus(e.TransitMoney)
+          .plus(e.TodayBuy)
+          .plus(e.TodaySell)
+          .plus(e.BankMoney)
+          .plus(e.BankMeta)
+          .minus(e.ReFund)
+      } catch (error) {
+        total = total
+          .plus(e.BankMoney)
+          .plus(e.BankMeta)
+          .minus(e.ReFund)
+      }
 
       currency[key].total = total.toPrecision()
     }
@@ -181,7 +188,11 @@ class Member extends PureComponent {
       let subData = []
       for (let index = 0; index < keys.length; index++) {
         const cur = keys[index]
-        let d = <td key={index}>{currency[cur][item.tag]}</td>
+        let d = (
+          <td key={index}>
+            {currency[cur][item.tag] ? currency[cur][item.tag] : 0}
+          </td>
+        )
         subData.push(d)
       }
       return (
