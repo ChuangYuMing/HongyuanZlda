@@ -7,6 +7,7 @@ import order from 'modules/order'
 import login from 'modules/login'
 import main from 'modules/main'
 import inventory from 'modules/inventory'
+import member from 'modules/member'
 import { LOG_OUT } from 'modules/menu/action-types.js'
 
 const appReducer = combineReducers({
@@ -14,6 +15,7 @@ const appReducer = combineReducers({
   [order.constants.NAME]: order.reducer,
   [login.constants.NAME]: login.reducer,
   [main.constants.NAME]: main.reducer,
+  [member.constants.NAME]: member.reducer,
   [inventory.constants.NAME]: inventory.reducer
 })
 

@@ -5,6 +5,7 @@
   background-color: rgb(235, 235, 235);
   height: 100%;
   width: 100%;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
   .main {
     height: calc(100% - 35px);
     position: relative;

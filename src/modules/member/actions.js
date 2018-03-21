@@ -1,5 +1,9 @@
 import * as types from './action-types'
-import { formatReponse, formatRequestData } from 'tools/format-res-data.js'
+import {
+  formatReponse,
+  formatRequestData,
+  formatFixToName
+} from 'tools/format-res-data.js'
 import { formatFormData } from 'tools/other.js'
 import { callApi } from 'modules/common/api.js'
 
@@ -13,7 +17,20 @@ export const getPurchasing = params => {
       method: 'POST',
       body: formData
     }).then(obj => {
+      console.log('getPurchasing', obj)
+      // console.log(formatFixToName(obj))
+      obj = formatFixToName(obj)
       console.log(obj)
+      obj = fromJS(obj)
+
+      dispatch(updatePurchasing(obj))
     })
+  }
+}
+
+export const updatePurchasing = data => {
+  return {
+    type: types.UPDATE_PURCHASING,
+    data
   }
 }

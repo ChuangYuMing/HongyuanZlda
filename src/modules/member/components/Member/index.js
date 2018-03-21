@@ -8,7 +8,8 @@ const mapStateToProps = state => {
   return {
     customerInfo: state.main.get('customerInfo'),
     targetAccount: state.main.get('targetAccount'),
-    userToken: state.app.get('userToken')
+    userToken: state.app.get('userToken'),
+    purchasing: state.member.get('purchasing')
   }
 }
 

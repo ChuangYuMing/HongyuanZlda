@@ -4,13 +4,15 @@ import styles from './member.css'
 import classNames from 'classnames/bind'
 import { StickyTable, Row, Cell } from 'react-sticky-table'
 import PopUp from 'modules/shared/components/PopUp/PopUp.js'
+import { Decimal } from 'decimal.js'
 
 let cx = classNames.bind(styles)
 class Member extends PureComponent {
   constructor() {
     super()
     this.state = {
-      showPurchasing: false
+      showPurchasing: false,
+      targetAccount: ''
     }
   }
   changeTargetAccount = e => {
@@ -39,8 +41,18 @@ class Member extends PureComponent {
       Branch: branch
     }
     this.setState({
-      showPurchasing: true
+      showPurchasing: true,
+      targetAccount: account,
+      targetBranch: branch
     })
+    this.props.getPurchasing(params)
+  }
+  refreshPurchasing = () => {
+    let { targetAccount, targetBranch } = this.state
+    let params = {
+      Account: targetAccount,
+      Branch: targetBranch
+    }
     this.props.getPurchasing(params)
   }
   componentDidUpdate() {
@@ -115,6 +127,75 @@ class Member extends PureComponent {
     for (const row of mainDatas) {
       rows.push(row)
     }
+    let { purchasing } = this.props
+    let currency = {}
+    if (purchasing.get('NoMDEntries')) {
+      purchasing.get('NoMDEntries').forEach(item => {
+        currency[item.get('Currency')] = {
+          BankMoney: parseFloat(item.get('BankMoney')),
+          BankMeta: parseFloat(item.get('BankMeta')),
+          ReFund: parseFloat(item.get('ReFund')),
+          Currency: item.get('Currency')
+        }
+      })
+    }
+    if (purchasing.get('Items')) {
+      purchasing.get('Items').forEach(item => {
+        let cur = item.get('Currency')
+        let obj = {
+          TodayBuy: parseFloat(item.get('TodayBuy')),
+          TodaySell: parseFloat(item.get('TodaySell'))
+            ? parseFloat(item.get('TodaySell'))
+            : 0,
+          TransitMoney: parseFloat(item.get('TransitMoney')),
+          Market: item.get('Market')
+        }
+        currency[cur] = Object.assign({}, currency[cur], obj)
+      })
+    }
+    for (const key in currency) {
+      const e = currency[key]
+      let total = Decimal(0)
+      total = total
+        .plus(e.TransitMoney)
+        .plus(e.TodayBuy)
+        .plus(e.TodaySell)
+        .plus(e.BankMoney)
+        .plus(e.BankMeta)
+        .minus(e.ReFund)
+
+      currency[key].total = total.toPrecision()
+    }
+    let keys = Object.keys(currency)
+    let title = [
+      { name: '幣別', tag: 'Currency' },
+      { name: '當日委賣', tag: 'TodaySell' },
+      { name: '當日委買', tag: 'TodayBuy' },
+      { name: '在途資金', tag: 'TransitMoney' },
+      { name: '待出帳金額', tag: 'BankMeta' },
+      { name: '退款', tag: 'ReFund' },
+      { name: '可出金', tag: 'BankMoney' },
+      { name: '總可用', tag: 'total' }
+    ]
+    let purchasingPopData = title.map((item, index) => {
+      let subData = []
+      for (let index = 0; index < keys.length; index++) {
+        const cur = keys[index]
+        let d = <td key={index}>{currency[cur][item.tag]}</td>
+        subData.push(d)
+      }
+      return (
+        <tr key={index}>
+          <td>{item.name}</td>
+          {subData}
+        </tr>
+      )
+    })
+    console.log(purchasingPopData)
+    // Object.keys(currency).forEach(item => {
+    //   purchasingPopData = <tbody>{purchasingPopData}</tbody>
+    // })
+    console.log('currency', currency)
     return (
       <div className={cx('member-wrap')}>
         <div id="member-table" className={cx('sticky-table')}>
@@ -124,49 +205,23 @@ class Member extends PureComponent {
           show={this.state.showPurchasing}
           width="600px"
           height="300px"
-          zIndex="10"
+          zIndex="11"
           data={this.state.orderParams}
         >
           <div className={cx('purchasing-popup')}>
             <div className={cx('top')}>
-              <span>帳戶：(複委託) 123</span>
-              <span className={cx('refersh', 'btn')}>更新</span>
+              <span>帳戶：(複委託) {this.state.targetAccount}</span>
+              <span
+                onClick={this.refreshPurchasing}
+                className={cx('refersh', 'btn')}
+              >
+                更新
+              </span>
               <a onClick={this.closePurchasing} className={cx('boxclose')} />
             </div>
             <div className={cx('main')}>
               <table>
-                <tbody>
-                  <tr>
-                    <th>幣別</th>
-                    <th>HKD</th>
-                    <th>USA</th>
-                  </tr>
-                  <tr>
-                    <td>當日委賣</td>
-                    <td>123</td>
-                    <td>123</td>
-                  </tr>
-                  <tr>
-                    <td>當日委買</td>
-                    <td>123</td>
-                    <td>123</td>
-                  </tr>
-                  <tr>
-                    <td>在途資金</td>
-                    <td>123</td>
-                    <td>123</td>
-                  </tr>
-                  <tr>
-                    <td>可出金</td>
-                    <td>123</td>
-                    <td>123</td>
-                  </tr>
-                  <tr>
-                    <td>總可用</td>
-                    <td>123</td>
-                    <td>123</td>
-                  </tr>
-                </tbody>
+                <tbody>{purchasingPopData}</tbody>
               </table>
             </div>
           </div>

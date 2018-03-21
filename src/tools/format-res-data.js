@@ -74,6 +74,7 @@ function fixDataMaping() {
     '1129': 'TokenID',
     '30056': 'Branch',
     '30057': 'RMode',
+    '30058': 'Items',
     '30061': 'Address',
     '30062': 'Phone',
     '30063': 'Email',
@@ -83,7 +84,17 @@ function fixDataMaping() {
     '30069': 'TradeUnit',
     '30072': 'CName',
     '30073': 'EName',
-    '30074': 'SName'
+    '30074': 'SName',
+    '30101': 'BuyLimint',
+    '30102': 'BuyUsage',
+    '30103': 'SellLimit',
+    '30104': 'SellUsage',
+    '30105': 'TransitMoney',
+    '30106': 'TodayBuy',
+    '30107': 'TodaySell',
+    '30108': 'BankMoney',
+    '30109': 'ReFund',
+    '30110': 'BankMeta'
   }
   for (const key in fixToName) {
     const element = fixToName[key]
@@ -206,6 +217,26 @@ function formatInventoryReponse(res) {
   return finalArr
 }
 
+function formatFixToName(obj) {
+  let { fixToName } = fixDataMaping()
+  let res = {}
+  for (const key in obj) {
+    const item = obj[key]
+    let tmp = []
+    if (Array.isArray(item)) {
+      item.forEach(element => {
+        tmp.push(formatFixToName(element))
+      })
+    }
+    if (tmp.length > 0) {
+      res[fixToName[key]] = tmp
+    } else {
+      res[fixToName[key]] = item
+    }
+  }
+  return res
+}
+
 function orderStatusMaping(status) {
   let res = ''
   let msg = {
@@ -261,5 +292,6 @@ export {
   orderErrorMaping,
   formatRequestData,
   orderTypeMaping,
-  formatInventoryReponse
+  formatInventoryReponse,
+  formatFixToName
 }

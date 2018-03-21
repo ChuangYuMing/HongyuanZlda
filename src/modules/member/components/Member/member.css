@@ -53,6 +53,7 @@
 .purchasing-popup {
   border-radius: 5px;
   border: solid 2px #636060;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
   .top {
     color: black;
     background-color: #999393;

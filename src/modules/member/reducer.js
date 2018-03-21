@@ -1,9 +1,12 @@
 import * as types from './action-types'
 
-export default (state = [], action) => {
+let init = fromJS({
+  purchasing: {}
+})
+export default (state = init, action) => {
   switch (action.type) {
-    case types.SHOW: {
-      return state
+    case types.UPDATE_PURCHASING: {
+      return state.update('purchasing', i => action.data)
     }
     default:
       return state

@@ -1,3 +1,3 @@
 import { NAME } from './constants'
 
-export const SHOW = `${NAME}/SHOW`
+export const UPDATE_PURCHASING = `${NAME}/UPDATE_PURCHASING`
