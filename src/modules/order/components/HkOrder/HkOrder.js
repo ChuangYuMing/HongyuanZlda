@@ -39,7 +39,8 @@ class HkOrder extends PureComponent {
       showPopUP: false,
       action: '',
       orderParams: {},
-      showSymbolFilter: false
+      showSymbolFilter: false,
+      targetInput: ''
     }
     props.resetData()
     this.endIndexSymbolFilter = 100
@@ -123,42 +124,83 @@ class HkOrder extends PureComponent {
   // }
   targetSearchSymbol = e => {
     console.log('targetSearchSymbol')
+    e.stopPropagation()
+    let quote = this.props.quote
     let country = this.props.country
+    let nowQuoteSymbol = quote.get('Symbol')
+    nowQuoteSymbol = nowQuoteSymbol
+      ? nowQuoteSymbol.split(`.${country}`)[0]
+      : ''
     let target = e.currentTarget
     let symbol = target.dataset.symbol
     this.setState({
+      showSymbolFilter: false,
       symbol
     })
-    this.props.getQuote([`${symbol}.${country}`])
+    if (nowQuoteSymbol !== symbol && symbol !== '') {
+      console.log(nowQuoteSymbol, symbol)
+      this.props.getQuote([`${symbol}.${country}`])
+    }
+  }
+  componentWillUnmount() {
+    console.log('componentWillUnmount')
+    console.log(this.a)
+    this.OrderWrapSub.unsubscribe()
   }
   componentDidMount() {
     let symbolSearch = this.inputSymbol
     let suggestList = this.suggestList
     let suggestWrap = this.orderStockFilter
+    let orderWrap = document.getElementById('orderWrap')
     let keyword = Observable.fromEvent(symbolSearch, 'input')
     let focus = Observable.fromEvent(symbolSearch, 'focus')
     let unfocus = Observable.fromEvent(symbolSearch, 'focusout')
     let wheelSuggest = Observable.fromEvent(suggestWrap, 'wheel')
     let scrollSuggest = Observable.fromEvent(suggestWrap, 'scroll')
+    let clickOrderWrap = Observable.fromEvent(orderWrap, 'click')
     let scrollMerge = Observable.merge(wheelSuggest, scrollSuggest)
     let targetValue = ''
-    let orderWrap = document.getElementById('orderWrap')
 
-    focus.map(e => e).subscribe(res => {
+    focus.map(e => e).subscribe(e => {
       this.setState({
-        showSymbolFilter: true
+        showSymbolFilter: true,
+        targetInput: 'symbol'
       })
       console.log(orderWrap)
     })
     unfocus.map(e => e).subscribe(res => {
       console.log(res)
-      this.setState({
-        showSymbolFilter: false
-      })
       let { symbol } = this.state
       let { country } = this.props
       // this.props.getQuote([`${symbol}.${country}`])
     })
+    this.OrderWrapSub = clickOrderWrap
+      .debounceTime(100)
+      .filter(e => {
+        let target = e.target.name
+        if (target !== this.state.targetInput) {
+          return true
+        }
+        return false
+      })
+      .map(e => e)
+      .subscribe(e => {
+        console.log(e.target)
+        let quote = this.props.quote
+        let country = this.props.country
+        let nowQuoteSymbol = quote.get('Symbol')
+        nowQuoteSymbol = nowQuoteSymbol
+          ? nowQuoteSymbol.split(`.${country}`)[0]
+          : ''
+        let { symbol } = this.state
+        this.setState({
+          showSymbolFilter: false,
+          targetInput: ''
+        })
+        if (nowQuoteSymbol !== symbol && symbol !== '') {
+          this.props.getQuote([`${symbol}.${country}`])
+        }
+      })
     keyword
       .debounceTime(100)
       .switchMap(e => {

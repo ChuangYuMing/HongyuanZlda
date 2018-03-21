@@ -62,7 +62,6 @@ class Main extends Component {
   }
   render() {
     console.log('Main')
-    console.log('@@@', this.props.isLogin)
     let { prodList } = this.props
     let gotProdList = Object.keys(prodList).length > 0
     if (!this.props.isLogin) {
