@@ -4,7 +4,8 @@ import { order, getQuote } from '../../actions.js'
 
 const mapStateToProps = state => {
   return {
-    prodList: state.main.get('prodList')
+    prodList: state.main.get('prodList'),
+    customerInfo: state.main.get('customerInfo')
   }
 }
 

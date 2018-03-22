@@ -1,0 +1,12 @@
+@import 'helpers/_mixins.css';
+
+.filter-wrap {
+  .symbol-wrap {
+    display: inline-block;
+    padding-right: 5px;
+  }
+}
+
+.key {
+  color: yellow;
+}

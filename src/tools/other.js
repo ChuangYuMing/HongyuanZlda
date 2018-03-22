@@ -82,19 +82,22 @@ function priceStyle(target, prePrice) {
   }
 }
 
-const keyWordStockFilter = (list, key) => {
+const keyWordStockFilter = (list, key, targetProperty = '') => {
   console.log(list, key)
   let len = list.length
   let arr = []
   let topShowFilter = []
   for (let i = 0; i < len; i++) {
-    let symbol = list[i]['Symbol']
-    let targetIndex = symbol.indexOf(key)
+    let targetValue = list[i][targetProperty]
+    let targetIndex = targetValue.indexOf(key)
     //如果字符串中不包含目标字符会返回-1
     if (targetIndex !== -1) {
-      // console.log(symbol)
-      let firstHalf = symbol.slice(0, targetIndex)
-      let secondHalf = symbol.slice(targetIndex + key.length, symbol.length)
+      // console.log(targetValue)
+      let firstHalf = targetValue.slice(0, targetIndex)
+      let secondHalf = targetValue.slice(
+        targetIndex + key.length,
+        targetValue.length
+      )
       let obj = {
         firstHalf,
         secondHalf,
@@ -109,6 +112,39 @@ const keyWordStockFilter = (list, key) => {
     }
   }
   return [...topShowFilter, ...arr]
+}
+
+const keyWordOtherFilter = (list, key, targetProperty = '') => {
+  // console.log(list, key)
+  let len = list.size
+  let arr = List([])
+  let topShowFilter = List([])
+  for (let i = 0; i < len; i++) {
+    let targetValue = list.getIn([i, targetProperty])
+    let targetIndex = targetValue.indexOf(key)
+    //如果字符串中不包含目标字符会返回-1
+    if (targetIndex !== -1) {
+      let firstHalf = targetValue.slice(0, targetIndex)
+      let secondHalf = targetValue.slice(
+        targetIndex + key.length,
+        targetValue.length
+      )
+      let obj = Map({
+        firstHalf,
+        secondHalf,
+        key
+      })
+      list = list.setIn([i, 'filterInfo'], obj)
+      if (firstHalf === '') {
+        topShowFilter = topShowFilter.push(list.get(i))
+      } else {
+        arr = arr.push(list.get(i))
+      }
+    }
+  }
+  console.log(topShowFilter.toJS())
+  console.log(arr.toJS())
+  return topShowFilter.concat(arr)
 }
 
 function text_truncate(str, length, ending = '...') {
@@ -161,5 +197,6 @@ export {
   keyWordStockFilter,
   formatGetRequestData,
   text_truncate,
-  searchProperty
+  searchProperty,
+  keyWordOtherFilter
 }

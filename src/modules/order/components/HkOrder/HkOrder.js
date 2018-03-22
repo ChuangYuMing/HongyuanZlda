@@ -11,8 +11,13 @@ import throttle from 'lodash/throttle'
 import { priceStyle } from 'tools/other.js'
 import PopUp from 'modules/shared/components/PopUp/PopUp.js'
 import FilterSearch from '../FilterSearch/FilterSearch.js'
+import AccountFilterSearch from '../AccountFilterSearch/AccountFilterSearch.js'
 import { Observable } from 'rxjs'
-import { keyWordStockFilter, searchProperty } from 'tools/other.js'
+import {
+  keyWordOtherFilter,
+  keyWordStockFilter,
+  searchProperty
+} from 'tools/other.js'
 
 let cx = classNames.bind(styles)
 let updtProdThrottle = throttle(
@@ -40,11 +45,13 @@ class HkOrder extends PureComponent {
       action: '',
       orderParams: {},
       showSymbolFilter: false,
+      showAccountFilter: false,
       targetInput: ''
     }
     props.resetData()
     this.endIndexSymbolFilter = 100
     this.symbolFilterList = []
+    this.accountFilterList = []
   }
   handleInputChange = e => {
     // console.log(this)
@@ -142,6 +149,15 @@ class HkOrder extends PureComponent {
       this.props.getQuote([`${symbol}.${country}`])
     }
   }
+  targetSearchAcc = e => {
+    console.log('targetSearchAcc')
+    e.stopPropagation()
+    let target = e.currentTarget
+    let account = target.dataset.account
+    this.setState({
+      showAccountFilter: false
+    })
+  }
   componentWillUnmount() {
     console.log('componentWillUnmount')
     console.log(this.a)
@@ -149,11 +165,14 @@ class HkOrder extends PureComponent {
   }
   componentDidMount() {
     let symbolSearch = this.inputSymbol
+    let accSearch = this.inputAcc
     let suggestList = this.suggestList
     let suggestWrap = this.orderStockFilter
     let orderWrap = document.getElementById('orderWrap')
     let keyword = Observable.fromEvent(symbolSearch, 'input')
+    let accKeyword = Observable.fromEvent(accSearch, 'input')
     let focus = Observable.fromEvent(symbolSearch, 'focus')
+    let accInputFocus = Observable.fromEvent(accSearch, 'focus')
     let unfocus = Observable.fromEvent(symbolSearch, 'focusout')
     let wheelSuggest = Observable.fromEvent(suggestWrap, 'wheel')
     let scrollSuggest = Observable.fromEvent(suggestWrap, 'scroll')
@@ -164,9 +183,16 @@ class HkOrder extends PureComponent {
     focus.map(e => e).subscribe(e => {
       this.setState({
         showSymbolFilter: true,
+        showAccountFilter: false,
         targetInput: 'symbol'
       })
-      console.log(orderWrap)
+    })
+    accInputFocus.map(e => e).subscribe(e => {
+      this.setState({
+        showSymbolFilter: false,
+        showAccountFilter: true,
+        targetInput: 'account'
+      })
     })
     unfocus.map(e => e).subscribe(res => {
       console.log(res)
@@ -207,7 +233,7 @@ class HkOrder extends PureComponent {
         targetValue = e.target.value.toUpperCase()
         return Observable.create(observer => {
           let prodList = this.props.prodList
-          let list = keyWordStockFilter(prodList, targetValue)
+          let list = keyWordStockFilter(prodList, targetValue, 'Symbol')
           // console.log(list)
           observer.next(list)
         })
@@ -218,6 +244,25 @@ class HkOrder extends PureComponent {
         this.endIndexSymbolFilter = 100
         this.filterSearch.updateData(list, endIndex)
         this.orderStockFilter.scrollTop = 0
+      })
+    accKeyword
+      .debounceTime(100)
+      .switchMap(e => {
+        targetValue = e.target.value
+        return Observable.create(observer => {
+          let accountList = this.props.accountList
+          let list = keyWordOtherFilter(accountList, targetValue, 'Account')
+          // console.log(list)
+          observer.next(list)
+        })
+      }, (e, res) => res)
+      .subscribe(list => {
+        console.log('!!!!', list.toJS())
+        // let endIndex = this.endIndexSymbolFilter
+        this.accountFilterList = list
+        // this.endIndexSymbolFilter = 100
+        this.filterAccSearch.updateData(list, 100)
+        // this.orderStockFilter.scrollTop = 0
       })
 
     scrollMerge
@@ -236,8 +281,8 @@ class HkOrder extends PureComponent {
       })
   }
   render() {
+    let { quote, accountList } = this.props
     let prodList = this.props.prodList || []
-    let quote = this.props.quote
     let Symbol = quote.get('Symbol')
     let Name = quote.get('Name')
     let APrice = quote.get('APrice')
@@ -266,13 +311,33 @@ class HkOrder extends PureComponent {
           <div className={cx('input-wrap')}>
             <div className={cx('item-wrap', 't1')}>
               <span>帳號1：</span>
-              <input
-                type="text"
-                name="account"
-                value={account}
-                onChange={this.handleInputChange}
-                ref="account"
-              />
+              <div className={cx('acc-input-wrap')}>
+                <input
+                  type="text"
+                  name="account"
+                  value={account}
+                  autoComplete="off"
+                  onChange={this.handleInputChange}
+                  ref={input => {
+                    this.inputAcc = input
+                  }}
+                />
+                <div
+                  id="accountFilter"
+                  ref={e => (this.accountFilter = e)}
+                  className={
+                    this.state.showAccountFilter
+                      ? cx('acc-filter')
+                      : cx('acc-filter', 'hide')
+                  }
+                >
+                  <AccountFilterSearch
+                    onClick={this.targetSearchAcc}
+                    listRef={list => (this.suggestAccList = list)}
+                    ref={e => (this.filterAccSearch = e)}
+                  />
+                </div>
+              </div>
             </div>
             <div className={cx('item-wrap', 't1-1')}>
               <span className={cx('name')}>黃碧香</span>
@@ -284,6 +349,7 @@ class HkOrder extends PureComponent {
                   type="text"
                   name="symbol"
                   value={this.state.symbol}
+                  autoComplete="off"
                   onChange={this.handleInputChange}
                   ref={input => {
                     this.inputSymbol = input

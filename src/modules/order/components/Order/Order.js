@@ -44,6 +44,7 @@ class Order extends Component {
                 prodList={prodList['HK']}
                 order={this.props.order}
                 getQuote={this.props.getQuote}
+                accountList={this.props.customerInfo}
               />
             </TabPanel>
             <TabPanel>
@@ -52,6 +53,7 @@ class Order extends Component {
                 prodList={prodList['US']}
                 order={this.props.order}
                 getQuote={this.props.getQuote}
+                accountList={this.props.customerInfo}
               />
             </TabPanel>
           </Tabs>
