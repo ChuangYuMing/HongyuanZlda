@@ -8,6 +8,7 @@ import { getDateFromFormat } from 'tools/date.js'
 import { updateOrderListHistory } from 'modules/order/actions.js'
 import { fromJS } from 'immutable'
 import { forceUpdatePwd } from 'modules/login/actions.js'
+import { orderStateMachine } from 'modules/order/stateMachine.js'
 
 export const updateMainPopUpMsg = (data, status) => {
   return {
@@ -159,7 +160,16 @@ export const getOrderStatus = params => {
           bdatetime = bdatetime + parseInt(btime[1])
           return bdatetime - adatetime
         })
+        orderList.forEach(item => {
+          let fsmFactory = orderStateMachine('none')
+          let orderFsm = new fsmFactory()
+          let clorderid = item.get('ClOrdID')
+          let orderStatus = item.get('OrdStatus')
+          appGlobal.addOrderStateMachine(clorderid, orderFsm)
+          appGlobal.changeFsmState(clorderid, orderStatus)
+        })
         dispatch(updateOrderListHistory(orderList))
+
         resolve(true)
       })
     })

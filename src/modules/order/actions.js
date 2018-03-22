@@ -6,6 +6,7 @@ import { quoteFormatEven } from 'tools/apex-dataformat'
 import { Map } from 'immutable'
 import { callApi } from 'modules/common/api.js'
 import { updateMainPopUpMsg } from 'modules/main/actions.js'
+import { orderStateMachine } from './stateMachine.js'
 
 export const order = params => {
   return (dispatch, getState) => {
@@ -31,6 +32,10 @@ export const order = params => {
         return
       }
       let data = formatReponse(obj)[0]
+      let fsmFactory = orderStateMachine('init')
+      let orderFsm = new fsmFactory()
+      orderFsm.doSyncSuccess()
+      appGlobal.addOrderStateMachine(data.ClOrdID, orderFsm)
       data = fromJS(data)
       dispatch(newOrder(data))
     })

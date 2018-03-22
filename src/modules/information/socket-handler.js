@@ -16,6 +16,7 @@ class SocketHandler {
   on() {
     cancelOrderObs.subscribe(cancelOrderPub, data => {
       let clorderid = data.ClOrdID
+      //for 改量改價
       let peddingOrder = appGlobal.needingOrderPending
       peddingOrder.forEach(element => {
         console.log(element.clorderid, clorderid)

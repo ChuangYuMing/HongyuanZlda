@@ -165,6 +165,7 @@ class Member extends PureComponent {
           .plus(e.BankMeta)
           .minus(e.ReFund)
       } catch (error) {
+        //no order data
         total = total
           .plus(e.BankMoney)
           .plus(e.BankMeta)

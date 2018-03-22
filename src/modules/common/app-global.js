@@ -13,6 +13,7 @@ class AppGlobal {
     this._userToken = ''
     this._prodList = {}
     this.needingOrderPending = []
+    this.orderStatusMachine = {}
   }
   get apiUrl() {
     return this._apiUrl
@@ -49,9 +50,57 @@ class AppGlobal {
       clorderid,
       callback
     })
-    console.log(this.needingOrderPending)
+  }
+  addOrderStateMachine(clorderid, fsm) {
+    this.orderStatusMachine[clorderid] = fsm
+  }
+  getOrderFsm(clorderid) {
+    return this.orderStatusMachine[clorderid]
+  }
+  changeFsmState(clorderid, status) {
+    let fsm = this.orderStatusMachine[clorderid]
+    let actionMaping = {
+      '0': 'doAsyncNew',
+      '1': 'doPartialDeal',
+      '2': 'doAllDeal',
+      '4': 'doCancelSucess',
+      '6': 'doCancelWait',
+      '8': 'doSyncFail',
+      A: 'doSyncSuccess',
+      C: 'doOrderOuttime',
+      cancel: 'doCancel',
+      cancelFail: 'doCancelFail'
+    }
+
+    let action = actionMaping[status]
+    fsm[action]()
+  }
+  canTransistionOrderStatus(clorderid, status) {
+    let newState = ''
+    let actionMaping = {
+      '0': 'do-async-new',
+      '1': 'do-partial-deal',
+      '2': 'do-all-deal',
+      '4': 'do-cancel-sucess',
+      '6': 'do-cancel-wait',
+      '8': 'do-sync-fail',
+      A: 'doSync-success',
+      C: 'doOrder-outtime',
+      cancel: 'do-cancel',
+      cancelFail: 'do-cancel-fail'
+    }
+    // let stateMaping = {
+    //   '0': 'new-order',
+    //   '1': 'partial-deal',
+    //   '2': 'all-deal',
+    //   '4': 'cancel-success',
+    //   '6': 'cancel-wait',
+    //   '8': 'sync-order-fail',
+    //   A: 'sync-order-success',
+    //   C: 'sync-order-outtime'
+    // }
+    return this.orderStatusMachine[clorderid].can(actionMaping[status])
   }
 }
 export default new AppGlobal()
-
 //1024*662

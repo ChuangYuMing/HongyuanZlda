@@ -1,4 +1,4 @@
-import { cancelOrderPub, dealHistoryPub } from 'modules/app/publisher'
+import { dealHistoryPub } from 'modules/app/publisher'
 import { Observer } from 'tools/pub-sub'
 import { store } from 'store'
 import appGlobal from 'modules/common/app-global.js'

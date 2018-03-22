@@ -95,6 +95,26 @@ class WsConnect {
       console.log(res)
       console.log('---------------------------')
 
+      let clordid = res.ClOrdID
+      let status = res.OrdStatus
+      let orderFsm = appGlobal.getOrderFsm(clordid)
+      if (orderFsm.state === 'cancel-wait' && status === '8') {
+        status = 'cancelFail'
+      }
+      if (!appGlobal.canTransistionOrderStatus(clordid, status)) {
+        let orderFsm = appGlobal.getOrderFsm(clordid)
+        console.log(orderFsm.transitions())
+        console.log(orderFsm.state)
+        console.log(status)
+        console.log('@@@@')
+        return
+      } else {
+        let orderFsm = appGlobal.getOrderFsm(clordid)
+        appGlobal.changeFsmState(clordid, status)
+        let b = appGlobal.getOrderFsm(clordid)
+        console.log(b.state)
+      }
+
       orderPub.trigger(res)
       mainPopUpPub.trigger(res)
 

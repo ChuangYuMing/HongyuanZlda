@@ -5,6 +5,7 @@ import { changeOrderStatus } from 'modules/order/actions.js'
 import { formatReponse } from 'tools/format-res-data.js'
 import { order } from 'modules/order/actions.js'
 import { callApi } from 'modules/common/api.js'
+import appGlobal from 'modules/common/app-global.js'
 
 export const cancelOrder = params => {
   return (dispatch, getState) => {
@@ -16,6 +17,7 @@ export const cancelOrder = params => {
         TokenID: tokenID
       })
     )
+    let clorderid = targetData.get('ClOrdID')
     console.log('params', targetData.toJS())
     targetData = formatRequestData(targetData.toJS())
     let formData = formatFormData(targetData)
@@ -24,6 +26,7 @@ export const cancelOrder = params => {
       body: formData
     }).then(obj => {
       console.log('cancelOrder', obj)
+      appGlobal.changeFsmState(clorderid, 'cancel')
       dispatch(changeOrderStatus(obj))
     })
   }

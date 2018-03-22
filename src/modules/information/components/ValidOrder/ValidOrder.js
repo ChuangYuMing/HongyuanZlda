@@ -328,7 +328,12 @@ class Information extends PureComponent {
     return (
       <div className={cx('sticky-table')}>
         <StickyTable stickyColumnCount={0}>{rows}</StickyTable>
-        <PopUp show={this.state.showCancelPopUp} width="300px" height="350px">
+        <PopUp
+          show={this.state.showCancelPopUp}
+          width="300px"
+          height="350px"
+          zIndex="11"
+        >
           <div className={validOrderCx('popup')}>
             <div className={validOrderCx('title')}>
               <span>刪單</span>
@@ -392,6 +397,7 @@ class Information extends PureComponent {
           show={this.state.showChangeVolPopUp}
           width="300px"
           height="350px"
+          zIndex="11"
         >
           <div className={validOrderCx('popup', 'changeVolPop')}>
             <div className={validOrderCx('title')}>
@@ -470,6 +476,7 @@ class Information extends PureComponent {
           show={this.state.showChangePricePopUp}
           width="300px"
           height="350px"
+          zIndex="11"
         >
           <div className={validOrderCx('popup')}>
             <div className={validOrderCx('title')}>
