@@ -54,8 +54,8 @@ export const getApiUrl = () => {
         appGlobal.orderApiUrl = `http://${obj.ClientOrderAPIServer}`
         appGlobal.quoteApiUrl = `http://${obj.ClientQuoteAPIServer}`
         if (!PRODUCTION) {
-          appGlobal.orderApiUrl = 'http://192.168.12.153:8008'
-          appGlobal.quoteApiUrl = 'http://192.168.12.153:8008'
+          // appGlobal.orderApiUrl = 'http://192.168.12.153:8008'
+          // appGlobal.quoteApiUrl = 'http://192.168.12.153:8008'
         }
         dispatch(updateApiUrl(true))
       })

@@ -4,8 +4,8 @@ class AppGlobal {
       this._apiUrl = window.location.origin
     } else {
       // this._apiUrl = 'http://192.168.12.134:8080'
-      // this._apiUrl = 'http://192.168.12.24:8008'
-      this._apiUrl = 'http://192.168.12.153:8008'
+      this._apiUrl = 'http://192.168.12.24:8008'
+      // this._apiUrl = 'http://192.168.12.153:8008'
     }
     this._orderApiUrl = ''
     this._quoteApiUrl = ''
@@ -63,7 +63,7 @@ class AppGlobal {
       '0': 'doAsyncNew',
       '1': 'doPartialDeal',
       '2': 'doAllDeal',
-      '4': 'doCancelSucess',
+      '4': 'doCancelSuccess',
       '6': 'doCancelWait',
       '8': 'doSyncFail',
       A: 'doSyncSuccess',
@@ -81,7 +81,7 @@ class AppGlobal {
       '0': 'do-async-new',
       '1': 'do-partial-deal',
       '2': 'do-all-deal',
-      '4': 'do-cancel-sucess',
+      '4': 'do-cancel-success',
       '6': 'do-cancel-wait',
       '8': 'do-sync-fail',
       A: 'doSync-success',

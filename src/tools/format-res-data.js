@@ -59,6 +59,7 @@ function fixDataMaping() {
     '128': 'DeliverToCompID',
     '150': 'ExecType',
     '151': 'LeavesQty',
+    '198': 'SecondaryOrderID',
     '268': 'NoMDEntries',
     '269': 'MDEntryType',
     '270': 'MDEntryPx',

@@ -10,17 +10,11 @@ import appGlobal from 'modules/common/app-global.js'
 export const cancelOrder = params => {
   return (dispatch, getState) => {
     let tokenID = getState().app.get('userToken')
-    let targetData = params.set('MsgType', 'F')
-    targetData = targetData.merge(
-      Map({
-        MsgType: 'F',
-        TokenID: tokenID
-      })
-    )
-    let clorderid = targetData.get('ClOrdID')
-    console.log('params', targetData.toJS())
-    targetData = formatRequestData(targetData.toJS())
-    let formData = formatFormData(targetData)
+    params.TokenID = tokenID
+    let clorderid = params['ClOrdID']
+    console.log('params', params)
+    params = formatRequestData(params)
+    let formData = formatFormData(params)
     callApi('/api/cancel', {
       method: 'POST',
       body: formData

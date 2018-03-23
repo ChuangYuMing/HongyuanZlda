@@ -19,7 +19,7 @@ let orderStateMachine = initState => {
       { name: 'do-cancel', from: 'partial-deal', to: 'cancel-wait' },
       { name: 'do-cancel', from: 'new-order', to: 'cancel-wait' },
       { name: 'do-cancel-success', from: 'cancel-wait', to: 'cancel-success' },
-      { name: 'do-cancel-success', from: 'cancel-wait', to: 'cancel-success' },
+      { name: 'do-cancel-success', from: 'new-order', to: 'cancel-success' },
       { name: 'do-cancel-fail', from: 'cancel-wait', to: 'cancel-fail' },
       { name: 'do-cancel-fail', from: 'cancel-wait', to: 'cancel-fail' },
       { name: 'do-all-deal', from: 'new-order', to: 'all-deal' },

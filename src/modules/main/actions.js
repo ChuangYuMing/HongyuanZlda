@@ -9,6 +9,7 @@ import { updateOrderListHistory } from 'modules/order/actions.js'
 import { fromJS } from 'immutable'
 import { forceUpdatePwd } from 'modules/login/actions.js'
 import { orderStateMachine } from 'modules/order/stateMachine.js'
+import { Decimal } from 'decimal.js'
 
 export const updateMainPopUpMsg = (data, status) => {
   return {
@@ -134,6 +135,7 @@ export const getOrderStatus = params => {
           })
 
           item = Map(list[list.length - 1])
+          item.set('avgPrice', item.get('LastPx'))
           list.forEach(element => {
             if (element['OrdStatus'] === '2' || element['OrdStatus'] === '1') {
               element = Map(element)
@@ -148,7 +150,7 @@ export const getOrderStatus = params => {
               item = item.set('inflatDealHistory', false)
             }
           })
-          orderList = orderList.push(fromJS(item))
+          orderList = orderList.push(item)
         }
         console.log('orderList', orderList.toJS())
         orderList = orderList.sort((a, b) => {

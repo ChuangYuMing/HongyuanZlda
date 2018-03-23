@@ -31,6 +31,9 @@ export const order = params => {
         dispatch(updateMainPopUpMsg(popupMsg, status))
         return
       }
+      if (!obj['30058']) {
+        return
+      }
       let data = formatReponse(obj)[0]
       let fsmFactory = orderStateMachine('init')
       let orderFsm = new fsmFactory()

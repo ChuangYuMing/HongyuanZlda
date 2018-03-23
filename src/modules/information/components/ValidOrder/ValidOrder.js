@@ -8,6 +8,7 @@ import { orderStatusMaping } from 'tools/format-res-data.js'
 import { getDateFromFormat } from 'tools/date.js'
 import PopUp from 'modules/shared/components/PopUp/PopUp.js'
 import InformationRow from '../InformationRow/InformationRow.js'
+import { Decimal } from 'decimal.js'
 
 let cx = classNames.bind(styles)
 let validOrderCx = classNames.bind(validOrderStyles)
@@ -91,7 +92,20 @@ class Information extends PureComponent {
   }
   cancelOrder = () => {
     let targetRow = this.state.targetRow
-    this.props.cancelOrder(targetRow)
+    let params = {
+      MsgType: 'F',
+      OrigClOrdID: targetRow.get('OrigClOrdID'),
+      Username: targetRow.get('Username'),
+      OrigClOrdID: targetRow.get('OrigClOrdID'),
+      ClOrdID: targetRow.get('ClOrdID'),
+      Branch: targetRow.get('Branch'),
+      OrderID: targetRow.get('OrderID'),
+      Account: targetRow.get('Account'),
+      Symbol: targetRow.get('Symbol'),
+      Side: targetRow.get('Side'),
+      MsgSeqNum: targetRow.get('MsgSeqNum')
+    }
+    this.props.cancelOrder(params)
     this.closePopUp()
   }
   changeOrderVol = () => {
@@ -160,16 +174,30 @@ class Information extends PureComponent {
     list = list.push(hiddenData)
     let inflatList = List([])
     list.forEach(item => {
-      inflatList = inflatList.push(item)
-      if (
-        item.has('inflatDealHistory') &&
-        item.get('inflatDealHistory') === true
-      ) {
-        let history = item.get('dealHistory')
-        history.forEach(h => {
-          h = h.set('isHistory', true)
-          inflatList = inflatList.push(h)
+      if (item.has('dealHistory')) {
+        let dealHistory = item.get('dealHistory')
+        let totalPrice = Decimal(0)
+        let totalVol = 0
+        dealHistory.forEach(item => {
+          let dealPrice = Decimal(parseFloat(item.get('LastPx')))
+          let dealVol = parseInt(item.get('LastQty'))
+          totalPrice = totalPrice.plus(dealPrice.times(dealVol))
+          totalVol = totalVol + dealVol
         })
+        let avgPrice = totalPrice.div(totalVol).toFixed(3, Decimal.ROUND_DOWN)
+        item = item.set('avgPrice', avgPrice)
+        inflatList = inflatList.push(item)
+        if (
+          item.has('inflatDealHistory') &&
+          item.get('inflatDealHistory') === true
+        ) {
+          dealHistory.forEach(h => {
+            h = h.set('isHistory', true)
+            inflatList = inflatList.push(h)
+          })
+        }
+      } else {
+        inflatList = inflatList.push(item)
       }
     })
     var rows = []
@@ -305,13 +333,17 @@ class Information extends PureComponent {
             <Cell className={sideCx} key="5">
               {item.get('Side')}
             </Cell>
-            <Cell key="6">{item.get('Price')}</Cell>
+            <Cell key="6">
+              {item.get('isHistory') ? item.get('LastPx') : item.get('Price')}
+            </Cell>
             <Cell key="7">{item.get('OrderQty')}</Cell>
             <Cell key="8">
               {item.get('isHistory') ? item.get('LastQty') : item.get('CumQty')}
             </Cell>
             <Cell key="9">{item.get('CxlQty')}</Cell>
-            <Cell key="10">{item.get('LastPx')}</Cell>
+            <Cell key="10">
+              {item.get('avgPrice') ? item.get('avgPrice') : ''}
+            </Cell>
             <Cell key="11">{item.get('LeavesQty')}</Cell>
             <Cell key="12">{orderStatusMaping(item.get('OrdStatus'))}</Cell>
           </Row>
