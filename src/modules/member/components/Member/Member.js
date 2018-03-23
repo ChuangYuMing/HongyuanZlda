@@ -26,7 +26,7 @@ class Member extends PureComponent {
       TokenID: userToken
     }
     this.props.changeTargetAccount({ account, branch })
-    this.props.getInventory(prams)
+    // this.props.getInventory(prams)
   }
   closePurchasing = () => {
     this.setState({

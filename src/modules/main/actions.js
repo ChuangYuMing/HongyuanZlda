@@ -80,7 +80,7 @@ export const getCustomerInfo = params => {
         }
         let res = formatReponse(obj)
         // let tempArr = []
-        // for (let index = 0; index < 100; index++) {
+        // for (let index = 0; index < 2000; index++) {
         //   let temp = JSON.parse(JSON.stringify(res[0]))
         //   temp.Account = `${res[0].Account}-${index}`
         //   tempArr.push(temp)

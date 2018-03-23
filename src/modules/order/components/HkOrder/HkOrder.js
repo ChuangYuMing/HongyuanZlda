@@ -50,6 +50,7 @@ class HkOrder extends PureComponent {
     }
     props.resetData()
     this.endIndexSymbolFilter = 100
+    this.endIndexAccountFilter = 100
     this.symbolFilterList = []
     this.accountFilterList = []
   }
@@ -153,10 +154,15 @@ class HkOrder extends PureComponent {
     console.log('targetSearchAcc')
     e.stopPropagation()
     let target = e.currentTarget
-    let account = target.dataset.account
+    let { account, branch } = target.dataset
     this.setState({
       showAccountFilter: false
     })
+    let params = Map({
+      account,
+      branch
+    })
+    this.props.changeTargetAccount(params)
   }
   componentWillUnmount() {
     console.log('componentWillUnmount')
@@ -168,16 +174,19 @@ class HkOrder extends PureComponent {
     let accSearch = this.inputAcc
     let suggestList = this.suggestList
     let suggestWrap = this.orderStockFilter
+    let accSuggestWrap = this.accountFilter
     let orderWrap = document.getElementById('orderWrap')
     let keyword = Observable.fromEvent(symbolSearch, 'input')
     let accKeyword = Observable.fromEvent(accSearch, 'input')
     let focus = Observable.fromEvent(symbolSearch, 'focus')
     let accInputFocus = Observable.fromEvent(accSearch, 'focus')
-    let unfocus = Observable.fromEvent(symbolSearch, 'focusout')
     let wheelSuggest = Observable.fromEvent(suggestWrap, 'wheel')
     let scrollSuggest = Observable.fromEvent(suggestWrap, 'scroll')
+    let accWheelSuggest = Observable.fromEvent(accSuggestWrap, 'wheel')
+    let accScrollSuggest = Observable.fromEvent(accSuggestWrap, 'scroll')
     let clickOrderWrap = Observable.fromEvent(orderWrap, 'click')
     let scrollMerge = Observable.merge(wheelSuggest, scrollSuggest)
+    let accScrollMerge = Observable.merge(accWheelSuggest, accScrollSuggest)
     let targetValue = ''
 
     focus.map(e => e).subscribe(e => {
@@ -186,6 +195,13 @@ class HkOrder extends PureComponent {
         showAccountFilter: false,
         targetInput: 'symbol'
       })
+      let prodList = this.props.prodList
+      let targetValue = e.target.value
+      let list = keyWordStockFilter(prodList, targetValue, 'Symbol')
+      this.symbolFilterList = list
+      this.endIndexSymbolFilter = 100
+      this.filterSearch.updateData(list, this.endIndexSymbolFilter)
+      this.orderStockFilter.scrollTop = 0
     })
     accInputFocus.map(e => e).subscribe(e => {
       this.setState({
@@ -193,13 +209,15 @@ class HkOrder extends PureComponent {
         showAccountFilter: true,
         targetInput: 'account'
       })
+      let accountList = this.props.accountList
+      let targetValue = e.target.value
+      let list = keyWordOtherFilter(accountList, targetValue, 'Account')
+      this.accountFilterList = list
+      this.endIndexAccountFilter = 100
+      this.filterAccSearch.updateData(list, this.endIndexAccountFilter)
+      this.accountFilter.scrollTop = 0
     })
-    unfocus.map(e => e).subscribe(res => {
-      console.log(res)
-      let { symbol } = this.state
-      let { country } = this.props
-      // this.props.getQuote([`${symbol}.${country}`])
-    })
+
     this.OrderWrapSub = clickOrderWrap
       .debounceTime(100)
       .filter(e => {
@@ -221,6 +239,7 @@ class HkOrder extends PureComponent {
         let { symbol } = this.state
         this.setState({
           showSymbolFilter: false,
+          showAccountFilter: false,
           targetInput: ''
         })
         if (nowQuoteSymbol !== symbol && symbol !== '') {
@@ -239,10 +258,9 @@ class HkOrder extends PureComponent {
         })
       }, (e, res) => res)
       .subscribe(list => {
-        let endIndex = this.endIndexSymbolFilter
         this.symbolFilterList = list
         this.endIndexSymbolFilter = 100
-        this.filterSearch.updateData(list, endIndex)
+        this.filterSearch.updateData(list, this.endIndexSymbolFilter)
         this.orderStockFilter.scrollTop = 0
       })
     accKeyword
@@ -257,12 +275,10 @@ class HkOrder extends PureComponent {
         })
       }, (e, res) => res)
       .subscribe(list => {
-        console.log('!!!!', list.toJS())
-        // let endIndex = this.endIndexSymbolFilter
         this.accountFilterList = list
-        // this.endIndexSymbolFilter = 100
-        this.filterAccSearch.updateData(list, 100)
-        // this.orderStockFilter.scrollTop = 0
+        this.endIndexAccountFilter = 100
+        this.filterAccSearch.updateData(list, this.endIndexAccountFilter)
+        this.accountFilter.scrollTop = 0
       })
 
     scrollMerge
@@ -276,6 +292,20 @@ class HkOrder extends PureComponent {
           this.filterSearch.updateData(
             this.symbolFilterList,
             this.endIndexSymbolFilter
+          )
+        }
+      })
+    accScrollMerge
+      .auditTime(1000)
+      .map(e => e)
+      .subscribe(res => {
+        let wrapHeight = this.endIndexAccountFilter * 19
+        let leavePxToBottom = wrapHeight - accSuggestWrap.scrollTop
+        if (leavePxToBottom < 1000) {
+          this.endIndexAccountFilter = this.endIndexAccountFilter + 200
+          this.filterAccSearch.updateData(
+            this.accountFilterList,
+            this.endIndexAccountFilter
           )
         }
       })

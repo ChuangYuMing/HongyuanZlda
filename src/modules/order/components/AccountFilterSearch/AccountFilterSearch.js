@@ -22,13 +22,19 @@ class AccountFilterSearch extends PureComponent {
     let { list } = this.state
     let items = list.map((item, index) => {
       let Account = item.get('Account')
+      let Branch = item.get('Branch')
       let filterInfo = item.get('filterInfo')
       let firstHalf = filterInfo.get('firstHalf')
       let secondHalf = filterInfo.get('secondHalf')
       let key = filterInfo.get('key')
-      console.log(filterInfo, firstHalf, secondHalf)
+      // console.log(filterInfo, firstHalf, secondHalf)
       return (
-        <li onClick={onClick} data-account={Account} key={index}>
+        <li
+          onClick={onClick}
+          data-account={Account}
+          data-branch={Branch}
+          key={index}
+        >
           <div className={cx('symbol-wrap')}>
             {firstHalf}
             <span className={cx('key')}>{key}</span>

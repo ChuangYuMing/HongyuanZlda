@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import Order from './Order'
 import { order, getQuote } from '../../actions.js'
+import { changeTargetAccount } from 'modules/main/actions.js'
 
 const mapStateToProps = state => {
   return {
@@ -16,6 +17,9 @@ const mapDispatchToProps = dispatch => {
     },
     getQuote: symbol => {
       dispatch(getQuote(symbol))
+    },
+    changeTargetAccount: params => {
+      dispatch(changeTargetAccount(params))
     }
   }
 }

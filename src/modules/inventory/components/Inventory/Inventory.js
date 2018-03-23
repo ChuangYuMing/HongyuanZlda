@@ -10,6 +10,19 @@ class Inventory extends PureComponent {
   constructor() {
     super()
   }
+  componentWillReceiveProps(nextProps) {
+    let targetAccount = nextProps.targetAccount
+    let old = this.props.targetAccount
+    if (!old.equals(targetAccount)) {
+      let params = {
+        Account: targetAccount.get('account'),
+        Branch: targetAccount.get('branch'),
+        TokenID: this.props.token
+      }
+      this.props.getInventory(params)
+    }
+  }
+
   componentDidMount() {
     SocketHandler.on()
   }

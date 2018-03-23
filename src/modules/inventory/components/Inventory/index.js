@@ -1,18 +1,20 @@
 import { connect } from 'react-redux'
 import Inventory from './Inventory'
+import { getInventory } from 'modules/inventory/actions.js'
 
 const mapStateToProps = state => {
   return {
     targetAccount: state.main.get('targetAccount'),
     customerInfo: state.main.get('customerInfo'),
-    inventory: state.inventory.get('inventory')
+    inventory: state.inventory.get('inventory'),
+    token: state.app.get('userToken')
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onTest: () => {
-      alert('test')
+    getInventory: params => {
+      dispatch(getInventory(params))
     }
   }
 }

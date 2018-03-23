@@ -45,6 +45,7 @@ class Order extends Component {
                 order={this.props.order}
                 getQuote={this.props.getQuote}
                 accountList={this.props.customerInfo}
+                changeTargetAccount={this.props.changeTargetAccount}
               />
             </TabPanel>
             <TabPanel>
@@ -54,6 +55,7 @@ class Order extends Component {
                 order={this.props.order}
                 getQuote={this.props.getQuote}
                 accountList={this.props.customerInfo}
+                changeTargetAccount={this.props.changeTargetAccount}
               />
             </TabPanel>
           </Tabs>
