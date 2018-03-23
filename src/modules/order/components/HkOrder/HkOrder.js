@@ -48,6 +48,7 @@ class HkOrder extends PureComponent {
       orderParams: {},
       showSymbolFilter: false,
       showAccountFilter: false,
+      showPirceFilter: true,
       targetInput: ''
     }
     props.resetData()
@@ -180,12 +181,17 @@ class HkOrder extends PureComponent {
   componentDidMount() {
     let symbolSearch = this.inputSymbol
     let accSearch = this.inputAcc
+    let priceSearch = this.inputPrice
     let suggestList = this.suggestList
     let suggestWrap = this.orderStockFilter
     let accSuggestWrap = this.accountFilter
+    let priceWrape = document.querySelector(
+      `.${styles['price-wrap']} .${styles['right-wrap']}`
+    )
     let orderWrap = document.getElementById('orderWrap')
     let keyword = Observable.fromEvent(symbolSearch, 'input')
     let accKeyword = Observable.fromEvent(accSearch, 'input')
+    let priceInputFocus = Observable.fromEvent(priceSearch, 'focus')
     let focus = Observable.fromEvent(symbolSearch, 'focus')
     let accInputFocus = Observable.fromEvent(accSearch, 'focus')
     let wheelSuggest = Observable.fromEvent(suggestWrap, 'wheel')
@@ -193,10 +199,23 @@ class HkOrder extends PureComponent {
     let accWheelSuggest = Observable.fromEvent(accSuggestWrap, 'wheel')
     let accScrollSuggest = Observable.fromEvent(accSuggestWrap, 'scroll')
     let clickOrderWrap = Observable.fromEvent(orderWrap, 'click')
+    let clickPriceWrap = Observable.fromEvent(priceWrape, 'click')
     let scrollMerge = Observable.merge(wheelSuggest, scrollSuggest)
     let accScrollMerge = Observable.merge(accWheelSuggest, accScrollSuggest)
     let targetValue = ''
 
+    clickPriceWrap.map(e => e.target.dataset.price).subscribe(price => {
+      console.log(price)
+      this.setState({
+        showPirceFilter: false,
+        price
+      })
+    })
+    priceInputFocus.map(e => e).subscribe(e => {
+      this.setState({
+        showPirceFilter: true
+      })
+    })
     focus.map(e => e).subscribe(e => {
       this.setState({
         showSymbolFilter: true,
@@ -319,7 +338,7 @@ class HkOrder extends PureComponent {
       })
   }
   render() {
-    let { quote, accountList } = this.props
+    let { quote, accountList, country } = this.props
     let prodList = this.props.prodList || []
     let Symbol = quote.get('Symbol')
     let Name = quote.get('Name')
@@ -352,7 +371,16 @@ class HkOrder extends PureComponent {
       tradeUnit,
       currency
     } = this.state
-
+    let orderPopTitle = ''
+    switch (country) {
+      case 'US':
+        orderPopTitle = '美股'
+        break
+      case 'HK':
+        orderPopTitle = '港股'
+      default:
+        break
+    }
     return (
       <div className={cx('usorder-wrap')}>
         <div className={cx('action-wrap')}>
@@ -434,13 +462,58 @@ class HkOrder extends PureComponent {
 
             <div className={cx('item-wrap', 't4')}>
               <span>價格：</span>
-              <input
-                type="text"
-                name="price"
-                value={this.state.price}
-                onChange={this.handleInputChange}
-                ref="price"
-              />
+              <div className={cx('price-input-wrap')}>
+                <input
+                  type="text"
+                  name="price"
+                  value={this.state.price}
+                  onChange={this.handleInputChange}
+                  ref={input => {
+                    this.inputPrice = input
+                  }}
+                />
+                <div
+                  ref={e => (this.priceFilter = e)}
+                  className={
+                    this.state.showPirceFilter
+                      ? cx('price-filter')
+                      : cx('price-filter', 'hide')
+                  }
+                >
+                  <div className={cx('price-wrap')}>
+                    <div className={cx('left-wrap')}>
+                      <span>[+1]買進價</span>
+                      <span>[+2]賣出價</span>
+                      <span>[+3]成交價</span>
+                      <span>[+4]開盤價</span>
+                      <span>[+5]平盤價</span>
+                      <span>[+6]今高價</span>
+                      <span>[+7]今低價</span>
+                    </div>
+                    <div className={cx('right-wrap')}>
+                      <span data-price={BPrice} style={bPriceStyle}>
+                        {BPrice}
+                      </span>
+                      <span data-price={APrice} style={aPriceStyle}>
+                        {APrice}
+                      </span>
+                      <span data-price={Price} style={pStyle}>
+                        {Price}
+                      </span>
+                      <span data-price={Open} style={openStyle}>
+                        {Open}
+                      </span>
+                      <span data-price={PrePrice}>{PrePrice}</span>
+                      <span data-price={high} style={highStyle}>
+                        {high}
+                      </span>
+                      <span data-price={low} style={lowStyle}>
+                        {low}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className={cx('item-wrap', 't5')}>
@@ -529,7 +602,7 @@ class HkOrder extends PureComponent {
         >
           <div className={cx('order-popup')}>
             <div className={cx('title')}>
-              <span>確認委託（港交所）</span>
+              <span>確認委託（{orderPopTitle}）</span>
             </div>
             <div
               className={

@@ -63,7 +63,7 @@
     }
   }
 }
-@media screen and (min-width: 1280px) {
+@media screen and (min-width: 1090px) {
   .sticky-table {
     :global {
       .sticky-table-x-wrapper {

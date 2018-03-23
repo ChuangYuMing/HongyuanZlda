@@ -23,6 +23,7 @@ class AccountFilterSearch extends PureComponent {
     let items = list.map((item, index) => {
       let Account = item.get('Account')
       let Branch = item.get('Branch')
+      let CName = item.get('CName')
       let filterInfo = item.get('filterInfo')
       let firstHalf = filterInfo.get('firstHalf')
       let secondHalf = filterInfo.get('secondHalf')
@@ -39,6 +40,7 @@ class AccountFilterSearch extends PureComponent {
             {firstHalf}
             <span className={cx('key')}>{key}</span>
             {secondHalf}
+            {CName}
           </div>
         </li>
       )

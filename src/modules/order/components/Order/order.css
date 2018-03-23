@@ -72,9 +72,9 @@
       .acc-filter {
         overflow: auto;
         position: absolute;
-        top: -200px;
+        top: -150px;
         width: 100%;
-        height: 200px;
+        height: 150px;
         background-color: black;
         z-index: 12;
         color: white;
@@ -107,6 +107,45 @@
   }
   .t4 {
     width: 10%;
+    .price-input-wrap {
+      width: 100%;
+      position: relative;
+      .price-filter {
+        overflow: auto;
+        position: absolute;
+        top: -150px;
+        width: 150%;
+        height: 150px;
+        background-color: black;
+        z-index: 12;
+        color: white;
+      }
+      .left-wrap {
+        width: 48%;
+        text-align: left;
+        float: left;
+      }
+      .right-wrap {
+        text-align: right;
+        width: 48%;
+        float: right;
+      }
+      .price-wrap {
+        span {
+          display: block;
+          padding: 1px 3px;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 1260px) {
+    .t4 {
+      .price-input-wrap {
+        .price-filter {
+          width: 200%;
+        }
+      }
+    }
   }
   .t5 {
     width: 10%;

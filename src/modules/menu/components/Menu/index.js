@@ -20,7 +20,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   let flag = true
   document.addEventListener('keydown', function(event) {
-    console.log(event.keyCode, event.metaKey)
+    // console.log(event.keyCode, event.metaKey)
     if (event.keyCode == 82 && event.metaKey) {
       flag = false
     }
