@@ -25,7 +25,7 @@ let updtProdThrottle = throttle(
     // console.log('%c 更新quote', 'color: #e30e0e')
     callback()
   },
-  1000,
+  100,
   { leading: false }
 )
 
@@ -116,20 +116,14 @@ class HkOrder extends PureComponent {
       showPopUP: false
     })
   }
-  // getQuote = e => {
-  //   console.log('getquote')
-  //   let country = this.props.country
-  //   const target = e.target
-  //   const name = target.name
-  //   let value = target.value
-  //   this.setState({
-  //     [name]: value
-  //   })
-  //   let symbol = [`${value}.${country}`]
-  //   updtProdThrottle(() => {
-  //     this.props.getQuote(symbol)
-  //   })
-  // }
+  getQuote = value => {
+    console.log('getquote')
+    let country = this.props.country
+    let symbol = [`${value}.${country}`]
+    updtProdThrottle(() => {
+      this.props.getQuote(symbol)
+    })
+  }
   targetSearchSymbol = e => {
     console.log('targetSearchSymbol')
     e.stopPropagation()
@@ -147,7 +141,7 @@ class HkOrder extends PureComponent {
     })
     if (nowQuoteSymbol !== symbol && symbol !== '') {
       console.log(nowQuoteSymbol, symbol)
-      this.props.getQuote([`${symbol}.${country}`])
+      this.getQuote(symbol)
     }
   }
   targetSearchAcc = e => {
@@ -164,6 +158,7 @@ class HkOrder extends PureComponent {
     })
     this.props.changeTargetAccount(params)
   }
+
   componentWillUnmount() {
     console.log('componentWillUnmount')
     console.log(this.a)
@@ -229,9 +224,9 @@ class HkOrder extends PureComponent {
       })
       .map(e => e)
       .subscribe(e => {
-        console.log(e.target)
-        let quote = this.props.quote
+        // console.log(e.target)
         let country = this.props.country
+        let quote = this.props.quote
         let nowQuoteSymbol = quote.get('Symbol')
         nowQuoteSymbol = nowQuoteSymbol
           ? nowQuoteSymbol.split(`.${country}`)[0]
@@ -243,7 +238,7 @@ class HkOrder extends PureComponent {
           targetInput: ''
         })
         if (nowQuoteSymbol !== symbol && symbol !== '') {
-          this.props.getQuote([`${symbol}.${country}`])
+          this.getQuote(symbol)
         }
       })
     keyword
