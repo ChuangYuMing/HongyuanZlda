@@ -36,8 +36,10 @@ class HkOrder extends PureComponent {
       data: {},
       account: props.targetAccount.get('account') || '',
       symbol: '',
-      volume: 1,
+      volume: '',
       price: '',
+      tradeUnit: '',
+      currency: '',
       orderType: '2',
       date: 20180131,
       items: [],
@@ -116,12 +118,23 @@ class HkOrder extends PureComponent {
       showPopUP: false
     })
   }
-  getQuote = value => {
+  getQuote = symbol => {
     console.log('getquote')
     let country = this.props.country
-    let symbol = [`${value}.${country}`]
+    let targetSymbol = [`${symbol}.${country}`]
+    let prodList = this.props.prodList
     updtProdThrottle(() => {
-      this.props.getQuote(symbol)
+      this.props.getQuote(targetSymbol)
+    })
+    let { TradeUnit, Currency } = searchProperty(
+      prodList,
+      ['TradeUnit', 'Currency'],
+      ['Symbol', symbol]
+    )
+    this.setState({
+      tradeUnit: TradeUnit,
+      currency: Currency,
+      volume: TradeUnit
     })
   }
   targetSearchSymbol = e => {
@@ -328,7 +341,17 @@ class HkOrder extends PureComponent {
     let lowStyle = priceStyle(low, PrePrice)
     let limitHighStyle = priceStyle(99999, PrePrice)
     let limitLowStyle = priceStyle(0, PrePrice)
-    let { account, symbol, volume, price, orderType, date, action } = this.state
+    let {
+      account,
+      symbol,
+      volume,
+      price,
+      orderType,
+      date,
+      action,
+      tradeUnit,
+      currency
+    } = this.state
 
     return (
       <div className={cx('usorder-wrap')}>
@@ -486,11 +509,11 @@ class HkOrder extends PureComponent {
           </div>
           <div className={cx('item-wrap', 'b1')}>
             <span>手單位</span>
-            <span>XXX</span>
+            <span>{tradeUnit}</span>
           </div>
           <div className={cx('item-wrap', 'b1')}>
             <span>交易幣別</span>
-            <span>XXX</span>
+            <span>{currency}</span>
           </div>
           <div className={cx('item-wrap', 'name')}>
             <span>股名</span>
