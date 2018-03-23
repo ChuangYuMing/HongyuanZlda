@@ -38,12 +38,17 @@ class Main extends Component {
       TokenID: this.props.userToken
     })
     let promise4 = this.props.getExchange({ TokenID: userToken })
+    let promise5 = this.props.getTradeUnit({
+      Market: 'US',
+      TokenID: this.props.userToken
+    })
     // let promise5 = this.props.getProd2({ TokenID: userToken })
-    Promise.all([promise2, promise3, promise4]).then(res => {
+    Promise.all([promise2, promise3, promise4, promise5]).then(res => {
       this.setState({
         hasLoadData: true
       })
     })
+
     this.WsConnect = new WsConnect(this.props.userToken)
     this.WsQuoteConnect = new WsQuoteConnect()
     this.WsConnect.connect()

@@ -293,6 +293,22 @@ export const getProds2 = params => {
   }
 }
 
+export const getTradeUnit = params => {
+  return (dispatch, getState) => {
+    return new Promise((resolve, reject) => {
+      params = formatRequestData(params)
+      let formData = formatFormData(params)
+      callApi(`/api/billing/trade/unit`, {
+        method: 'POST',
+        body: formData
+      }).then(obj => {
+        console.log('getTradeUnit', obj)
+        // resolve(res)
+      })
+    })
+  }
+}
+
 export const updateExchange = data => {
   return {
     type: types.UPDATE_EXCHANGE,
