@@ -6,7 +6,8 @@ import { changeTargetAccount } from 'modules/main/actions.js'
 const mapStateToProps = state => {
   return {
     prodList: state.main.get('prodList'),
-    customerInfo: state.main.get('customerInfo')
+    customerInfo: state.main.get('customerInfo'),
+    tradeUnit: state.main.get('tradeUnit')
   }
 }
 

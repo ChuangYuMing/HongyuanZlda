@@ -61,7 +61,11 @@ const mapDispatchToProps = dispatch => {
       })
     },
     getExchange: params => {
-      dispatch(getExchange(params))
+      return new Promise(resolve => {
+        dispatch(getExchange(params)).then(res => {
+          resolve(true)
+        })
+      })
     },
     getProd2: params => {
       dispatch(getProds2(params))

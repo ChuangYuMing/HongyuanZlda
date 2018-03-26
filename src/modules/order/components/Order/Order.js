@@ -24,6 +24,7 @@ class Order extends Component {
 
   render() {
     let prodList = this.props.prodList
+    console.log(this.props.tradeUnit)
     return (
       <div id="orderWrap" className={cx('order-wrap')}>
         <div className={cx('setting-wrap')}>
@@ -46,6 +47,7 @@ class Order extends Component {
                 getQuote={this.props.getQuote}
                 accountList={this.props.customerInfo}
                 changeTargetAccount={this.props.changeTargetAccount}
+                tradeUnit={this.props.tradeUnit.get('HK')}
               />
             </TabPanel>
             <TabPanel>
@@ -56,6 +58,7 @@ class Order extends Component {
                 getQuote={this.props.getQuote}
                 accountList={this.props.customerInfo}
                 changeTargetAccount={this.props.changeTargetAccount}
+                tradeUnit={this.props.tradeUnit.get('US')}
               />
             </TabPanel>
           </Tabs>

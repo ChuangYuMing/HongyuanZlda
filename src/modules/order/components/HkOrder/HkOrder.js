@@ -16,8 +16,10 @@ import { Observable } from 'rxjs'
 import {
   keyWordOtherFilter,
   keyWordStockFilter,
-  searchProperty
+  searchProperty,
+  decimalPlaces
 } from 'tools/other.js'
+import { Decimal } from 'decimal.js'
 
 let cx = classNames.bind(styles)
 let updtProdThrottle = throttle(
@@ -48,8 +50,9 @@ class HkOrder extends PureComponent {
       orderParams: {},
       showSymbolFilter: false,
       showAccountFilter: false,
-      showPirceFilter: true,
-      targetInput: ''
+      showPirceFilter: false,
+      targetInput: '',
+      tradeUnitPrice: ''
     }
     props.resetData()
     this.endIndexSymbolFilter = 100
@@ -58,12 +61,28 @@ class HkOrder extends PureComponent {
     this.accountFilterList = []
   }
   handleInputChange = e => {
-    // console.log(this)
+    console.log('handleInputChange')
     const target = e.target
     let value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
     if (name === 'symbol') {
       value = value.toUpperCase()
+    }
+    if (name === 'price') {
+      let tradeUnitPrice = this.getTradeUnitPrice(value)
+      let { targetTradeUnit } = tradeUnitPrice
+      let canDecimalCount = decimalPlaces(targetTradeUnit)
+      let pattern = /(\d+)(\.)?\d*$/
+      if (
+        (value.match(pattern) || value === '') &&
+        decimalPlaces(value) <= canDecimalCount
+      ) {
+        this.setState({
+          tradeUnitPrice,
+          price: value
+        })
+      }
+      return
     }
     this.setState({
       [name]: value
@@ -149,13 +168,20 @@ class HkOrder extends PureComponent {
       : ''
     let target = e.currentTarget
     let symbol = target.dataset.symbol
-    this.setState({
-      showSymbolFilter: false,
-      symbol
-    })
+
     if (nowQuoteSymbol !== symbol && symbol !== '') {
       console.log(nowQuoteSymbol, symbol)
+      this.setState({
+        price: '',
+        showSymbolFilter: false,
+        symbol
+      })
       this.getQuote(symbol)
+    } else {
+      this.setState({
+        showSymbolFilter: false,
+        symbol
+      })
     }
   }
   targetSearchAcc = e => {
@@ -172,7 +198,63 @@ class HkOrder extends PureComponent {
     })
     this.props.changeTargetAccount(params)
   }
-
+  getTradeUnitPrice = nowPrice => {
+    let tradeUnit = this.props.tradeUnit
+    // console.log(tradeUnit)
+    nowPrice = parseFloat(nowPrice)
+    let entryPx = tradeUnit.get('entryPx')
+    let targetTradeUnit
+    let nextPrice
+    let prePrice
+    for (let i = 0; i < entryPx.size; i++) {
+      const item = entryPx.get(i)
+      const preItem = entryPx.get(i - 1)
+      if (nowPrice < parseFloat(item)) {
+        targetTradeUnit = tradeUnit.getIn(['price', i])
+        nextPrice = Decimal(nowPrice)
+          .plus(parseFloat(targetTradeUnit))
+          .toPrecision()
+        prePrice
+        if (parseFloat(preItem) === nowPrice) {
+          let preTargetUnit = tradeUnit.getIn(['price', i - 1])
+          prePrice = Decimal(nowPrice)
+            .minus(parseFloat(preTargetUnit))
+            .toPrecision()
+        } else {
+          prePrice = Decimal(nowPrice)
+            .minus(parseFloat(targetTradeUnit))
+            .toPrecision()
+        }
+        break
+      }
+    }
+    let res = {
+      nextPrice,
+      prePrice,
+      targetTradeUnit
+    }
+    console.log(res)
+    return res
+  }
+  priceStepUp = () => {
+    let { nextPrice } = this.state.tradeUnitPrice
+    console.log(nextPrice)
+    let tradeUnitPrice = this.getTradeUnitPrice(nextPrice)
+    this.setState({
+      price: nextPrice,
+      tradeUnitPrice
+    })
+  }
+  priceStepDown = () => {
+    let { prePrice } = this.state.tradeUnitPrice
+    if (parseFloat(prePrice) >= 0.01) {
+      let tradeUnitPrice = this.getTradeUnitPrice(prePrice)
+      this.setState({
+        price: parseFloat(prePrice) < 0.01 ? '0.01' : prePrice,
+        tradeUnitPrice
+      })
+    }
+  }
   componentWillUnmount() {
     console.log('componentWillUnmount')
     console.log(this.a)
@@ -185,12 +267,11 @@ class HkOrder extends PureComponent {
     let suggestList = this.suggestList
     let suggestWrap = this.orderStockFilter
     let accSuggestWrap = this.accountFilter
-    let priceWrape = document.querySelector(
-      `.${styles['price-wrap']} .${styles['right-wrap']}`
-    )
+    let priceWrape = document.querySelector(`.${styles['price-wrap']}`)
     let orderWrap = document.getElementById('orderWrap')
     let keyword = Observable.fromEvent(symbolSearch, 'input')
     let accKeyword = Observable.fromEvent(accSearch, 'input')
+    let priceKeyword = Observable.fromEvent(priceSearch, 'input')
     let priceInputFocus = Observable.fromEvent(priceSearch, 'focus')
     let focus = Observable.fromEvent(symbolSearch, 'focus')
     let accInputFocus = Observable.fromEvent(accSearch, 'focus')
@@ -206,20 +287,26 @@ class HkOrder extends PureComponent {
 
     clickPriceWrap.map(e => e.target.dataset.price).subscribe(price => {
       console.log(price)
+      let tradeUnitPrice = this.getTradeUnitPrice(price)
       this.setState({
         showPirceFilter: false,
-        price
+        price,
+        tradeUnitPrice
       })
     })
     priceInputFocus.map(e => e).subscribe(e => {
       this.setState({
-        showPirceFilter: true
+        showSymbolFilter: false,
+        showAccountFilter: false,
+        showPirceFilter: true,
+        targetInput: 'price'
       })
     })
     focus.map(e => e).subscribe(e => {
       this.setState({
         showSymbolFilter: true,
         showAccountFilter: false,
+        showPirceFilter: false,
         targetInput: 'symbol'
       })
       let prodList = this.props.prodList
@@ -234,6 +321,7 @@ class HkOrder extends PureComponent {
       this.setState({
         showSymbolFilter: false,
         showAccountFilter: true,
+        showPirceFilter: false,
         targetInput: 'account'
       })
       let accountList = this.props.accountList
@@ -264,13 +352,23 @@ class HkOrder extends PureComponent {
           ? nowQuoteSymbol.split(`.${country}`)[0]
           : ''
         let { symbol } = this.state
-        this.setState({
-          showSymbolFilter: false,
-          showAccountFilter: false,
-          targetInput: ''
-        })
+
         if (nowQuoteSymbol !== symbol && symbol !== '') {
+          this.setState({
+            showSymbolFilter: false,
+            showAccountFilter: false,
+            showPirceFilter: false,
+            targetInput: '',
+            price: ''
+          })
           this.getQuote(symbol)
+        } else {
+          this.setState({
+            showSymbolFilter: false,
+            showAccountFilter: false,
+            showPirceFilter: false,
+            targetInput: ''
+          })
         }
       })
     keyword
@@ -307,7 +405,17 @@ class HkOrder extends PureComponent {
         this.filterAccSearch.updateData(list, this.endIndexAccountFilter)
         this.accountFilter.scrollTop = 0
       })
-
+    // priceKeyword
+    //   .debounceTime(100)
+    //   .map(e => {
+    //     return e.target.value
+    //   })
+    //   .subscribe(value => {
+    //     let tradeUnitPrice = this.getTradeUnitPrice(value)
+    //     this.setState({
+    //       tradeUnitPrice
+    //     })
+    //   })
     scrollMerge
       .auditTime(1000)
       .map(e => e)
@@ -351,6 +459,20 @@ class HkOrder extends PureComponent {
     let LowLimitPrice = quote.get('LowLimitPrice')
     let high = quote.get('high')
     let low = quote.get('low')
+
+    // APrice = parseFloat(APrice) > 0 ? parseFloat(APrice) : APrice
+    // BPrice = parseFloat(BPrice) > 0 ? parseFloat(BPrice) : BPrice
+    // Price = parseFloat(Price) > 0 ? parseFloat(Price) : Price
+    // Open = parseFloat(Open) > 0 ? parseFloat(Open) : Open
+    // PrePrice = parseFloat(PrePrice) > 0 ? parseFloat(PrePrice) : PrePrice
+    // HighLimitPrice =
+    //   parseFloat(HighLimitPrice) > 0
+    //     ? parseFloat(HighLimitPrice)
+    //     : HighLimitPrice
+    // LowLimitPrice =
+    //   parseFloat(LowLimitPrice) > 0 ? parseFloat(LowLimitPrice) : LowLimitPrice
+    // high = parseFloat(high) > 0 ? parseFloat(high) : high
+    // low = parseFloat(low) > 0 ? parseFloat(low) : low
 
     let pStyle = priceStyle(Price, PrePrice)
     let bPriceStyle = priceStyle(BPrice, PrePrice)
@@ -455,6 +577,7 @@ class HkOrder extends PureComponent {
                 type="text"
                 name="volume"
                 value={this.state.volume}
+                autoComplete="off"
                 onChange={this.handleInputChange}
                 ref="volume"
               />
@@ -468,9 +591,18 @@ class HkOrder extends PureComponent {
                   name="price"
                   value={this.state.price}
                   onChange={this.handleInputChange}
+                  autoComplete="off"
                   ref={input => {
                     this.inputPrice = input
                   }}
+                />
+                <span
+                  onClick={this.priceStepUp}
+                  className={cx('top-triangle')}
+                />
+                <span
+                  onClick={this.priceStepDown}
+                  className={cx('bottom-triangle')}
                 />
                 <div
                   ref={e => (this.priceFilter = e)}
@@ -482,32 +614,110 @@ class HkOrder extends PureComponent {
                 >
                   <div className={cx('price-wrap')}>
                     <div className={cx('left-wrap')}>
-                      <span>[+1]買進價</span>
-                      <span>[+2]賣出價</span>
-                      <span>[+3]成交價</span>
-                      <span>[+4]開盤價</span>
-                      <span>[+5]平盤價</span>
-                      <span>[+6]今高價</span>
-                      <span>[+7]今低價</span>
+                      <span
+                        data-price={
+                          parseFloat(BPrice) > 0 ? parseFloat(BPrice) : BPrice
+                        }
+                      >
+                        [+1]買進價
+                      </span>
+                      <span
+                        data-price={
+                          parseFloat(APrice) > 0 ? parseFloat(APrice) : APrice
+                        }
+                      >
+                        [+2]賣出價
+                      </span>
+                      <span
+                        data-price={
+                          parseFloat(Price) > 0 ? parseFloat(Price) : Price
+                        }
+                      >
+                        [+3]成交價
+                      </span>
+                      <span
+                        data-price={
+                          parseFloat(Open) > 0 ? parseFloat(Open) : Open
+                        }
+                      >
+                        [+4]開盤價
+                      </span>
+                      <span
+                        data-price={
+                          parseFloat(PrePrice) > 0
+                            ? parseFloat(PrePrice)
+                            : PrePrice
+                        }
+                      >
+                        [+5]平盤價
+                      </span>
+                      <span
+                        data-price={
+                          parseFloat(high) > 0 ? parseFloat(high) : high
+                        }
+                      >
+                        [+6]今高價
+                      </span>
+                      <span
+                        data-price={parseFloat(low) > 0 ? parseFloat(low) : low}
+                      >
+                        [+7]今低價
+                      </span>
                     </div>
                     <div className={cx('right-wrap')}>
-                      <span data-price={BPrice} style={bPriceStyle}>
+                      <span
+                        data-price={
+                          parseFloat(BPrice) > 0 ? parseFloat(BPrice) : BPrice
+                        }
+                        style={bPriceStyle}
+                      >
                         {BPrice}
                       </span>
-                      <span data-price={APrice} style={aPriceStyle}>
+                      <span
+                        data-price={
+                          parseFloat(APrice) > 0 ? parseFloat(APrice) : APrice
+                        }
+                        style={aPriceStyle}
+                      >
                         {APrice}
                       </span>
-                      <span data-price={Price} style={pStyle}>
+                      <span
+                        data-price={
+                          parseFloat(Price) > 0 ? parseFloat(Price) : Price
+                        }
+                        style={pStyle}
+                      >
                         {Price}
                       </span>
-                      <span data-price={Open} style={openStyle}>
+                      <span
+                        data-price={
+                          parseFloat(Open) > 0 ? parseFloat(Open) : Open
+                        }
+                        style={openStyle}
+                      >
                         {Open}
                       </span>
-                      <span data-price={PrePrice}>{PrePrice}</span>
-                      <span data-price={high} style={highStyle}>
+                      <span
+                        data-price={
+                          parseFloat(PrePrice) > 0
+                            ? parseFloat(PrePrice)
+                            : PrePrice
+                        }
+                      >
+                        {PrePrice}
+                      </span>
+                      <span
+                        data-price={
+                          parseFloat(high) > 0 ? parseFloat(high) : high
+                        }
+                        style={highStyle}
+                      >
                         {high}
                       </span>
-                      <span data-price={low} style={lowStyle}>
+                      <span
+                        data-price={parseFloat(low) > 0 ? parseFloat(low) : low}
+                        style={lowStyle}
+                      >
                         {low}
                       </span>
                     </div>

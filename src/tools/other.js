@@ -83,7 +83,7 @@ function priceStyle(target, prePrice) {
 }
 
 const keyWordStockFilter = (list, key, targetProperty = '') => {
-  console.log(list, key)
+  // console.log(list, key)
   let len = list.length
   let arr = []
   let topShowFilter = []
@@ -187,6 +187,20 @@ function searchProperty(source = [], property = [], filter = []) {
   }
   return res
 }
+
+function decimalPlaces(num) {
+  var match = ('' + num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/)
+  if (!match) {
+    return 0
+  }
+  return Math.max(
+    0,
+    // Number of digits right of decimal point.
+    (match[1] ? match[1].length : 0) -
+      // Adjust for scientific notation.
+      (match[2] ? +match[2] : 0)
+  )
+}
 export {
   sleep,
   getClientOffset,
@@ -198,5 +212,6 @@ export {
   formatGetRequestData,
   text_truncate,
   searchProperty,
-  keyWordOtherFilter
+  keyWordOtherFilter,
+  decimalPlaces
 }

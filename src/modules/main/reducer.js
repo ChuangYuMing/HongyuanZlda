@@ -7,7 +7,8 @@ let init = Map({
   customerInfo: List([]),
   targetAccount: Map({}),
   showChangePwd: false,
-  exchange: Map({})
+  exchange: Map({}),
+  tradeUnit: Map({})
 })
 export default (state = init, action) => {
   switch (action.type) {
@@ -44,6 +45,9 @@ export default (state = init, action) => {
     }
     case types.UPDATE_EXCHANGE: {
       return state.update('exchange', i => action.data)
+    }
+    case types.UPDATE_TRADE_UNIT: {
+      return state.update('tradeUnit', i => action.data)
     }
     default:
       return state

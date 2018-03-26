@@ -228,6 +228,8 @@ export const getExchange = params => {
       params = formatRequestData(params)
       let formData = formatFormData(params)
       // console.log('formData', formData)
+      let hasGetProd = false
+      let hasGetTradeUnit = false
       callApi(`/api/billing/trade/exchange`, {
         method: 'POST',
         body: formData
@@ -254,19 +256,53 @@ export const getExchange = params => {
             TokenID: tokenId,
             Market: item
           }
-          console.log(params)
           return dispatch(getProds2(params))
+        })
+        let promises2 = markets.map(item => {
+          let params = {
+            TokenID: tokenId,
+            Market: item
+          }
+          return dispatch(getTradeUnit(params))
         })
         let prodList = {}
         Promise.all(promises)
           .then(res => {
-            console.log('all', res)
             res.forEach((item, i) => {
               prodList[markets[i]] = res[i]
             })
             dispatch(updateProdList(prodList))
             console.log('prodList: ', prodList)
-            resolve(true)
+            hasGetProd = true
+            if (hasGetProd && hasGetTradeUnit) {
+              resolve(true)
+            }
+          })
+          .catch(e => {
+            console.log(e)
+          })
+        let tradeUnit = {}
+        Promise.all(promises2)
+          .then(res => {
+            console.log(res)
+            res.forEach((item, i) => {
+              let price = []
+              let entryPx = []
+              item['30058'].forEach(element => {
+                price.push(element['44'])
+                entryPx.push(element['270'])
+              })
+              tradeUnit[markets[i]] = {
+                price,
+                entryPx
+              }
+            })
+            dispatch(updateTrideUnit(fromJS(tradeUnit)))
+            console.log('tradeUnit: ', tradeUnit)
+            hasGetTradeUnit = true
+            if (hasGetProd && hasGetTradeUnit) {
+              resolve(true)
+            }
           })
           .catch(e => {
             console.log(e)
@@ -285,7 +321,7 @@ export const getProds2 = params => {
         method: 'POST',
         body: formData
       }).then(obj => {
-        console.log('getProds2', obj)
+        // console.log('getProds2', obj)
         let res = formatReponse(obj)
         resolve(res)
       })
@@ -302,8 +338,8 @@ export const getTradeUnit = params => {
         method: 'POST',
         body: formData
       }).then(obj => {
-        console.log('getTradeUnit', obj)
-        // resolve(res)
+        // console.log('getTradeUnit', obj)
+        resolve(obj)
       })
     })
   }
@@ -312,6 +348,13 @@ export const getTradeUnit = params => {
 export const updateExchange = data => {
   return {
     type: types.UPDATE_EXCHANGE,
+    data
+  }
+}
+
+export const updateTrideUnit = data => {
+  return {
+    type: types.UPDATE_TRADE_UNIT,
     data
   }
 }
