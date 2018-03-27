@@ -20,9 +20,14 @@ export const getPurchasing = params => {
       console.log('getPurchasing', obj)
       // console.log(formatFixToName(obj))
       obj = formatFixToName(obj)
-      console.log(obj)
+      // console.log(obj)
       obj = fromJS(obj)
-
+      obj = obj.update('NoMDEntries', i => {
+        i = i.sort((a, b) => {
+          return a.get('Currency') < b.get('Currency')
+        })
+        return i
+      })
       dispatch(updatePurchasing(obj))
     })
   }

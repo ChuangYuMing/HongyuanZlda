@@ -35,6 +35,7 @@ class Information extends PureComponent {
     })
   }
   showChangeVolPopUp = () => {
+    return
     console.log('-----')
     this.setState({
       showCancelPopUp: false,
@@ -43,6 +44,7 @@ class Information extends PureComponent {
     })
   }
   showChangePricePopUp = () => {
+    return
     console.log('-----')
     this.setState({
       showChangePricePopUp: true,
@@ -300,12 +302,15 @@ class Information extends PureComponent {
                   <span onClick={this.showCancelPopUp} className={cx('btn')}>
                     刪
                   </span>
-                  <span onClick={this.showChangeVolPopUp} className={cx('btn')}>
+                  <span
+                    onClick={this.showChangeVolPopUp}
+                    className={cx('btn', 'hide')}
+                  >
                     量
                   </span>
                   <span
                     onClick={this.showChangePricePopUp}
-                    className={cx('btn')}
+                    className={cx('btn', 'hide')}
                   >
                     價
                   </span>

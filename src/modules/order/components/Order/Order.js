@@ -48,6 +48,7 @@ class Order extends Component {
                 accountList={this.props.customerInfo}
                 changeTargetAccount={this.props.changeTargetAccount}
                 tradeUnit={this.props.tradeUnit.get('HK')}
+                customerInfo={this.props.customerInfo}
               />
             </TabPanel>
             <TabPanel>
@@ -59,6 +60,7 @@ class Order extends Component {
                 accountList={this.props.customerInfo}
                 changeTargetAccount={this.props.changeTargetAccount}
                 tradeUnit={this.props.tradeUnit.get('US')}
+                customerInfo={this.props.customerInfo}
               />
             </TabPanel>
           </Tabs>

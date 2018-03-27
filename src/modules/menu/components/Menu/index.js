@@ -6,14 +6,15 @@ import {
   changeTargetAccount,
   toggleChangePwdPopup
 } from 'modules/main/actions.js'
-import { logout } from '../../actions.js'
+import { logout, updateFilterSetting } from '../../actions.js'
 import { history } from '../../../../history.js'
 
 const mapStateToProps = state => {
   return {
     customerInfo: state.main.get('customerInfo'),
     targetAccount: state.main.get('targetAccount'),
-    member: state.main.get('customerInfo')
+    member: state.main.get('customerInfo'),
+    todaySymbols: state.menu.get('todaySymbols')
   }
 }
 
@@ -52,6 +53,9 @@ const mapDispatchToProps = dispatch => {
     },
     showChangePwd: () => {
       dispatch(toggleChangePwdPopup(true))
+    },
+    updateFilterSetting: (tag, value) => {
+      dispatch(updateFilterSetting(tag, value))
     }
   }
 }

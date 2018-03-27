@@ -57,6 +57,9 @@
       width: 100%;
     }
     .name {
+      line-height: 17px;
+      height: 21px;
+      vertical-align: bottom;
       display: inline-block;
       border: solid 1px #5e5c67;
       text-align: center;

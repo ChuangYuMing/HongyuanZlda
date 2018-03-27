@@ -494,6 +494,11 @@ class HkOrder extends PureComponent {
       currency
     } = this.state
     let orderPopTitle = ''
+    let { CName } = searchProperty(
+      this.props.customerInfo,
+      ['CName'],
+      ['Account', account]
+    )
     switch (country) {
       case 'US':
         orderPopTitle = '美股'
@@ -538,7 +543,7 @@ class HkOrder extends PureComponent {
               </div>
             </div>
             <div className={cx('item-wrap', 't1-1')}>
-              <span className={cx('name')}>黃碧香</span>
+              <span className={cx('name')}>{CName}</span>
             </div>
             <div className={cx('item-wrap', 't2')}>
               <span>股票：</span>

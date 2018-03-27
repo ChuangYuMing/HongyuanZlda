@@ -8,6 +8,7 @@ import login from 'modules/login'
 import main from 'modules/main'
 import inventory from 'modules/inventory'
 import member from 'modules/member'
+import menu from 'modules/menu'
 import { LOG_OUT } from 'modules/menu/action-types.js'
 
 const appReducer = combineReducers({
@@ -16,7 +17,8 @@ const appReducer = combineReducers({
   [login.constants.NAME]: login.reducer,
   [main.constants.NAME]: main.reducer,
   [member.constants.NAME]: member.reducer,
-  [inventory.constants.NAME]: inventory.reducer
+  [inventory.constants.NAME]: inventory.reducer,
+  [menu.constants.NAME]: menu.reducer
 })
 
 const rootReducer = (state, action) => {

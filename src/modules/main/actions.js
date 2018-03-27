@@ -10,6 +10,7 @@ import { fromJS } from 'immutable'
 import { forceUpdatePwd } from 'modules/login/actions.js'
 import { orderStateMachine } from 'modules/order/stateMachine.js'
 import { Decimal } from 'decimal.js'
+import { setTodaySymbol } from 'modules/menu/actions.js'
 
 export const updateMainPopUpMsg = (data, status) => {
   return {
@@ -111,6 +112,7 @@ export const getOrderStatus = params => {
         let res = formatReponse(obj)
         let groupData = {}
         let orderList = List([])
+        let symbols = []
         //get group data
         res.forEach((element, index) => {
           let ClOrdID = element['ClOrdID']
@@ -163,6 +165,7 @@ export const getOrderStatus = params => {
           return bdatetime - adatetime
         })
         orderList.forEach(item => {
+          symbols.push(item.get('Symbol'))
           let fsmFactory = orderStateMachine('none')
           let orderFsm = new fsmFactory()
           let clorderid = item.get('ClOrdID')
@@ -170,8 +173,9 @@ export const getOrderStatus = params => {
           appGlobal.addOrderStateMachine(clorderid, orderFsm)
           appGlobal.changeFsmState(clorderid, orderStatus)
         })
+        symbols = List([...new Set(symbols)])
         dispatch(updateOrderListHistory(orderList))
-
+        dispatch(setTodaySymbol(symbols))
         resolve(true)
       })
     })

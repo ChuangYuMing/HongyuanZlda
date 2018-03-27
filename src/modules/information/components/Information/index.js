@@ -3,7 +3,9 @@ import Information from './Information'
 
 const mapStateToProps = state => {
   return {
-    list: state.order.getIn(['orderList'])
+    list: state.order.getIn(['orderList']),
+    filterSetting: state.menu.get('filterSetting'),
+    exchange: state.main.get('exchange')
   }
 }
 
