@@ -7,9 +7,11 @@ import { Map } from 'immutable'
 import { callApi } from 'modules/common/api.js'
 import { updateMainPopUpMsg } from 'modules/main/actions.js'
 import { orderStateMachine } from './stateMachine.js'
+import { updateTodaySymbol } from 'modules/menu/actions.js'
 
 export const order = params => {
   return (dispatch, getState) => {
+    let orderSymbol = params.Symbol
     params.TokenID = getState().app.get('userToken')
     params = formatRequestData(params)
     console.log('order params', params)
@@ -41,6 +43,7 @@ export const order = params => {
       appGlobal.addOrderStateMachine(data.ClOrdID, orderFsm)
       data = fromJS(data)
       dispatch(newOrder(data))
+      dispatch(updateTodaySymbol(orderSymbol))
     })
   }
 }

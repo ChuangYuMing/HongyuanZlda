@@ -92,8 +92,12 @@ class HkOrder extends PureComponent {
     let account = this.state.account
     let newTargetAcc = nextProps.targetAccount.get('account') || ''
     if (account !== newTargetAcc) {
+      this.props.resetData()
       this.setState({
-        account: newTargetAcc
+        account: newTargetAcc,
+        symbol: '',
+        price: '',
+        volume: ''
       })
     }
   }

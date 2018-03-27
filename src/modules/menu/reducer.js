@@ -20,7 +20,7 @@ export default (state = init, action) => {
         .get('todaySymbols')
         .findIndex(item => item === action.data)
       if (index === -1) {
-        return state.udpate('todaySymbols', i => i.push(action.data))
+        return state.update('todaySymbols', i => i.push(action.data))
       } else {
         return state
       }

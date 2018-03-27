@@ -71,6 +71,7 @@ class Menu extends PureComponent {
         </option>
       )
     })
+    todaySymbols = todaySymbols.sort((a, b) => a > b)
     let symbolList = todaySymbols.map((item, index) => {
       return (
         <option key={index} value={item}>

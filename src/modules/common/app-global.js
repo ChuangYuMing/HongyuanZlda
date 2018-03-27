@@ -4,8 +4,8 @@ class AppGlobal {
       this._apiUrl = window.location.origin
     } else {
       // this._apiUrl = 'http://192.168.12.134:8080'
-      this._apiUrl = 'http://192.168.12.24:8008'
-      // this._apiUrl = 'http://192.168.12.153:8008'
+      // this._apiUrl = 'http://192.168.12.24:8008'
+      this._apiUrl = 'http://192.168.12.153:8008'
     }
     this._orderApiUrl = ''
     this._quoteApiUrl = ''
