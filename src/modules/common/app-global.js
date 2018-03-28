@@ -12,6 +12,8 @@ class AppGlobal {
     this._wsQuoteSessionId = ''
     this._userToken = ''
     this._prodList = {}
+    this._clordId = ''
+    this._clordIdCount = 0
     this.needingOrderPending = []
     this.orderStatusMachine = {}
   }
@@ -20,6 +22,12 @@ class AppGlobal {
   }
   set apiUrl(val) {
     this._apiUrl = val
+  }
+  get clordId() {
+    return this._clordId
+  }
+  set clordId(val) {
+    this._clordId = val
   }
   get orderApiUrl() {
     return this._orderApiUrl
@@ -45,6 +53,10 @@ class AppGlobal {
   set wsQuoteSessionId(val) {
     this._wsQuoteSessionId = val
   }
+  getClordID() {
+    this._clordIdCount = this._clordIdCount + 1
+    return `${this._clordId}${this._clordIdCount}`
+  }
   addOrderPending(clorderid, callback) {
     this.needingOrderPending.push({
       clorderid,
@@ -69,7 +81,8 @@ class AppGlobal {
       A: 'doSyncSuccess',
       C: 'doOrderOuttime',
       cancel: 'doCancel',
-      cancelFail: 'doCancelFail'
+      cancelFail: 'doCancelFail',
+      error: 'doError'
     }
 
     let action = actionMaping[status]
@@ -84,10 +97,11 @@ class AppGlobal {
       '4': 'do-cancel-success',
       '6': 'do-cancel-wait',
       '8': 'do-sync-fail',
-      A: 'doSync-success',
-      C: 'doOrder-outtime',
+      A: 'do-sync-success',
+      C: 'do-order-outtime',
       cancel: 'do-cancel',
-      cancelFail: 'do-cancel-fail'
+      cancelFail: 'do-cancel-fail',
+      error: 'do-error'
     }
     // let stateMaping = {
     //   '0': 'new-order',

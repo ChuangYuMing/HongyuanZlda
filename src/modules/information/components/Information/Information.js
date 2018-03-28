@@ -77,7 +77,7 @@ class Information extends PureComponent {
 
     let filterList = filterBySetting(list)
 
-    console.log('filterList@@', filterList.toJS())
+    // console.log('filterList@@', filterList.toJS())
 
     let NowSettingList = filterList.filter(x => {
       let filterStatus = []

@@ -11,12 +11,30 @@ import { updateTodaySymbol } from 'modules/menu/actions.js'
 
 export const order = params => {
   return (dispatch, getState) => {
-    let orderSymbol = params.Symbol
-    params.TokenID = getState().app.get('userToken')
-    params = formatRequestData(params)
-    console.log('order params', params)
-    let formData = formatFormData(params)
     let apiUrl = appGlobal.orderApiUrl
+    let orderSymbol = params.Symbol
+    let formData = ''
+    let clordId = appGlobal.getClordID()
+    let requestParams = ''
+    let fakeOrder = ''
+    params.TokenID = getState().app.get('userToken')
+    params.ClOrdID = clordId
+    fakeOrder = Object.assign({}, params, {
+      ExecType: 'A',
+      OrdStatus: 'A',
+      TransactTime: '--',
+      OrderID: '--'
+    })
+    console.log('fakeOrder', fakeOrder)
+    requestParams = formatRequestData(params)
+    console.log('order params', requestParams)
+    formData = formatFormData(requestParams)
+    let fsmFactory = orderStateMachine('init')
+    let orderFsm = new fsmFactory()
+    orderFsm.doSyncSuccess()
+    appGlobal.addOrderStateMachine(clordId, orderFsm)
+    dispatch(newOrder(fromJS(fakeOrder)))
+    dispatch(updateTodaySymbol(orderSymbol))
     callApi(
       '/api/order',
       {
@@ -27,9 +45,21 @@ export const order = params => {
     ).then(obj => {
       console.log('order response', obj)
       if (obj.hasOwnProperty('373')) {
+        let clordId = obj['11']
         let status = 'error'
         let errMsg = `發生錯誤, error code: ${obj['373']}`
         let popupMsg = `<span>${errMsg}</span>`
+        let orderFsm = appGlobal.getOrderFsm(clordId)
+        appGlobal.changeFsmState(clordId, 'error')
+        dispatch(
+          changeOrderStatus(
+            fromJS({
+              ClOrdID: clordId,
+              OrdStatus: '8'
+            }),
+            false
+          )
+        )
         dispatch(updateMainPopUpMsg(popupMsg, status))
         return
       }
@@ -37,13 +67,11 @@ export const order = params => {
         return
       }
       let data = formatReponse(obj)[0]
-      let fsmFactory = orderStateMachine('init')
-      let orderFsm = new fsmFactory()
-      orderFsm.doSyncSuccess()
-      appGlobal.addOrderStateMachine(data.ClOrdID, orderFsm)
-      data = fromJS(data)
-      dispatch(newOrder(data))
-      dispatch(updateTodaySymbol(orderSymbol))
+      let orderFsm = appGlobal.getOrderFsm(data.ClOrdID)
+      if (appGlobal.canTransistionOrderStatus(data.ClOrdID, data.OrdStatus)) {
+        data = fromJS(data)
+        dispatch(changeOrderStatus(data, false))
+      }
     })
   }
 }
@@ -82,11 +110,12 @@ export const getQuote = (symbols, options = {}) => {
       },
       apiUrl
     ).then(obj => {
+      console.log(obj)
       if (!obj.Prods) {
         return
       }
       let quote = obj.Prods[0].Quote
-      let symbol = quote['48']
+      let symbol = obj.Prods[0].Symbol
       let iob = Map(quoteFormatEven(symbol, quote))
       dispatch(show(iob))
       dispatch(registerTick(sessionId, symbols))

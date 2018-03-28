@@ -333,7 +333,7 @@ class Information extends PureComponent {
               </div>
             </Cell>
             <Cell key="2">{item.get('OrderID')}</Cell>
-            <Cell key="3">{TransactTime}</Cell>
+            <Cell key="3">{TransactTime === '' ? '--' : TransactTime}</Cell>
             <Cell key="4">{item.get('Symbol')}</Cell>
             <Cell className={sideCx} key="5">
               {item.get('Side')}

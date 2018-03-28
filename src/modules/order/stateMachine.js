@@ -5,7 +5,14 @@ let orderStateMachine = initState => {
     init: initState,
     transitions: [
       { name: 'do-sync-fail', from: 'init', to: 'sync-order-fail' },
+      { name: 'do-sync-fail', from: 'sync-order-fail', to: 'sync-order-fail' },
       { name: 'do-sync-success', from: 'init', to: 'sync-order-success' },
+      {
+        name: 'do-sync-success',
+        from: 'sync-order-success',
+        to: 'sync-order-success'
+      },
+      { name: 'do-error', from: 'sync-order-success', to: 'error' },
       { name: 'do-order-outtime', from: 'init', to: 'sync-order-outtime' },
       { name: 'do-async-new', from: 'sync-order-success', to: 'new-order' },
       { name: 'do-partial-deal', from: 'new-order', to: 'partial-deal' },

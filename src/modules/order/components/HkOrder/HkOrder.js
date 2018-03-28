@@ -123,7 +123,8 @@ class HkOrder extends PureComponent {
       Username: userId,
       TokenID: userToken,
       ExDestination,
-      DeliverToCompID
+      DeliverToCompID,
+      MsgSeqNum: 'test123'
     }
     this.setState({
       showPopUP: true,
@@ -155,11 +156,20 @@ class HkOrder extends PureComponent {
       ['TradeUnit', 'Currency'],
       ['Symbol', symbol]
     )
-    this.setState({
-      tradeUnit: TradeUnit,
-      currency: Currency,
-      volume: TradeUnit
-    })
+
+    if (TradeUnit && Currency) {
+      this.setState({
+        tradeUnit: TradeUnit,
+        currency: Currency,
+        volume: TradeUnit
+      })
+    } else {
+      this.setState({
+        tradeUnit: '',
+        currency: '',
+        volume: ''
+      })
+    }
   }
   targetSearchSymbol = e => {
     console.log('targetSearchSymbol')
@@ -362,8 +372,7 @@ class HkOrder extends PureComponent {
             showSymbolFilter: false,
             showAccountFilter: false,
             showPirceFilter: false,
-            targetInput: '',
-            price: ''
+            targetInput: ''
           })
           this.getQuote(symbol)
         } else {

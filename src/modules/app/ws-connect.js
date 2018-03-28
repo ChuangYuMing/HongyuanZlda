@@ -77,9 +77,13 @@ class WsConnect {
         }
       } else {
         res = JSON.parse(e.data)
+        // console.log(res)
         if (res.hasOwnProperty('heartbeat')) {
           this.sock.send('got it!!')
           console.log('heartbeat')
+        }
+        if (res.hasOwnProperty('BaseClOrdId')) {
+          appGlobal.clordId = res.BaseClOrdId
         }
       }
       if (res.hasOwnProperty('SessionID')) {
@@ -98,6 +102,8 @@ class WsConnect {
       let clordid = res.ClOrdID
       let status = res.OrdStatus
       let orderFsm = appGlobal.getOrderFsm(clordid)
+      // console.log(orderFsm.state)
+      // console.log(orderFsm.transitions())
       if (orderFsm.state === 'cancel-wait' && status === '8') {
         status = 'cancelFail'
       }
