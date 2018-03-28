@@ -47,7 +47,7 @@ export const order = params => {
       if (obj.hasOwnProperty('373')) {
         let clordId = obj['11']
         let status = 'error'
-        let errMsg = `發生錯誤, error code: ${obj['373']}`
+        let errMsg = `發生錯誤, ${obj['58']}, error code: ${obj['373']}`
         let popupMsg = `<span>${errMsg}</span>`
         let orderFsm = appGlobal.getOrderFsm(clordId)
         appGlobal.changeFsmState(clordId, 'error')
