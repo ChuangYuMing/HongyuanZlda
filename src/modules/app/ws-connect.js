@@ -26,17 +26,17 @@ class WsConnect {
     // this.sessionId = window.btoa(this.userToken + '$' + 'apex@tw')
   }
   connect() {
-    // console.log('re connect!!')
-    // if (this.reConnectCount > 3) {
-    //   let r = confirm(
-    //     `連線中斷!!!\n請檢查\n1. 網路連線正常\n2. 防毒軟體\n3. 防火牆設定\n4. chrome AdBlock設定\n檢查完畢後請按「確定`
-    //   )
-    //   if (r === true) {
-    //     this.reConnectCount = 0
-    //   } else {
-    //     return
-    //   }
-    // }
+    console.log('re connect!!')
+    if (this.reConnectCount > 3) {
+      let r = confirm(
+        `連線中斷!!!\n請檢查網路是否異常，檢查完畢後請按「確定」。`
+      )
+      if (r === true) {
+        this.reConnectCount = 0
+      } else {
+        return
+      }
+    }
     this.reConnectCount = this.reConnectCount + 1
     this.creatSessionId()
     this.sock = new SockJS(this.apiUrl + '/orderWS', null, {
@@ -58,7 +58,7 @@ class WsConnect {
       // let delayTime = 5000
       this.shouldReload = true
       setTimeout(() => {
-        // this.connect()
+        this.connect()
       }, delayTime)
     }
     this.sock.onerror = e => {
