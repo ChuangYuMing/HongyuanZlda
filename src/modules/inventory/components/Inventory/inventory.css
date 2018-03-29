@@ -52,3 +52,10 @@
 .cell-center {
   text-align: center;
 }
+
+.symbol-wrap {
+  display: inline-block;
+  .key {
+    color: yellow;
+  }
+}
