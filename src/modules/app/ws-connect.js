@@ -11,6 +11,7 @@ import {
   dealHistoryPub
 } from 'modules/app/publisher'
 import { formatReponse } from 'tools/format-res-data.js'
+import { orderStateMachine } from 'modules/order/stateMachine.js'
 
 class WsConnect {
   constructor(userToken) {
@@ -102,6 +103,11 @@ class WsConnect {
       let clordid = res.ClOrdID
       let status = res.OrdStatus
       let orderFsm = appGlobal.getOrderFsm(clordid)
+      if (!orderFsm) {
+        let fsmFactory = orderStateMachine('none')
+        orderFsm = new fsmFactory()
+        appGlobal.addOrderStateMachine(clordid, orderFsm)
+      }
       // console.log(orderFsm.state)
       // console.log(orderFsm.transitions())
       if (orderFsm.state === 'cancel-wait' && status === '8') {
