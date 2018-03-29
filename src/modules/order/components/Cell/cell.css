@@ -1,0 +1,18 @@
+@import 'helpers/_mixins.css';
+
+.wrap {
+  display: inline-block;
+  position: relative;
+  .value {
+    display: inline-block;
+  }
+  .anim {
+    width: 100%;
+    display: inline-block;
+    position: absolute;
+    border-bottom: solid 1px skyblue !important;
+    opacity: 0;
+    bottom: 0px;
+    left: 0px;
+  }
+}

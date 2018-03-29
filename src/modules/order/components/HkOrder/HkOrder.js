@@ -20,6 +20,7 @@ import {
   decimalPlaces
 } from 'tools/other.js'
 import { Decimal } from 'decimal.js'
+import Cell from '../Cell/Cell.js'
 
 let cx = classNames.bind(styles)
 let updtProdThrottle = throttle(
@@ -903,15 +904,21 @@ class HkOrder extends PureComponent {
         <div className={cx('info-wrap')}>
           <div className={cx('item-wrap', 'b1')}>
             <span>買進</span>
-            <span style={bPriceStyle}>{BPrice}</span>
+            <span style={bPriceStyle}>
+              <Cell value={BPrice} />
+            </span>
           </div>
           <div className={cx('item-wrap', 'b1')}>
             <span>賣出</span>
-            <span style={aPriceStyle}>{APrice}</span>
+            <span style={aPriceStyle}>
+              <Cell value={APrice} />
+            </span>
           </div>
           <div className={cx('item-wrap', 'b1')}>
             <span>成交</span>
-            <span style={pStyle}>{Price}</span>
+            <span style={pStyle}>
+              <Cell value={Price} />
+            </span>
           </div>
           <div className={cx('item-wrap', 'b1')}>
             <span>開盤價</span>
@@ -931,11 +938,15 @@ class HkOrder extends PureComponent {
           </div>
           <div className={cx('item-wrap', 'b1')}>
             <span>今高價</span>
-            <span style={highStyle}>{high}</span>
+            <span style={highStyle}>
+              <Cell value={high} />
+            </span>
           </div>
           <div className={cx('item-wrap', 'b1')}>
             <span>今低價</span>
-            <span style={lowStyle}>{low}</span>
+            <span style={lowStyle}>
+              <Cell value={low} />
+            </span>
           </div>
           <div className={cx('item-wrap', 'b1')}>
             <span>股代</span>

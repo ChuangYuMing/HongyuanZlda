@@ -68,6 +68,7 @@ class Inventory extends PureComponent {
       let firstHalf = filterInfo.get('firstHalf')
       let secondHalf = filterInfo.get('secondHalf')
       let key = filterInfo.get('key')
+      let symbol = item.get('Symbol')
       return (
         <Row className={cx('cell-right')} key={index + 1}>
           <Cell key="0">{item.get('Account')}</Cell>
@@ -78,7 +79,7 @@ class Inventory extends PureComponent {
               {secondHalf}
             </div>
           </Cell>
-          <Cell key="2">{''}</Cell>
+          <Cell key="2">{parseInt(symbol) ? '港股' : '美股'}</Cell>
           <Cell key="3">
             {parseFloat(item.getIn(['100', 'MDEntrySize'])) || 0}
           </Cell>
