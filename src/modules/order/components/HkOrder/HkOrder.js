@@ -40,19 +40,22 @@ class HkOrder extends PureComponent {
       symbol: '',
       volume: '',
       price: '',
-      tradeUnit: '',
+      stockUnit: '',
       currency: '',
       orderType: '2',
       date: 20180131,
       items: [],
       showPopUP: false,
+      showOrderParamsCheckPopUP1: false,
+      showOrderParamsCheckPopUP2: false,
       action: '',
       orderParams: {},
       showSymbolFilter: false,
       showAccountFilter: false,
       showPirceFilter: false,
       targetInput: '',
-      tradeUnitPrice: ''
+      tradeUnitPrice: '',
+      checkOrderParamsMsg: ''
     }
     props.resetData()
     this.endIndexSymbolFilter = 100
@@ -101,6 +104,65 @@ class HkOrder extends PureComponent {
       })
     }
   }
+  checkOrderParams = params => {
+    // console.log(this.checkPriceLimit(0.01))
+    // console.log(this.checkPriceLimit(0.02))
+    // console.log(this.checkPriceLimit(0.24))
+    // console.log(this.checkPriceLimit(0.25))
+    // console.log(this.checkPriceLimit(0.27))
+    // console.log(this.checkPriceLimit(0.45))
+    // console.log(this.checkPriceLimit(100))
+    // console.log(this.checkPriceLimit(199))
+    // console.log(this.checkPriceLimit(10000))
+    // console.log(this.checkPriceLimit(9990))
+    let msg = ''
+    let { Price, Account, Symbol: symbol, OrderQty } = params
+    let nowPrice = this.props.quote.get('Price')
+    let { customerInfo, country } = this.props
+    let { stockUnit } = this.state
+    let accIndex = customerInfo.findIndex(item => {
+      console.log(item.get('Account'))
+      return item.get('Account') === Account
+    })
+    if (accIndex === -1) {
+      msg = `無效的帳號！`
+      return { errorMsg: msg, popup: 2 }
+    }
+    if (OrderQty === '' || !parseFloat(OrderQty)) {
+      msg = `數量不正確！`
+      return { errorMsg: msg, popup: 2 }
+    }
+    if (!parseFloat(Price) || parseFloat(Price) <= 0) {
+      msg = `價格不正確！`
+      return { errorMsg: msg, popup: 2 }
+    }
+    let foundSymbol = this.props.prodList.find(item => {
+      return item.Symbol === symbol
+    })
+    if (!foundSymbol) {
+      msg = `股代[${symbol}]非可辨識股代或交易標的，仍要繼續？`
+      return { errorMsg: msg, popup: 1 }
+    }
+
+    if (parseFloat(OrderQty) / parseInt(stockUnit) < 1) {
+      msg = `下單數量非手的倍數，是否仍要送單？`
+      return { errorMsg: msg, popup: 1 }
+    }
+    if (country === 'HK' && parseFloat(nowPrice)) {
+      let { max, min } = this.checkPriceLimit(nowPrice)
+      if (parseFloat(Price) > max) {
+        msg = `價格高於上限，是否仍要送出？`
+        return { errorMsg: msg, popup: 1 }
+      }
+      if (parseFloat(Price) < min) {
+        msg = `價格低於下限，是否仍要送出？`
+        return { errorMsg: msg, popup: 1 }
+      }
+    }
+
+    return {}
+    console.log(Account, accIndex)
+  }
   handleOrderAction = e => {
     let action = e.target.dataset.action
     let { account, symbol, volume, price, orderType, date } = this.state
@@ -126,11 +188,21 @@ class HkOrder extends PureComponent {
       DeliverToCompID,
       MsgSeqNum: 'test123'
     }
-    this.setState({
-      showPopUP: true,
-      action,
-      orderParams: params
-    })
+    let checked = this.checkOrderParams(params)
+    if (checked.hasOwnProperty('errorMsg')) {
+      this.setState({
+        [`showOrderParamsCheckPopUP${checked.popup}`]: true,
+        checkOrderParamsMsg: checked.errorMsg,
+        action,
+        orderParams: params
+      })
+    } else {
+      this.setState({
+        showPopUP: true,
+        action,
+        orderParams: params
+      })
+    }
     // this.props.order(params)
   }
   order = () => {
@@ -140,7 +212,16 @@ class HkOrder extends PureComponent {
   }
   closePopUp = () => {
     this.setState({
-      showPopUP: false
+      showPopUP: false,
+      showOrderParamsCheckPopUP1: false,
+      showOrderParamsCheckPopUP2: false
+    })
+  }
+  showOrderPopUp = () => {
+    this.setState({
+      showPopUP: true,
+      showOrderParamsCheckPopUP1: false,
+      showOrderParamsCheckPopUP2: false
     })
   }
   getQuote = symbol => {
@@ -159,13 +240,13 @@ class HkOrder extends PureComponent {
 
     if (TradeUnit && Currency) {
       this.setState({
-        tradeUnit: TradeUnit,
+        stockUnit: TradeUnit,
         currency: Currency,
         volume: TradeUnit
       })
     } else {
       this.setState({
-        tradeUnit: '',
+        stockUnit: '',
         currency: '',
         volume: ''
       })
@@ -212,9 +293,58 @@ class HkOrder extends PureComponent {
     })
     this.props.changeTargetAccount(params)
   }
+  checkPriceLimit = nowPrice => {
+    console.log('nowPrice', nowPrice)
+    let { country } = this.props
+    const miniPrice = country === 'HK' ? 0.01 : 0
+    let tradeUnit = this.props.tradeUnit
+    nowPrice = Decimal(nowPrice)
+    let entryPx = tradeUnit.get('entryPx')
+    let topLimitEntPX = ''
+    let bottomLimitEntPX = ''
+    let bottomUnit = ''
+    let middleUnit = ''
+    let topUnit = ''
+    let max = Decimal(nowPrice)
+    let min = Decimal(nowPrice)
+    let count = 12
+    for (let i = 0; i < entryPx.size; i++) {
+      let pi = i - 1 < 0 ? 0 : i - 1
+      const item = entryPx.get(i)
+      const preItem = entryPx.get(pi)
+      if (nowPrice.lessThanOrEqualTo(item)) {
+        let preIndex = i - 1 < 0 ? 0 : i - 1
+        let nextIndex = i + 1 > entryPx.size - 1 ? 0 : i + 1
+        topLimitEntPX = item
+        bottomLimitEntPX = preItem
+        bottomUnit = tradeUnit.getIn(['price', preIndex])
+        middleUnit = tradeUnit.getIn(['price', i])
+        topUnit = tradeUnit.getIn(['price', nextIndex])
+        break
+      }
+    }
+    if (nowPrice.equals(topLimitEntPX)) {
+      max = nowPrice.plus(Decimal(topUnit).times(12)).toPrecision()
+      min = nowPrice.minus(Decimal(middleUnit).times(12)).toPrecision()
+      return { max, min }
+    }
+    let maxDiff = middleUnit
+    let minDiff = middleUnit
+    for (let i = 0; i < count; i++) {
+      max = max.plus(maxDiff)
+      min = min.minus(minDiff)
+      if (max.equals(topLimitEntPX)) {
+        maxDiff = topUnit
+      }
+      if (min.equals(bottomLimitEntPX)) {
+        minDiff = bottomUnit
+      }
+    }
+    min = min.lessThanOrEqualTo(miniPrice) ? miniPrice : min
+    return { max: max.toPrecision(), min: min.toPrecision() }
+  }
   getTradeUnitPrice = nowPrice => {
     let tradeUnit = this.props.tradeUnit
-    // console.log(tradeUnit)
     nowPrice = parseFloat(nowPrice)
     let entryPx = tradeUnit.get('entryPx')
     let targetTradeUnit
@@ -228,7 +358,6 @@ class HkOrder extends PureComponent {
         nextPrice = Decimal(nowPrice)
           .plus(parseFloat(targetTradeUnit))
           .toPrecision()
-        prePrice
         if (parseFloat(preItem) === nowPrice) {
           let preTargetUnit = tradeUnit.getIn(['price', i - 1])
           prePrice = Decimal(nowPrice)
@@ -247,26 +376,30 @@ class HkOrder extends PureComponent {
       prePrice,
       targetTradeUnit
     }
-    console.log(res)
+    // console.log(res)
     return res
   }
   priceStepUp = () => {
     let { nextPrice } = this.state.tradeUnitPrice
-    console.log(nextPrice)
-    let tradeUnitPrice = this.getTradeUnitPrice(nextPrice)
-    this.setState({
-      price: nextPrice,
-      tradeUnitPrice
-    })
+    // console.log(nextPrice)
+    if (nextPrice) {
+      let tradeUnitPrice = this.getTradeUnitPrice(nextPrice)
+      this.setState({
+        price: nextPrice,
+        tradeUnitPrice
+      })
+    }
   }
   priceStepDown = () => {
     let { prePrice } = this.state.tradeUnitPrice
-    if (parseFloat(prePrice) >= 0.01) {
-      let tradeUnitPrice = this.getTradeUnitPrice(prePrice)
-      this.setState({
-        price: parseFloat(prePrice) < 0.01 ? '0.01' : prePrice,
-        tradeUnitPrice
-      })
+    if (prePrice) {
+      if (parseFloat(prePrice) >= 0.01) {
+        let tradeUnitPrice = this.getTradeUnitPrice(prePrice)
+        this.setState({
+          price: parseFloat(prePrice) < 0.01 ? '0.01' : prePrice,
+          tradeUnitPrice
+        })
+      }
     }
   }
   componentWillUnmount() {
@@ -503,7 +636,7 @@ class HkOrder extends PureComponent {
       orderType,
       date,
       action,
-      tradeUnit,
+      stockUnit,
       currency
     } = this.state
     let orderPopTitle = ''
@@ -810,7 +943,7 @@ class HkOrder extends PureComponent {
           </div>
           <div className={cx('item-wrap', 'b1')}>
             <span>手單位</span>
-            <span>{tradeUnit}</span>
+            <span>{stockUnit}</span>
           </div>
           <div className={cx('item-wrap', 'b1')}>
             <span>交易幣別</span>
@@ -869,6 +1002,49 @@ class HkOrder extends PureComponent {
                 </span>
                 <span onClick={this.closePopUp} className={cx('btn')}>
                   取消
+                </span>
+              </div>
+            </div>
+          </div>
+        </PopUp>
+        <PopUp
+          show={this.state.showOrderParamsCheckPopUP1}
+          width="300px"
+          height="100px"
+          zIndex="12"
+          data={this.state.orderParams}
+        >
+          <div className={cx('check-params-popup')}>
+            <div className={cx('main')}>
+              <div className={cx('msg')}>{this.state.checkOrderParamsMsg}</div>
+            </div>
+            <div className={cx('bottom')}>
+              <div className={cx('button-wrap')}>
+                <span onClick={this.showOrderPopUp} className={cx('btn')}>
+                  是
+                </span>
+                <span onClick={this.closePopUp} className={cx('btn')}>
+                  否
+                </span>
+              </div>
+            </div>
+          </div>
+        </PopUp>
+        <PopUp
+          show={this.state.showOrderParamsCheckPopUP2}
+          width="300px"
+          height="100px"
+          zIndex="12"
+          data={this.state.orderParams}
+        >
+          <div className={cx('check-params-popup')}>
+            <div className={cx('main')}>
+              <div className={cx('msg')}>{this.state.checkOrderParamsMsg}</div>
+            </div>
+            <div className={cx('bottom')}>
+              <div className={cx('button-wrap')}>
+                <span onClick={this.closePopUp} className={cx('btn')}>
+                  確定
                 </span>
               </div>
             </div>
