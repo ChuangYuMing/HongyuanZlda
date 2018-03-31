@@ -153,6 +153,7 @@ class Member extends PureComponent {
         currency[cur] = Object.assign({}, currency[cur], obj)
       })
     }
+
     for (const key in currency) {
       const e = currency[key]
       let total = Decimal(0)

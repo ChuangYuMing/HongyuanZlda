@@ -56,7 +56,8 @@ class HkOrder extends PureComponent {
       showPirceFilter: false,
       targetInput: '',
       tradeUnitPrice: '',
-      checkOrderParamsMsg: ''
+      checkOrderParamsMsg: '',
+      isProfessional: ''
     }
     props.resetData()
     this.endIndexSymbolFilter = 100
@@ -65,7 +66,6 @@ class HkOrder extends PureComponent {
     this.accountFilterList = []
   }
   handleInputChange = e => {
-    console.log('handleInputChange')
     const target = e.target
     let value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
@@ -120,13 +120,27 @@ class HkOrder extends PureComponent {
     let { Price, Account, Symbol: symbol, OrderQty } = params
     let nowPrice = this.props.quote.get('Price')
     let { customerInfo, country } = this.props
-    let { stockUnit } = this.state
-    let accIndex = customerInfo.findIndex(item => {
-      console.log(item.get('Account'))
-      return item.get('Account') === Account
-    })
-    if (accIndex === -1) {
+    let { stockUnit, isProfessional } = this.state
+    let { Account: acc, Professional: accountIdentify } = searchProperty(
+      customerInfo,
+      ['Account', 'Professional'],
+      ['Account', Account]
+    )
+
+    // let accIndex = customerInfo.findIndex(item => {
+    //   return item.get('Account') === Account
+    // })
+    if (!acc) {
       msg = `無效的帳號！`
+      return { errorMsg: msg, popup: 2 }
+    }
+
+    if (
+      isProfessional &&
+      accountIdentify !== '1' &&
+      isProfessional !== accountIdentify
+    ) {
+      msg = `此商品須為專業投資人才可下單！`
       return { errorMsg: msg, popup: 2 }
     }
     if (OrderQty === '' || !parseFloat(OrderQty)) {
@@ -162,7 +176,7 @@ class HkOrder extends PureComponent {
     }
 
     return {}
-    console.log(Account, accIndex)
+    // console.log(Account, accIndex)
   }
   handleOrderAction = e => {
     let action = e.target.dataset.action
@@ -226,7 +240,7 @@ class HkOrder extends PureComponent {
     })
   }
   getQuote = symbol => {
-    console.log('getquote')
+    // console.log('getquote')
     let country = this.props.country
     let targetSymbol = [`${symbol}.${country}`]
     let prodList = this.props.prodList
@@ -254,7 +268,7 @@ class HkOrder extends PureComponent {
     }
   }
   targetSearchSymbol = e => {
-    console.log('targetSearchSymbol')
+    // console.log('targetSearchSymbol')
     e.stopPropagation()
     let quote = this.props.quote
     let country = this.props.country
@@ -263,25 +277,57 @@ class HkOrder extends PureComponent {
       ? nowQuoteSymbol.split(`.${country}`)[0]
       : ''
     let target = e.currentTarget
-    let symbol = target.dataset.symbol
+    let { symbol, isProfessional } = target.dataset
 
     if (nowQuoteSymbol !== symbol && symbol !== '') {
-      console.log(nowQuoteSymbol, symbol)
+      // console.log(nowQuoteSymbol, symbol)
       this.setState({
         price: '',
         showSymbolFilter: false,
-        symbol
+        symbol,
+        isProfessional
       })
       this.getQuote(symbol)
     } else {
       this.setState({
         showSymbolFilter: false,
-        symbol
+        symbol,
+        isProfessional
+      })
+    }
+    this.volumeInput.focus()
+  }
+  targetSearchSymbolByEnterKey = (symbol, isProfessional) => {
+    console.log('targetSearchSymbolByEnterKey', symbol)
+    let { targetInput, showSymbolFilter } = this.state
+    if (!showSymbolFilter || targetInput !== 'symbol') {
+      return
+    }
+    let quote = this.props.quote
+    let country = this.props.country
+    let nowQuoteSymbol = quote.get('Symbol')
+    nowQuoteSymbol = nowQuoteSymbol
+      ? nowQuoteSymbol.split(`.${country}`)[0]
+      : ''
+    if (nowQuoteSymbol !== symbol && symbol !== '') {
+      // console.log(nowQuoteSymbol, symbol)
+      this.setState({
+        price: '',
+        showSymbolFilter: false,
+        symbol,
+        isProfessional
+      })
+      this.getQuote(symbol)
+    } else {
+      this.setState({
+        showSymbolFilter: false,
+        symbol,
+        isProfessional
       })
     }
   }
   targetSearchAcc = e => {
-    console.log('targetSearchAcc')
+    // console.log('targetSearchAcc')
     e.stopPropagation()
     let target = e.currentTarget
     let { account, branch } = target.dataset
@@ -295,7 +341,7 @@ class HkOrder extends PureComponent {
     this.props.changeTargetAccount(params)
   }
   checkPriceLimit = nowPrice => {
-    console.log('nowPrice', nowPrice)
+    // console.log('nowPrice', nowPrice)
     let { country } = this.props
     const miniPrice = country === 'HK' ? 0.01 : 0
     let tradeUnit = this.props.tradeUnit
@@ -404,9 +450,8 @@ class HkOrder extends PureComponent {
     }
   }
   componentWillUnmount() {
-    console.log('componentWillUnmount')
-    console.log(this.a)
     this.OrderWrapSub.unsubscribe()
+    this.enterKeyDown.unsubscribe()
   }
   componentDidMount() {
     let symbolSearch = this.inputSymbol
@@ -415,12 +460,14 @@ class HkOrder extends PureComponent {
     let suggestList = this.suggestList
     let suggestWrap = this.orderStockFilter
     let accSuggestWrap = this.accountFilter
+    let volumeInput = this.volumeInput
     let priceWrape = document.querySelector(`.${styles['price-wrap']}`)
     let orderWrap = document.getElementById('orderWrap')
     let keyword = Observable.fromEvent(symbolSearch, 'input')
     let accKeyword = Observable.fromEvent(accSearch, 'input')
     let priceKeyword = Observable.fromEvent(priceSearch, 'input')
     let priceInputFocus = Observable.fromEvent(priceSearch, 'focus')
+    let volumeInputFocus = Observable.fromEvent(volumeInput, 'focus')
     let focus = Observable.fromEvent(symbolSearch, 'focus')
     let accInputFocus = Observable.fromEvent(accSearch, 'focus')
     let wheelSuggest = Observable.fromEvent(suggestWrap, 'wheel')
@@ -429,18 +476,110 @@ class HkOrder extends PureComponent {
     let accScrollSuggest = Observable.fromEvent(accSuggestWrap, 'scroll')
     let clickOrderWrap = Observable.fromEvent(orderWrap, 'click')
     let clickPriceWrap = Observable.fromEvent(priceWrape, 'click')
+    let keyDowns = Observable.fromEvent(document, 'keydown')
+    let keyUps = Observable.fromEvent(document, 'keyup')
+    let keyActions = Observable.merge(keyDowns, keyUps)
     let scrollMerge = Observable.merge(wheelSuggest, scrollSuggest)
     let accScrollMerge = Observable.merge(accWheelSuggest, accScrollSuggest)
     let targetValue = ''
+    let focusAccKeyMaping = []
+
+    let accFoucsbyKey = keyActions.subscribe(e => {
+      let key = e.keyCode
+      if (e.type === 'keydown') {
+        if (key === 17 || key === 65) {
+          focusAccKeyMaping.push(key)
+        }
+        if (focusAccKeyMaping[0] === 17 && focusAccKeyMaping[1] === 65) {
+          accSearch.focus()
+        }
+      } else if (e.type === 'keyup') {
+        focusAccKeyMaping.length = 0
+      }
+    })
+    let orderBuyByKey = keyDowns.filter(e => e.keyCode === 112).subscribe(e => {
+      let buyBtn = document.querySelector(
+        `.${styles['action']} .${styles['buy']}`
+      )
+      buyBtn.click()
+    })
+    let orderSellByKey = keyDowns
+      .filter(e => e.keyCode === 113)
+      .subscribe(e => {
+        let sellbBtn = document.querySelector(
+          `.${styles['action']} .${styles['sell']}`
+        )
+        sellbBtn.click()
+      })
+    let escKeyDown = keyDowns.filter(e => e.keyCode === 27).subscribe(e => {
+      if (this.state.showPopUP) {
+        let esc = document.querySelector(`.${styles['order-popup']} .esc`)
+        esc.click()
+      }
+    })
+    this.enterKeyDown = keyDowns
+      .debounceTime(200)
+      .filter(e => e.keyCode === 13)
+      .subscribe(e => {
+        let { targetInput, showPopUP } = this.state
+        if (showPopUP) {
+          let buy = document.querySelector(`.${styles['order-popup']} .enter`)
+          buy.click()
+          return
+        }
+        // console.log('targetInput', targetInput)
+        if (targetInput === 'account') {
+          let account = this.state.account
+          let { Branch } = searchProperty(
+            this.props.customerInfo,
+            ['Branch'],
+            ['Account', account]
+          )
+          let params = Map({
+            account,
+            branch: Branch
+          })
+          this.props.changeTargetAccount(params)
+          symbolSearch.focus()
+          return
+        }
+        if (targetInput === 'symbol') {
+          let { symbol } = this.state
+          let { quote, country } = this.props
+          let nowQuoteSymbol = quote.get('Symbol')
+          nowQuoteSymbol = nowQuoteSymbol
+            ? nowQuoteSymbol.split(`.${country}`)[0]
+            : ''
+          volumeInput.focus()
+          if (nowQuoteSymbol !== symbol && symbol !== '') {
+            this.getQuote(symbol)
+          }
+          return
+        }
+        if (targetInput === 'volume') {
+          priceSearch.focus()
+          return
+        }
+        if (targetInput === 'price') {
+          this.setState({
+            showPirceFilter: false
+          })
+          return
+        }
+        // console.log(e.keyCode)
+      })
 
     clickPriceWrap.map(e => e.target.dataset.price).subscribe(price => {
-      console.log(price)
-      let tradeUnitPrice = this.getTradeUnitPrice(price)
-      this.setState({
-        showPirceFilter: false,
-        price,
-        tradeUnitPrice
-      })
+      // console.log(price)
+      let pattern = /(\d+)(\.)?\d*$/
+      if (price && (price.match(pattern) || price === '')) {
+        let tradeUnitPrice = this.getTradeUnitPrice(price)
+        this.setState({
+          showPirceFilter: false,
+          price,
+          tradeUnitPrice
+        })
+      }
     })
     priceInputFocus.map(e => e).subscribe(e => {
       this.setState({
@@ -448,6 +587,15 @@ class HkOrder extends PureComponent {
         showAccountFilter: false,
         showPirceFilter: true,
         targetInput: 'price'
+      })
+    })
+    volumeInputFocus.map(e => e).subscribe(e => {
+      // console.log('volumeInputFocus')
+      this.setState({
+        showSymbolFilter: false,
+        showAccountFilter: false,
+        showPirceFilter: false,
+        targetInput: 'volume'
       })
     })
     focus.map(e => e).subscribe(e => {
@@ -466,6 +614,7 @@ class HkOrder extends PureComponent {
       this.orderStockFilter.scrollTop = 0
     })
     accInputFocus.map(e => e).subscribe(e => {
+      // console.log('accInputFocus@@')
       this.setState({
         showSymbolFilter: false,
         showAccountFilter: true,
@@ -492,7 +641,7 @@ class HkOrder extends PureComponent {
       })
       .map(e => e)
       .subscribe(e => {
-        // console.log(e.target)
+        // console.log('OrderWrapSub')
         let country = this.props.country
         let quote = this.props.quote
         let nowQuoteSymbol = quote.get('Symbol')
@@ -505,16 +654,14 @@ class HkOrder extends PureComponent {
           this.setState({
             showSymbolFilter: false,
             showAccountFilter: false,
-            showPirceFilter: false,
-            targetInput: ''
+            showPirceFilter: false
           })
           this.getQuote(symbol)
         } else {
           this.setState({
             showSymbolFilter: false,
             showAccountFilter: false,
-            showPirceFilter: false,
-            targetInput: ''
+            showPirceFilter: false
           })
         }
       })
@@ -534,6 +681,11 @@ class HkOrder extends PureComponent {
         this.endIndexSymbolFilter = 100
         this.filterSearch.updateData(list, this.endIndexSymbolFilter)
         this.orderStockFilter.scrollTop = 0
+        if (!this.state.showSymbolFilter) {
+          this.setState({
+            showSymbolFilter: true
+          })
+        }
       })
     accKeyword
       .debounceTime(100)
@@ -552,17 +704,7 @@ class HkOrder extends PureComponent {
         this.filterAccSearch.updateData(list, this.endIndexAccountFilter)
         this.accountFilter.scrollTop = 0
       })
-    // priceKeyword
-    //   .debounceTime(100)
-    //   .map(e => {
-    //     return e.target.value
-    //   })
-    //   .subscribe(value => {
-    //     let tradeUnitPrice = this.getTradeUnitPrice(value)
-    //     this.setState({
-    //       tradeUnitPrice
-    //     })
-    //   })
+
     scrollMerge
       .auditTime(1000)
       .map(e => e)
@@ -573,7 +715,8 @@ class HkOrder extends PureComponent {
           this.endIndexSymbolFilter = this.endIndexSymbolFilter + 200
           this.filterSearch.updateData(
             this.symbolFilterList,
-            this.endIndexSymbolFilter
+            this.endIndexSymbolFilter,
+            'lazyLoad'
           )
         }
       })
@@ -660,7 +803,7 @@ class HkOrder extends PureComponent {
         <div className={cx('action-wrap')}>
           <div className={cx('input-wrap')}>
             <div className={cx('item-wrap', 't1')}>
-              <span>帳號1：</span>
+              <span>帳號：</span>
               <div className={cx('acc-input-wrap')}>
                 <input
                   type="text"
@@ -716,6 +859,7 @@ class HkOrder extends PureComponent {
                 >
                   <FilterSearch
                     onClick={this.targetSearchSymbol}
+                    onEnter={this.targetSearchSymbolByEnterKey}
                     listRef={list => (this.suggestList = list)}
                     ref={e => (this.filterSearch = e)}
                   />
@@ -731,7 +875,7 @@ class HkOrder extends PureComponent {
                 value={this.state.volume}
                 autoComplete="off"
                 onChange={this.handleInputChange}
-                ref="volume"
+                ref={i => (this.volumeInput = i)}
               />
             </div>
 
@@ -894,10 +1038,10 @@ class HkOrder extends PureComponent {
 
           <div className={cx('action')} onClick={this.handleOrderAction}>
             <span data-action="1" className={cx('btn', 'buy')}>
-              買
+              買[F1]
             </span>
             <span data-action="2" className={cx('btn', 'sell')}>
-              賣
+              賣[F2]
             </span>
           </div>
         </div>
@@ -1008,11 +1152,11 @@ class HkOrder extends PureComponent {
             </div>
             <div className={cx('bottom')}>
               <div className={cx('button-wrap')}>
-                <span onClick={this.order} className={cx('btn')}>
-                  委託單送出
+                <span onClick={this.order} className={cx('btn', 'enter')}>
+                  委託單送出[Enter]
                 </span>
-                <span onClick={this.closePopUp} className={cx('btn')}>
-                  取消
+                <span onClick={this.closePopUp} className={cx('btn', 'esc')}>
+                  取消[Esc]
                 </span>
               </div>
             </div>

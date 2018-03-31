@@ -12,7 +12,7 @@ class AccountFilterSearch extends PureComponent {
     }
   }
   updateData = (list, endIndex) => {
-    console.log(list, endIndex)
+    // console.log(list, endIndex)
     this.setState({
       list: list.slice(0, endIndex)
     })

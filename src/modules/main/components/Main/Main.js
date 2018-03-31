@@ -43,18 +43,23 @@ class Main extends Component {
     //   TokenID: this.props.userToken
     // })
     // let promise5 = this.props.getProd2({ TokenID: userToken })
-    Promise.all([promise2, promise3, promise4]).then(res => {
-      console.log('res', res)
-      let getDataDone
-      res.forEach(element => {
-        getDataDone = getDataDone !== false ? element : false
-      })
-      if (getDataDone) {
-        this.setState({
-          hasLoadData: true
+    Promise.all([promise2, promise3, promise4]).then(
+      res => {
+        let getDataDone
+        res.forEach(element => {
+          getDataDone = getDataDone !== false ? element : false
         })
+        if (getDataDone) {
+          this.setState({
+            hasLoadData: true
+          })
+        }
+      },
+      e => {
+        console.log('系統異常！', e)
+        alert(`系統異常！ ${e['58'] ? e['58'] : ''}`)
       }
-    })
+    )
 
     this.WsConnect = new WsConnect(this.props.userToken)
     this.WsQuoteConnect = new WsQuoteConnect()
@@ -63,8 +68,6 @@ class Main extends Component {
     SocketHandler.on()
   }
   componentWillUnmount() {
-    this.WsConnect.close()
-    this.WsQuoteConnect.close()
     SocketHandler.off()
   }
   closeMainPopup = e => {

@@ -10,3 +10,7 @@
 .key {
   color: yellow;
 }
+
+.focus {
+  border: solid 1px yellow;
+}

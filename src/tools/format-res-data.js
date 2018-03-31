@@ -46,6 +46,7 @@ function fixDataMaping() {
     '50': 'SenderSubID',
     '52': 'SendingTime',
     '54': 'Side',
+    '55': 'isincode',
     '56': 'TargetCompID',
     '57': 'TargetSubID',
     '58': 'Text',

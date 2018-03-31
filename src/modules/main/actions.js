@@ -75,6 +75,9 @@ export const getCustomerInfo = params => {
         method: 'GET'
       }).then(obj => {
         console.log('CustomerInfo', obj)
+        if (obj.hasOwnProperty('373')) {
+          reject(obj)
+        }
         if (!obj['30058']) {
           resolve(true)
           return
@@ -105,6 +108,9 @@ export const getOrderStatus = params => {
         method: 'GET'
       }).then(obj => {
         console.log('OrderStatus', obj)
+        if (obj.hasOwnProperty('373')) {
+          reject(obj)
+        }
         if (!obj['30058']) {
           resolve(true)
           return
@@ -190,6 +196,7 @@ export const updateCustomerInfo = data => {
 }
 
 export const changeTargetAccount = data => {
+  console.log('changeTargetAccount')
   data = Map(data)
   return {
     type: types.TARGET_ACCOUNT,
@@ -240,6 +247,9 @@ export const getExchange = params => {
       }).then(obj => {
         let finalRes = {}
         console.log('getExchange', obj)
+        if (obj.hasOwnProperty('373')) {
+          reject(obj)
+        }
         let res = formatReponse(obj)
         console.log(res)
         res.forEach(item => {
@@ -325,7 +335,7 @@ export const getProds2 = params => {
         method: 'POST',
         body: formData
       }).then(obj => {
-        // console.log('getProds2', obj)
+        console.log('getProds2', obj)
         let res = formatReponse(obj)
         resolve(res)
       })

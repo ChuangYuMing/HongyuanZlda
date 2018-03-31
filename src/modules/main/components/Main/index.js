@@ -47,24 +47,33 @@ const mapDispatchToProps = dispatch => {
       })
     },
     getCustomerInfo: params => {
-      return new Promise(resolve => {
-        dispatch(getCustomerInfo(params)).then(res => {
-          resolve(true)
-        })
+      return new Promise((resolve, reject) => {
+        dispatch(getCustomerInfo(params)).then(
+          res => {
+            resolve(true)
+          },
+          e => reject(e)
+        )
       })
     },
     getOrderStatus: params => {
-      return new Promise(resolve => {
-        dispatch(getOrderStatus(params)).then(res => {
-          resolve(true)
-        })
+      return new Promise((resolve, reject) => {
+        dispatch(getOrderStatus(params)).then(
+          res => {
+            resolve(true)
+          },
+          e => reject(e)
+        )
       })
     },
     getExchange: params => {
-      return new Promise(resolve => {
-        dispatch(getExchange(params)).then(res => {
-          resolve(true)
-        })
+      return new Promise((resolve, reject) => {
+        dispatch(getExchange(params)).then(
+          res => {
+            resolve(true)
+          },
+          e => reject(e)
+        )
       })
     },
     getProd2: params => {

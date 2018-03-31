@@ -9,6 +9,7 @@ import { getDateFromFormat } from 'tools/date.js'
 import PopUp from 'modules/shared/components/PopUp/PopUp.js'
 import InformationRow from '../InformationRow/InformationRow.js'
 import { Decimal } from 'decimal.js'
+import { Observable } from 'rxjs'
 
 let cx = classNames.bind(styles)
 let validOrderCx = classNames.bind(validOrderStyles)
@@ -143,6 +144,47 @@ class Information extends PureComponent {
     }
     this.props.inflatDealHistory(clorderid, flag)
   }
+  componentDidMount() {
+    let keyDowns = Observable.fromEvent(document, 'keydown')
+    let enterBykey = keyDowns.filter(e => e.keyCode === 13).subscribe(e => {
+      let {
+        showCancelPopUp,
+        showChangePricePopUp,
+        showChangeVolPopUp
+      } = this.state
+      let targetPop
+      if (showCancelPopUp) {
+        targetPop = 'cancelPop'
+      } else if (showChangePricePopUp) {
+        targetPop = 'changePricePop'
+      } else if (showChangeVolPopUp) {
+        targetPop = 'changeVolPop'
+      }
+      if (targetPop) {
+        let enter = document.querySelector(`.${targetPop} .popupEnter`)
+        enter.click()
+      }
+    })
+    let escKeyDown = keyDowns.filter(e => e.keyCode === 27).subscribe(e => {
+      let {
+        showCancelPopUp,
+        showChangePricePopUp,
+        showChangeVolPopUp
+      } = this.state
+      let targetPop
+      if (showCancelPopUp) {
+        targetPop = 'cancelPop'
+      } else if (showChangePricePopUp) {
+        targetPop = 'changePricePop'
+      } else if (showChangeVolPopUp) {
+        targetPop = 'changeVolPop'
+      }
+      if (targetPop) {
+        let esc = document.querySelector(`.${targetPop} .popupEsc`)
+        esc.click()
+      }
+    })
+  }
   render() {
     let list = this.props.data
     let targetRow = this.state.targetRow
@@ -224,7 +266,13 @@ class Information extends PureComponent {
       if (i == 0) {
         cellData = (
           <div className={cx('header1')}>
-            <input type="checkbox" name="checkDelete" checked readOnly />
+            <input
+              className={cx('hide')}
+              type="checkbox"
+              name="checkDelete"
+              checked
+              readOnly
+            />
             <span className={cx('bt1')}>刪</span>
             <span className={cx('bt2')}>改</span>
             <span className={cx('bt3')}>價</span>
@@ -290,7 +338,7 @@ class Information extends PureComponent {
                     className={
                       item.get('OrdStatus') !== '0'
                         ? cx('checkDelete', 'hide')
-                        : cx('checkDelete')
+                        : cx('checkDelete', 'hide')
                     }
                     type="checkbox"
                     name={item.get('ClOrdID')}
@@ -371,7 +419,7 @@ class Information extends PureComponent {
           height="350px"
           zIndex="11"
         >
-          <div className={validOrderCx('popup')}>
+          <div className={validOrderCx('popup', 'cancelPop')}>
             <div className={validOrderCx('title')}>
               <span>刪單</span>
             </div>
@@ -424,8 +472,18 @@ class Information extends PureComponent {
                 </div>
               </div>
               <div className={validOrderCx('btn-wrap')}>
-                <span onClick={this.cancelOrder}>委託單送出</span>
-                <span onClick={this.closePopUp}>取消</span>
+                <span
+                  className={validOrderCx('popupEnter')}
+                  onClick={this.cancelOrder}
+                >
+                  委託單送出[Enter]
+                </span>
+                <span
+                  className={validOrderCx('popupEsc')}
+                  onClick={this.closePopUp}
+                >
+                  取消[esc]
+                </span>
               </div>
             </div>
           </div>
@@ -515,7 +573,7 @@ class Information extends PureComponent {
           height="350px"
           zIndex="11"
         >
-          <div className={validOrderCx('popup')}>
+          <div className={validOrderCx('popup', 'changePricePop')}>
             <div className={validOrderCx('title')}>
               <span>改價</span>
             </div>

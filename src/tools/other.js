@@ -142,8 +142,8 @@ const keyWordOtherFilter = (list, key, targetProperty = '') => {
       }
     }
   }
-  console.log(topShowFilter.toJS())
-  console.log(arr.toJS())
+  // console.log(topShowFilter.toJS())
+  // console.log(arr.toJS())
   return topShowFilter.concat(arr)
 }
 
