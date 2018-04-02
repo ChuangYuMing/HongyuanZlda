@@ -4,9 +4,14 @@ let orderStateMachine = initState => {
   return StateMachine.factory({
     init: initState,
     transitions: [
-      { name: 'do-sync-fail', from: 'init', to: 'sync-order-fail' },
-      { name: 'do-sync-fail', from: 'sync-order-fail', to: 'sync-order-fail' },
+      { name: 'do-order-reject', from: 'init', to: 'order-reject' },
+      { name: 'do-order-reject', from: 'order-reject', to: 'order-reject' },
       { name: 'do-sync-success', from: 'init', to: 'sync-order-success' },
+      {
+        name: 'do-order-reject',
+        from: 'sync-order-success',
+        to: 'order-reject'
+      },
       {
         name: 'do-sync-success',
         from: 'sync-order-success',
@@ -35,7 +40,7 @@ let orderStateMachine = initState => {
       { name: 'do-all-deal', from: 'cancel-fail', to: 'all-deal' },
       { name: 'do-all-deal', from: 'partial-deal', to: 'all-deal' },
       { name: 'do-all-deal', from: 'sync-order-success', to: 'all-deal' },
-      { name: 'do-sync-fail', from: 'none', to: 'sync-order-fail' },
+      { name: 'do-order-reject', from: 'none', to: 'order-reject' },
       { name: 'do-sync-success', from: 'none', to: 'sync-order-success' },
       { name: 'do-order-outtime', from: 'none', to: 'sync-order-outtime' },
       { name: 'do-async-new', from: 'none', to: 'new-order' },
