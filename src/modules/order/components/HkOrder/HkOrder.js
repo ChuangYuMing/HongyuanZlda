@@ -96,12 +96,12 @@ class HkOrder extends PureComponent {
     let account = this.state.account
     let newTargetAcc = nextProps.targetAccount.get('account') || ''
     if (account !== newTargetAcc) {
-      this.props.resetData()
+      // this.props.resetData()
       this.setState({
-        account: newTargetAcc,
-        symbol: '',
-        price: '',
-        volume: ''
+        account: newTargetAcc
+        // symbol: '',
+        // price: '',
+        // volume: ''
       })
     }
   }
@@ -297,6 +297,16 @@ class HkOrder extends PureComponent {
     }
     this.volumeInput.focus()
   }
+  targetSearchAccByEnterKey = (account, branch) => {
+    this.setState({
+      showAccountFilter: false
+    })
+    let params = Map({
+      account,
+      branch
+    })
+    this.props.changeTargetAccount(params)
+  }
   targetSearchSymbolByEnterKey = (symbol, isProfessional) => {
     console.log('targetSearchSymbolByEnterKey', symbol)
     let { targetInput, showSymbolFilter } = this.state
@@ -339,6 +349,7 @@ class HkOrder extends PureComponent {
       branch
     })
     this.props.changeTargetAccount(params)
+    this.inputSymbol.focus()
   }
   checkPriceLimit = nowPrice => {
     // console.log('nowPrice', nowPrice)
@@ -457,10 +468,12 @@ class HkOrder extends PureComponent {
     let symbolSearch = this.inputSymbol
     let accSearch = this.inputAcc
     let priceSearch = this.inputPrice
+    let volumeInput = this.volumeInput
+    let inputList = [accSearch, symbolSearch, volumeInput, priceSearch]
+    let foucsInputPostion = -1
     let suggestList = this.suggestList
     let suggestWrap = this.orderStockFilter
     let accSuggestWrap = this.accountFilter
-    let volumeInput = this.volumeInput
     let priceWrape = document.querySelector(`.${styles['price-wrap']}`)
     let orderWrap = document.getElementById('orderWrap')
     let keyword = Observable.fromEvent(symbolSearch, 'input')
@@ -515,6 +528,35 @@ class HkOrder extends PureComponent {
       if (this.state.showPopUP) {
         let esc = document.querySelector(`.${styles['order-popup']} .esc`)
         esc.click()
+      } else {
+        foucsInputPostion =
+          foucsInputPostion === 0 ? inputList.length - 1 : foucsInputPostion - 1
+        if (inputList[foucsInputPostion]) {
+          inputList[foucsInputPostion].focus()
+          setTimeout(() => {
+            inputList[foucsInputPostion].select()
+          }, 0)
+        }
+      }
+    })
+    this.preKeyDown = keyDowns.filter(e => e.keyCode === 37).subscribe(e => {
+      foucsInputPostion =
+        foucsInputPostion === 0 ? inputList.length - 1 : foucsInputPostion - 1
+      if (inputList[foucsInputPostion]) {
+        inputList[foucsInputPostion].focus()
+        setTimeout(() => {
+          inputList[foucsInputPostion].select()
+        }, 0)
+      }
+    })
+    this.nextKeyDown = keyDowns.filter(e => e.keyCode === 39).subscribe(e => {
+      foucsInputPostion =
+        foucsInputPostion === inputList.length - 1 ? 0 : foucsInputPostion + 1
+      if (inputList[foucsInputPostion]) {
+        inputList[foucsInputPostion].focus()
+        setTimeout(() => {
+          inputList[foucsInputPostion].select()
+        }, 0)
       }
     })
     this.enterKeyDown = keyDowns
@@ -588,6 +630,8 @@ class HkOrder extends PureComponent {
         showPirceFilter: true,
         targetInput: 'price'
       })
+      foucsInputPostion = 3
+      priceSearch.select()
     })
     volumeInputFocus.map(e => e).subscribe(e => {
       // console.log('volumeInputFocus')
@@ -597,14 +641,19 @@ class HkOrder extends PureComponent {
         showPirceFilter: false,
         targetInput: 'volume'
       })
+      foucsInputPostion = 2
+      volumeInput.select()
     })
     focus.map(e => e).subscribe(e => {
+      console.log('focus')
       this.setState({
         showSymbolFilter: true,
         showAccountFilter: false,
         showPirceFilter: false,
         targetInput: 'symbol'
       })
+      foucsInputPostion = 1
+      symbolSearch.select()
       let prodList = this.props.prodList
       let targetValue = e.target.value
       let list = keyWordStockFilter(prodList, targetValue, 'Symbol')
@@ -621,6 +670,8 @@ class HkOrder extends PureComponent {
         showPirceFilter: false,
         targetInput: 'account'
       })
+      foucsInputPostion = 0
+      accSearch.select()
       let accountList = this.props.accountList
       let targetValue = e.target.value
       let list = keyWordOtherFilter(accountList, targetValue, 'Account')
@@ -633,11 +684,22 @@ class HkOrder extends PureComponent {
     this.OrderWrapSub = clickOrderWrap
       .debounceTime(100)
       .filter(e => {
-        let target = e.target.name
-        if (target !== this.state.targetInput) {
-          return true
+        let targetName = e.target.name
+        let parent = e.target.parentElement
+        let grandParent = parent.parentElement
+        console.log(e.target, parent)
+        if (
+          parent.nodeName === 'UL' ||
+          parent.nodeName === 'LI' ||
+          grandParent.nodeName === 'UL' ||
+          grandParent.nodeName === 'LI'
+        ) {
+          return false
         }
-        return false
+        if (targetName === this.state.targetInput) {
+          return false
+        }
+        return true
       })
       .map(e => e)
       .subscribe(e => {
@@ -730,7 +792,8 @@ class HkOrder extends PureComponent {
           this.endIndexAccountFilter = this.endIndexAccountFilter + 200
           this.filterAccSearch.updateData(
             this.accountFilterList,
-            this.endIndexAccountFilter
+            this.endIndexAccountFilter,
+            'lazyLoad'
           )
         }
       })
@@ -827,6 +890,7 @@ class HkOrder extends PureComponent {
                   <AccountFilterSearch
                     onClick={this.targetSearchAcc}
                     listRef={list => (this.suggestAccList = list)}
+                    onEnter={this.targetSearchAccByEnterKey}
                     ref={e => (this.filterAccSearch = e)}
                   />
                 </div>

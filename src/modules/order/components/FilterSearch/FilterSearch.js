@@ -16,7 +16,6 @@ class FilterSearch extends Component {
     this.updateList = false
   }
   updateData = (list, endIndex, type = '') => {
-    console.log('updateData!!!')
     let dataList = list.slice(0, endIndex)
     let listLength = dataList.length
     this.updateList = true
@@ -65,7 +64,6 @@ class FilterSearch extends Component {
     let keyDowns = Observable.fromEvent(document, 'keydown')
     let filterWrap = document.getElementById('orderStockFilter')
     let downByKey = keyDowns.filter(e => e.keyCode === 40).subscribe(e => {
-      console.log('downByKey@@')
       if (this.focusItemIndex < this.state.listLength) {
         let focusItem = listWrap.querySelector(
           `li:nth-child(${this.focusItemIndex})`

@@ -335,3 +335,7 @@
     border-color: rgb(139, 121, 121) transparent transparent transparent;
   }
 }
+
+.focus {
+  border: solid 1px yellow;
+}

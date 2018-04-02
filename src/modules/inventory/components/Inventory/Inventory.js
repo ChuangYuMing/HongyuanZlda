@@ -31,6 +31,9 @@ class Inventory extends PureComponent {
         Branch: targetAccount.get('branch'),
         TokenID: this.props.token
       }
+      this.setState({
+        symbolFilter: ''
+      })
       this.props.getInventory(params)
     }
   }

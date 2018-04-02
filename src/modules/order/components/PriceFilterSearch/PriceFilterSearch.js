@@ -1,58 +1,15 @@
-import React, { Component } from 'react'
-import styles from './acc-filter-search.css'
+import React, { PureComponent } from 'react'
+import styles from './price-filter-search.css'
 import classNames from 'classnames/bind'
 import { keyWordStockFilter, text_truncate } from 'tools/other.js'
 import { Observable } from 'rxjs'
 
 let cx = classNames.bind(styles)
-class AccountFilterSearch extends Component {
+class PriceFilterSearch extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      list: [],
-      listLength: 0
-    }
-    this.focusItemIndex = 1
-    this.updateList = false
   }
-  updateData = (list, endIndex, type = '') => {
-    let dataList = list.slice(0, endIndex)
-    let listLength = dataList.size
-    this.updateList = true
-    this.updateType = type
-    this.setState({
-      list: dataList,
-      listLength
-    })
-  }
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.updateList) {
-      this.updateList = false
-      return true
-    }
-    return false
-  }
-  componentDidUpdate() {
-    let listWrap = document.querySelector(`.${styles['filter-wrap']} ul`)
-    let focusItem = listWrap.querySelector(
-      `li:nth-child(${this.focusItemIndex})`
-    )
-    if (focusItem) {
-      focusItem.classList.remove(styles['focus'])
-    }
-    if (this.updateType === 'lazyLoad') {
-      this.focusItemIndex = this.focusItemIndex + 1
-    } else {
-      this.focusItemIndex = 1
-    }
 
-    let nextFocusItem = listWrap.querySelector(
-      `li:nth-child(${this.focusItemIndex})`
-    )
-    if (nextFocusItem) {
-      nextFocusItem.classList.add(styles['focus'])
-    }
-  }
   componentWillUnmount() {
     this.enter.unsubscribe()
   }
@@ -143,11 +100,86 @@ class AccountFilterSearch extends Component {
       )
     })
     return (
-      <div className={cx('filter-wrap')}>
-        <ul ref={listRef}>{items}</ul>
+      <div className={cx('price-wrap')}>
+        <div className={cx('left-wrap')}>
+          <span
+            data-price={parseFloat(BPrice) > 0 ? parseFloat(BPrice) : BPrice}
+          >
+            [+1]買進價
+          </span>
+          <span
+            data-price={parseFloat(APrice) > 0 ? parseFloat(APrice) : APrice}
+          >
+            [+2]賣出價
+          </span>
+          <span data-price={parseFloat(Price) > 0 ? parseFloat(Price) : Price}>
+            [+3]成交價
+          </span>
+          <span data-price={parseFloat(Open) > 0 ? parseFloat(Open) : Open}>
+            [+4]開盤價
+          </span>
+          <span
+            data-price={
+              parseFloat(PrePrice) > 0 ? parseFloat(PrePrice) : PrePrice
+            }
+          >
+            [+5]平盤價
+          </span>
+          <span data-price={parseFloat(high) > 0 ? parseFloat(high) : high}>
+            [+6]今高價
+          </span>
+          <span data-price={parseFloat(low) > 0 ? parseFloat(low) : low}>
+            [+7]今低價
+          </span>
+        </div>
+        <div className={cx('right-wrap')}>
+          <span
+            data-price={parseFloat(BPrice) > 0 ? parseFloat(BPrice) : BPrice}
+            style={bPriceStyle}
+          >
+            {BPrice}
+          </span>
+          <span
+            data-price={parseFloat(APrice) > 0 ? parseFloat(APrice) : APrice}
+            style={aPriceStyle}
+          >
+            {APrice}
+          </span>
+          <span
+            data-price={parseFloat(Price) > 0 ? parseFloat(Price) : Price}
+            style={pStyle}
+          >
+            {Price}
+          </span>
+          <span
+            data-price={parseFloat(Open) > 0 ? parseFloat(Open) : Open}
+            style={openStyle}
+          >
+            {Open}
+          </span>
+          <span
+            data-price={
+              parseFloat(PrePrice) > 0 ? parseFloat(PrePrice) : PrePrice
+            }
+          >
+            {PrePrice}
+          </span>
+          <span
+            data-price={parseFloat(high) > 0 ? parseFloat(high) : high}
+            style={highStyle}
+          >
+            {high}
+          </span>
+          <span
+            data-price={parseFloat(low) > 0 ? parseFloat(low) : low}
+            style={lowStyle}
+          >
+            {low}
+          </span>
+        </div>
       </div>
     )
   }
 }
 
-export default AccountFilterSearch
+export default PriceFilterSearch

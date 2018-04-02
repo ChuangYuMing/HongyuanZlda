@@ -20,6 +20,9 @@ export const cancelOrder = params => {
       body: formData
     }).then(obj => {
       console.log('cancelOrder', obj)
+      if (!obj['30058']) {
+        return
+      }
       appGlobal.changeFsmState(clorderid, 'cancel')
       dispatch(changeOrderStatus(obj))
     })

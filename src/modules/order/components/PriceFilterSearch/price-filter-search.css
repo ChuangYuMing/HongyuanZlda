@@ -1,9 +1,9 @@
 @import 'helpers/_mixins.css';
 
-.filter-wrap {
-  .symbol-wrap {
-    display: inline-block;
-    padding-right: 5px;
+.price-wrap {
+  span {
+    display: block;
+    padding: 1px 3px;
   }
 }
 
