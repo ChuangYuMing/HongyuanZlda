@@ -26,6 +26,7 @@ class Member extends PureComponent {
       TokenID: userToken
     }
     this.props.changeTargetAccount({ account, branch })
+    this.props.updateFilterSetting('account', account)
     // this.props.getInventory(prams)
   }
   closePurchasing = () => {
@@ -103,7 +104,7 @@ class Member extends PureComponent {
           data-id={item.assetCode}
           data-account={Account}
           data-branch={Branch}
-          onDoubleClick={this.changeTargetAccount}
+          onClick={this.changeTargetAccount}
         >
           <Cell className={cc} key="0">
             {Account}

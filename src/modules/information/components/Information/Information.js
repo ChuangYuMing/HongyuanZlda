@@ -30,7 +30,7 @@ class Information extends PureComponent {
     let allDeal = filterSetting.get('allDeal')
 
     let filterByAcc = list => {
-      if (account === 'all') {
+      if (account === '') {
         return list
       } else {
         return list.filter(item => {

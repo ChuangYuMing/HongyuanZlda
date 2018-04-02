@@ -451,7 +451,7 @@ class Information extends PureComponent {
                     <span>原始委託量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('OrderQty')} 張`}</span>
+                    <span>{`${targetRow.get('OrderQty')} 股`}</span>
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>
@@ -459,7 +459,7 @@ class Information extends PureComponent {
                     <span>已成交數量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('CumQty')} 張`}</span>
+                    <span>{`${targetRow.get('CumQty')} 股`}</span>
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>
@@ -467,7 +467,7 @@ class Information extends PureComponent {
                     <span>未成交數量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('LeavesQty')} 張`}</span>
+                    <span>{`${targetRow.get('LeavesQty')} 股`}</span>
                   </div>
                 </div>
               </div>
@@ -526,7 +526,7 @@ class Information extends PureComponent {
                     <span>原始委託量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('OrderQty')} 張`}</span>
+                    <span>{`${targetRow.get('OrderQty')} 股`}</span>
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>
@@ -534,7 +534,7 @@ class Information extends PureComponent {
                     <span>已成交數量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('CumQty')} 張`}</span>
+                    <span>{`${targetRow.get('CumQty')} 股`}</span>
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>
@@ -542,7 +542,7 @@ class Information extends PureComponent {
                     <span>未成交數量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('LeavesQty')} 張`}</span>
+                    <span>{`${targetRow.get('LeavesQty')} 股`}</span>
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>
@@ -556,7 +556,7 @@ class Information extends PureComponent {
                       value={this.state.changeDiffVol}
                       name="changeDiffVol"
                       type="number"
-                    />張
+                    />股
                   </div>
                 </div>
               </div>
@@ -605,7 +605,7 @@ class Information extends PureComponent {
                     <span>未成交數量</span>
                   </div>
                   <div className={validOrderCx('value')}>
-                    <span>{`${targetRow.get('LeavesQty')} 張`}</span>
+                    <span>{`${targetRow.get('LeavesQty')} 股`}</span>
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>
@@ -627,7 +627,7 @@ class Information extends PureComponent {
                       value={this.state.changeDiffVol2}
                       name="changeDiffVol2"
                       type="number"
-                    />張
+                    />股
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>
@@ -641,7 +641,7 @@ class Information extends PureComponent {
                       value={this.state.changeDiffPrice}
                       name="changeDiffPrice"
                       type="number"
-                    />張
+                    />股
                   </div>
                 </div>
                 <div className={validOrderCx('item')}>

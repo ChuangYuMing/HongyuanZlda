@@ -3,6 +3,7 @@ import Member from './Member'
 import { changeTargetAccount } from 'modules/main/actions.js'
 import { getInventory } from 'modules/inventory/actions.js'
 import { getPurchasing } from '../../actions.js'
+import { updateFilterSetting } from 'modules/menu/actions.js'
 
 const mapStateToProps = state => {
   return {
@@ -23,6 +24,9 @@ const mapDispatchToProps = dispatch => {
     },
     getPurchasing: params => {
       dispatch(getPurchasing(params))
+    },
+    updateFilterSetting: (tag, value) => {
+      dispatch(updateFilterSetting(tag, value))
     }
   }
 }

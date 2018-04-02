@@ -9,6 +9,7 @@ class Menu extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
+      account: '',
       market: 'all',
       symbol: 'all',
       partialDeal: false,
@@ -18,6 +19,16 @@ class Menu extends PureComponent {
   logout = () => {
     this.props.logout()
     // this.props.history.replace('/login')
+  }
+  componentWillReceiveProps(nextProps, nextState) {
+    let oldAccount = this.state.account
+    let targetAcc = nextProps.targetAccount.get('account')
+
+    if (oldAccount !== targetAcc) {
+      this.setState({
+        account: targetAcc
+      })
+    }
   }
   handleInputChange = e => {
     const target = e.target
@@ -40,7 +51,12 @@ class Menu extends PureComponent {
       ['Account', account]
     )
     console.log('Branch', branch)
-    this.props.changeTargetAccount({ account, branch })
+    if (account !== '') {
+      this.props.changeTargetAccount({ account, branch })
+    }
+    this.setState({
+      account
+    })
     this.props.updateFilterSetting('account', account)
   }
   changeTargetMarket = e => {
@@ -79,6 +95,7 @@ class Menu extends PureComponent {
         </option>
       )
     })
+    console.log('this.state.account', this.state.account)
     return (
       <div className={cx('menu-wrap')}>
         <div className={cx('item-wrap', 't1')}>
@@ -88,10 +105,10 @@ class Menu extends PureComponent {
           <span>選取帳號</span>
           <select
             onChange={this.changeTargetAccount}
-            name="acc"
-            value={targetAccount.get('account')}
+            name="account"
+            value={this.state.account}
           >
-            <option value="all">全部帳號</option>
+            <option value="">全部帳號</option>
             {accountList}
           </select>
         </div>

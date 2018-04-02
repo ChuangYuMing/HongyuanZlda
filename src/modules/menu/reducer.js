@@ -2,7 +2,7 @@ import * as types from './action-types'
 
 let init = fromJS({
   filterSetting: {
-    account: 'all',
+    account: '',
     symbol: 'all',
     market: 'all',
     partialDeal: false,

@@ -532,14 +532,14 @@ class HkOrder extends PureComponent {
         focusAccKeyMaping.length = 0
       }
     })
-    let orderBuyByKey = keyDowns.filter(e => e.keyCode === 112).subscribe(e => {
+    let orderBuyByKey = keyDowns.filter(e => e.keyCode === 113).subscribe(e => {
       let buyBtn = document.querySelector(
         `.${styles['action']} .${styles['buy']}`
       )
       buyBtn.click()
     })
     let orderSellByKey = keyDowns
-      .filter(e => e.keyCode === 113)
+      .filter(e => e.keyCode === 121)
       .subscribe(e => {
         let sellbBtn = document.querySelector(
           `.${styles['action']} .${styles['sell']}`
@@ -1139,10 +1139,10 @@ class HkOrder extends PureComponent {
 
           <div className={cx('action')} onClick={this.handleOrderAction}>
             <span data-action="1" className={cx('btn', 'buy')}>
-              買[F1]
+              買[F2]
             </span>
             <span data-action="2" className={cx('btn', 'sell')}>
-              賣[F2]
+              賣[F10]
             </span>
           </div>
         </div>
