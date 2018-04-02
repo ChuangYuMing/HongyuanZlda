@@ -123,20 +123,20 @@
         z-index: 12;
         color: white;
       }
-      .left-wrap {
-        width: 48%;
-        text-align: left;
-        float: left;
-      }
-      .right-wrap {
-        text-align: right;
-        width: 48%;
-        float: right;
-      }
       .price-wrap {
         span {
-          display: block;
+          display: inline-block;
           padding: 1px 3px;
+        }
+        .left-wrap {
+          width: 48%;
+          text-align: left;
+          // float: left;
+        }
+        .right-wrap {
+          text-align: right;
+          width: 48%;
+          // float: right;
         }
       }
     }

@@ -64,6 +64,7 @@ class HkOrder extends PureComponent {
     this.endIndexAccountFilter = 100
     this.symbolFilterList = []
     this.accountFilterList = []
+    this.focusPriceItemIndex = 1
   }
   handleInputChange = e => {
     const target = e.target
@@ -298,6 +299,10 @@ class HkOrder extends PureComponent {
     this.volumeInput.focus()
   }
   targetSearchAccByEnterKey = (account, branch) => {
+    let { targetInput, showAccountFilter } = this.state
+    if (!showAccountFilter || targetInput !== 'account') {
+      return
+    }
     this.setState({
       showAccountFilter: false
     })
@@ -460,9 +465,26 @@ class HkOrder extends PureComponent {
       }
     }
   }
+  clickPriceWrap = e => {
+    let price = e.currentTarget.dataset.price
+    let pattern = /(\d+)(\.)?\d*$/
+    if (price && (price.match(pattern) || price === '')) {
+      let tradeUnitPrice = this.getTradeUnitPrice(price)
+      this.setState({
+        showPirceFilter: false,
+        price,
+        tradeUnitPrice
+      })
+    } else {
+      this.setState({
+        showPirceFilter: false
+      })
+    }
+  }
   componentWillUnmount() {
     this.OrderWrapSub.unsubscribe()
     this.enterKeyDown.unsubscribe()
+    this.priceWrapEnter.unsubscribe()
   }
   componentDidMount() {
     let symbolSearch = this.inputSymbol
@@ -474,7 +496,6 @@ class HkOrder extends PureComponent {
     let suggestList = this.suggestList
     let suggestWrap = this.orderStockFilter
     let accSuggestWrap = this.accountFilter
-    let priceWrape = document.querySelector(`.${styles['price-wrap']}`)
     let orderWrap = document.getElementById('orderWrap')
     let keyword = Observable.fromEvent(symbolSearch, 'input')
     let accKeyword = Observable.fromEvent(accSearch, 'input')
@@ -488,7 +509,6 @@ class HkOrder extends PureComponent {
     let accWheelSuggest = Observable.fromEvent(accSuggestWrap, 'wheel')
     let accScrollSuggest = Observable.fromEvent(accSuggestWrap, 'scroll')
     let clickOrderWrap = Observable.fromEvent(orderWrap, 'click')
-    let clickPriceWrap = Observable.fromEvent(priceWrape, 'click')
     let keyDowns = Observable.fromEvent(document, 'keydown')
     let keyUps = Observable.fromEvent(document, 'keyup')
     let keyActions = Observable.merge(keyDowns, keyUps)
@@ -496,6 +516,8 @@ class HkOrder extends PureComponent {
     let accScrollMerge = Observable.merge(accWheelSuggest, accScrollSuggest)
     let targetValue = ''
     let focusAccKeyMaping = []
+
+    let priceListWrap = document.querySelector(`.${styles['price-wrap']} ul`)
 
     let accFoucsbyKey = keyActions.subscribe(e => {
       let key = e.keyCode
@@ -569,7 +591,7 @@ class HkOrder extends PureComponent {
           buy.click()
           return
         }
-        // console.log('targetInput', targetInput)
+
         if (targetInput === 'account') {
           let account = this.state.account
           let { Branch } = searchProperty(
@@ -611,18 +633,6 @@ class HkOrder extends PureComponent {
         // console.log(e.keyCode)
       })
 
-    clickPriceWrap.map(e => e.target.dataset.price).subscribe(price => {
-      // console.log(price)
-      let pattern = /(\d+)(\.)?\d*$/
-      if (price && (price.match(pattern) || price === '')) {
-        let tradeUnitPrice = this.getTradeUnitPrice(price)
-        this.setState({
-          showPirceFilter: false,
-          price,
-          tradeUnitPrice
-        })
-      }
-    })
     priceInputFocus.map(e => e).subscribe(e => {
       this.setState({
         showSymbolFilter: false,
@@ -632,6 +642,15 @@ class HkOrder extends PureComponent {
       })
       foucsInputPostion = 3
       priceSearch.select()
+      let focusItem = priceListWrap.querySelector(
+        `li:nth-child(${this.focusPriceItemIndex})`
+      )
+      focusItem.classList.remove(styles['focus'])
+      this.focusPriceItemIndex = 1
+      let nextFocusItem = priceListWrap.querySelector(
+        `li:nth-child(${this.focusPriceItemIndex})`
+      )
+      nextFocusItem.classList.add(styles['focus'])
     })
     volumeInputFocus.map(e => e).subscribe(e => {
       // console.log('volumeInputFocus')
@@ -687,7 +706,7 @@ class HkOrder extends PureComponent {
         let targetName = e.target.name
         let parent = e.target.parentElement
         let grandParent = parent.parentElement
-        console.log(e.target, parent)
+        // console.log(e.target, parent)
         if (
           parent.nodeName === 'UL' ||
           parent.nodeName === 'LI' ||
@@ -712,20 +731,14 @@ class HkOrder extends PureComponent {
           : ''
         let { symbol } = this.state
 
-        if (nowQuoteSymbol !== symbol && symbol !== '') {
-          this.setState({
-            showSymbolFilter: false,
-            showAccountFilter: false,
-            showPirceFilter: false
-          })
+        if (nowQuoteSymbol !== symbol) {
           this.getQuote(symbol)
-        } else {
-          this.setState({
-            showSymbolFilter: false,
-            showAccountFilter: false,
-            showPirceFilter: false
-          })
         }
+        this.setState({
+          showSymbolFilter: false,
+          showAccountFilter: false,
+          showPirceFilter: false
+        })
       })
     keyword
       .debounceTime(100)
@@ -796,6 +809,59 @@ class HkOrder extends PureComponent {
             'lazyLoad'
           )
         }
+      })
+
+    let downByKey = keyDowns.filter(e => e.keyCode === 40).subscribe(e => {
+      let { targetInput, showPirceFilter } = this.state
+      if (!showPirceFilter || targetInput !== 'price') {
+        return
+      }
+      if (this.focusPriceItemIndex < 7) {
+        let focusItem = priceListWrap.querySelector(
+          `li:nth-child(${this.focusPriceItemIndex})`
+        )
+
+        let nextFocusItem = priceListWrap.querySelector(
+          `li:nth-child(${this.focusPriceItemIndex + 1})`
+        )
+        focusItem.classList.remove(styles['focus'])
+        nextFocusItem.classList.add(styles['focus'])
+        this.focusPriceItemIndex = this.focusPriceItemIndex + 1
+      }
+    })
+    let upByKey = keyDowns.filter(e => e.keyCode === 38).subscribe(e => {
+      let { targetInput, showPirceFilter } = this.state
+      if (!showPirceFilter || targetInput !== 'price') {
+        return
+      }
+      if (this.focusPriceItemIndex > 1) {
+        let focusItem = priceListWrap.querySelector(
+          `li:nth-child(${this.focusPriceItemIndex})`
+        )
+        let nextFocusItem = priceListWrap.querySelector(
+          `li:nth-child(${this.focusPriceItemIndex - 1})`
+        )
+        focusItem.classList.remove(styles['focus'])
+        nextFocusItem.classList.add(styles['focus'])
+        this.focusPriceItemIndex = this.focusPriceItemIndex - 1
+      }
+    })
+    this.priceWrapEnter = keyDowns
+      .filter(e => e.keyCode === 13)
+      .subscribe(e => {
+        let { targetInput, showPirceFilter } = this.state
+        if (!showPirceFilter || targetInput !== 'price') {
+          return
+        }
+        let focusItem = priceListWrap.querySelector(
+          `li:nth-child(${this.focusPriceItemIndex})`
+        )
+        if (focusItem) {
+          focusItem.click()
+        }
+        this.setState({
+          showPirceFilter: false
+        })
       })
   }
   render() {
@@ -973,114 +1039,85 @@ class HkOrder extends PureComponent {
                   }
                 >
                   <div className={cx('price-wrap')}>
-                    <div className={cx('left-wrap')}>
-                      <span
+                    <ul>
+                      <li
+                        onClick={this.clickPriceWrap}
                         data-price={
                           parseFloat(BPrice) > 0 ? parseFloat(BPrice) : BPrice
                         }
                       >
-                        [+1]買進價
-                      </span>
-                      <span
+                        <span className={cx('left-wrap')}>[+1] 買進價</span>
+                        <span className={cx('right-wrap')} style={bPriceStyle}>
+                          {BPrice}
+                        </span>
+                      </li>
+                      <li
+                        onClick={this.clickPriceWrap}
                         data-price={
                           parseFloat(APrice) > 0 ? parseFloat(APrice) : APrice
                         }
                       >
-                        [+2]賣出價
-                      </span>
-                      <span
+                        <span className={cx('left-wrap')}>[+2] 賣出價</span>
+                        <span className={cx('right-wrap')} style={bPriceStyle}>
+                          {APrice}
+                        </span>
+                      </li>
+                      <li
+                        onClick={this.clickPriceWrap}
                         data-price={
                           parseFloat(Price) > 0 ? parseFloat(Price) : Price
                         }
                       >
-                        [+3]成交價
-                      </span>
-                      <span
+                        <span className={cx('left-wrap')}>[+3] 成交價</span>
+                        <span className={cx('right-wrap')} style={bPriceStyle}>
+                          {Price}
+                        </span>
+                      </li>
+                      <li
+                        onClick={this.clickPriceWrap}
                         data-price={
                           parseFloat(Open) > 0 ? parseFloat(Open) : Open
                         }
                       >
-                        [+4]開盤價
-                      </span>
-                      <span
+                        <span className={cx('left-wrap')}>[+4]開盤價</span>
+                        <span className={cx('right-wrap')} style={bPriceStyle}>
+                          {Open}
+                        </span>
+                      </li>
+                      <li
+                        onClick={this.clickPriceWrap}
                         data-price={
                           parseFloat(PrePrice) > 0
                             ? parseFloat(PrePrice)
                             : PrePrice
                         }
                       >
-                        [+5]平盤價
-                      </span>
-                      <span
+                        <span className={cx('left-wrap')}>[+5]平盤價</span>
+                        <span className={cx('right-wrap')} style={bPriceStyle}>
+                          {PrePrice}
+                        </span>
+                      </li>
+                      <li
+                        onClick={this.clickPriceWrap}
                         data-price={
                           parseFloat(high) > 0 ? parseFloat(high) : high
                         }
                       >
-                        [+6]今高價
-                      </span>
-                      <span
+                        <span className={cx('left-wrap')}>[+6] 今高價</span>
+                        <span className={cx('right-wrap')} style={bPriceStyle}>
+                          {high}
+                        </span>
+                      </li>
+                      <li
+                        onClick={this.clickPriceWrap}
                         data-price={parseFloat(low) > 0 ? parseFloat(low) : low}
                       >
-                        [+7]今低價
-                      </span>
-                    </div>
-                    <div className={cx('right-wrap')}>
-                      <span
-                        data-price={
-                          parseFloat(BPrice) > 0 ? parseFloat(BPrice) : BPrice
-                        }
-                        style={bPriceStyle}
-                      >
-                        {BPrice}
-                      </span>
-                      <span
-                        data-price={
-                          parseFloat(APrice) > 0 ? parseFloat(APrice) : APrice
-                        }
-                        style={aPriceStyle}
-                      >
-                        {APrice}
-                      </span>
-                      <span
-                        data-price={
-                          parseFloat(Price) > 0 ? parseFloat(Price) : Price
-                        }
-                        style={pStyle}
-                      >
-                        {Price}
-                      </span>
-                      <span
-                        data-price={
-                          parseFloat(Open) > 0 ? parseFloat(Open) : Open
-                        }
-                        style={openStyle}
-                      >
-                        {Open}
-                      </span>
-                      <span
-                        data-price={
-                          parseFloat(PrePrice) > 0
-                            ? parseFloat(PrePrice)
-                            : PrePrice
-                        }
-                      >
-                        {PrePrice}
-                      </span>
-                      <span
-                        data-price={
-                          parseFloat(high) > 0 ? parseFloat(high) : high
-                        }
-                        style={highStyle}
-                      >
-                        {high}
-                      </span>
-                      <span
-                        data-price={parseFloat(low) > 0 ? parseFloat(low) : low}
-                        style={lowStyle}
-                      >
-                        {low}
-                      </span>
-                    </div>
+                        <span className={cx('left-wrap')}>[+7] 今低價</span>
+                        <span className={cx('right-wrap')} style={bPriceStyle}>
+                          {low}
+                        </span>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
