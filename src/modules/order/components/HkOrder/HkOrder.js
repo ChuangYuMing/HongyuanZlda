@@ -299,6 +299,7 @@ class HkOrder extends PureComponent {
     this.volumeInput.focus()
   }
   targetSearchAccByEnterKey = (account, branch) => {
+    console.log('targetSearchAccByEnterKey')
     let { targetInput, showAccountFilter } = this.state
     if (!showAccountFilter || targetInput !== 'account') {
       return
@@ -1227,7 +1228,10 @@ class HkOrder extends PureComponent {
               }
             >
               <div className={cx('left')}>
-                <span className={cx('s1', 'acc')}>{account}</span>
+                <div className={cx('acc-wrap')}>
+                  <span className={cx('s1')}>{CName}</span>
+                  <span className={cx('s3')}>({account})</span>
+                </div>
               </div>
               <div className={cx('right')}>
                 <div className={cx('item')}>

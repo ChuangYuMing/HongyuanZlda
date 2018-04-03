@@ -230,12 +230,16 @@
       float: left;
       height: 100%;
       position: relative;
-      .acc {
+      .acc-wrap {
         position: absolute;
         display: inline-block;
-        transform: translate(-50%, -50%);
-        top: 50%;
+        transform: translate(-50%, -40%);
+        top: 40%;
         left: 50%;
+        span {
+          display: block;
+          text-align: center;
+        }
       }
     }
     .right {
@@ -258,6 +262,10 @@
     .s2 {
       color: white;
       font-size: 18px;
+    }
+    .s3 {
+      color: white;
+      font-size: 14px;
     }
   }
   .bottom {
