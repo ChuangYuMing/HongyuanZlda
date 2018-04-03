@@ -27,17 +27,23 @@ class Information extends PureComponent {
       changeDiffPrice: ''
     }
   }
-  showCancelPopUp = () => {
+  showCancelPopUp = e => {
+    const target = e.currentTarget
+    let orderid = target.dataset.orderid
     console.log('-----')
+    this.targetRow(orderid)
     this.setState({
       showCancelPopUp: true,
       showChangeVolPopUp: false,
       showChangePricePopUp: false
     })
   }
-  showChangeVolPopUp = () => {
+  showChangeVolPopUp = e => {
     return
+    const target = e.currentTarget
+    let orderid = target.dataset.orderid
     console.log('-----')
+    this.targetRow(orderid)
     this.setState({
       showCancelPopUp: false,
       showChangeVolPopUp: true,
@@ -46,7 +52,10 @@ class Information extends PureComponent {
   }
   showChangePricePopUp = () => {
     return
+    const target = e.currentTarget
+    let orderid = target.dataset.orderid
     console.log('-----')
+    this.targetRow(orderid)
     this.setState({
       showChangePricePopUp: true,
       showCancelPopUp: false,
@@ -63,10 +72,9 @@ class Information extends PureComponent {
       changeDiffPrice: ''
     })
   }
-  targetRow = e => {
+  targetRow = orderid => {
     let list = this.props.data
-    const target = e.currentTarget
-    let orderid = target.dataset.orderid
+
     const index = list.findIndex(i => i.get('OrderID') === orderid)
     if (index !== -1) {
       let targetRow = list.get(index)
@@ -327,7 +335,7 @@ class Information extends PureComponent {
           <Row
             className={cxx}
             data-orderid={item.get('OrderID')}
-            onClick={this.targetRow}
+            // onClick={this.targetRow}
           >
             <Cell key="0">
               {!showActionWrap ? (
@@ -347,16 +355,22 @@ class Information extends PureComponent {
                     onChange={this.handleCheckDelete}
                     checked={item.get('checkToDelete')}
                   />
-                  <span onClick={this.showCancelPopUp} className={cx('btn')}>
+                  <span
+                    data-orderid={item.get('OrderID')}
+                    onClick={this.showCancelPopUp}
+                    className={cx('btn')}
+                  >
                     刪
                   </span>
                   <span
+                    data-orderid={item.get('OrderID')}
                     onClick={this.showChangeVolPopUp}
                     className={cx('btn', 'hide')}
                   >
                     量
                   </span>
                   <span
+                    data-orderid={item.get('OrderID')}
                     onClick={this.showChangePricePopUp}
                     className={cx('btn', 'hide')}
                   >

@@ -76,7 +76,7 @@ class Main extends Component {
     this.props.closeMainPopup(id)
   }
   render() {
-    console.log('Main')
+    console.log('Main render')
     let { prodList } = this.props
     let gotProdList = Object.keys(prodList).length > 0
     if (!this.props.isLogin) {
@@ -94,10 +94,12 @@ class Main extends Component {
     }
     let popup = []
     let { mainPopupMsg } = this.props
-    mainPopupMsg.forEach(item => {
-      let id = item.get('id')
-      let msg = item.get('msg')
-      let status = item.get('status')
+    console.log(mainPopupMsg.toJS())
+    let lastMainPopMsg = mainPopupMsg.get(mainPopupMsg.size - 1)
+    if (lastMainPopMsg) {
+      let id = lastMainPopMsg.get('id')
+      let msg = lastMainPopMsg.get('msg')
+      let status = lastMainPopMsg.get('status')
       let statuscx = cx({
         mainPopup: true,
         success: status === 'success',
@@ -106,7 +108,7 @@ class Main extends Component {
       })
       let data = (
         <PopUp
-          key={id}
+          key={0}
           show={true}
           width="400px"
           height="60px"
@@ -127,7 +129,8 @@ class Main extends Component {
         </PopUp>
       )
       popup.push(data)
-    })
+    }
+    console.log('popup', popup)
     return (
       <div className={cx('main-wrap')}>
         <div className={cx('menu')}>

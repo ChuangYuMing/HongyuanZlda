@@ -19,7 +19,10 @@ export default (state = init, action) => {
         msg: action.data,
         status: action.status
       })
-      state = state.update('mainPopupMsg', list => list.push(obj))
+      state = state.update('mainPopupMsg', list => {
+        let empty = List([])
+        return empty.push(obj)
+      })
       return state
     }
     case types.CLOSE_MAIN_POPUP: {
