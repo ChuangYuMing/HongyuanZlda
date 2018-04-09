@@ -23,7 +23,8 @@ export const order = params => {
       ExecType: 'A',
       OrdStatus: 'A',
       TransactTime: '--',
-      OrderID: '--'
+      OrderID: '--',
+      originOrderVolume: params.OrderQty
     })
     console.log('fakeOrder', fakeOrder)
     requestParams = formatRequestData(params)

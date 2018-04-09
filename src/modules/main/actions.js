@@ -146,7 +146,7 @@ export const getOrderStatus = params => {
           // item.set('avgPrice', item.get('LastPx'))
           list.forEach(element => {
             if (element['OrdStatus'] === '0') {
-              item = item.set('OrderQty', element['OrderQty'])
+              item = item.set('originOrderVolume', element['OrderQty'])
             }
             if (element['OrdStatus'] === '2' || element['OrdStatus'] === '1') {
               element = Map(element)
