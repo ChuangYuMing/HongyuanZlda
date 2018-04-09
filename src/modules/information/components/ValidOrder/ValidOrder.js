@@ -109,6 +109,7 @@ class Information extends PureComponent {
       Username: targetRow.get('Username'),
       OrigClOrdID: targetRow.get('OrigClOrdID'),
       ClOrdID: targetRow.get('ClOrdID'),
+      OrderID: targetRow.get('OrderID'),
       Branch: targetRow.get('Branch'),
       OrderID: targetRow.get('OrderID'),
       Account: targetRow.get('Account'),
@@ -138,19 +139,19 @@ class Information extends PureComponent {
   handleCheckDelete = event => {
     const target = event.target
     const value = target.checked
-    let clorderid = target.dataset.clorderid
-    this.props.checkDeleteRow(clorderid, value)
+    let orderid = target.dataset.orderid
+    this.props.checkDeleteRow(orderid, value)
   }
   inflatDealHistory = e => {
     let target = e.target
-    let clorderid = target.dataset.clorderid
+    let orderid = target.dataset.orderid
     let flag = target.dataset.flag
     if (flag === undefined) {
       return
     } else {
       flag = flag === 'true' ? false : true
     }
-    this.props.inflatDealHistory(clorderid, flag)
+    this.props.inflatDealHistory(orderid, flag)
   }
   componentDidMount() {
     let keyDowns = Observable.fromEvent(document, 'keydown')
@@ -349,8 +350,8 @@ class Information extends PureComponent {
                         : cx('checkDelete', 'hide')
                     }
                     type="checkbox"
-                    name={item.get('ClOrdID')}
-                    data-clorderid={item.get('ClOrdID')}
+                    name={item.get('OrderID')}
+                    data-orderid={item.get('OrderID')}
                     data-ordstatus={item.get('OrdStatus')}
                     onChange={this.handleCheckDelete}
                     checked={item.get('checkToDelete')}
@@ -382,7 +383,7 @@ class Information extends PureComponent {
             <Cell key="1">
               <div className={cx('account-wrap')}>
                 <a
-                  data-clorderid={item.get('ClOrdID')}
+                  data-orderid={item.get('OrderID')}
                   data-flag={item.get('inflatDealHistory')}
                   onClick={this.inflatDealHistory}
                   className={

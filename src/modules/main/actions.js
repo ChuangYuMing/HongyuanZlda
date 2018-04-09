@@ -121,11 +121,11 @@ export const getOrderStatus = params => {
         let symbols = []
         //get group data
         res.forEach((element, index) => {
-          let ClOrdID = element['ClOrdID']
-          if (!groupData[ClOrdID]) {
-            groupData[ClOrdID] = [element]
+          let OrderID = element['OrderID']
+          if (!groupData[OrderID]) {
+            groupData[OrderID] = [element]
           } else {
-            groupData[ClOrdID].push(element)
+            groupData[OrderID].push(element)
           }
         })
         //sort data
@@ -174,10 +174,10 @@ export const getOrderStatus = params => {
           symbols.push(item.get('Symbol'))
           let fsmFactory = orderStateMachine('none')
           let orderFsm = new fsmFactory()
-          let clorderid = item.get('ClOrdID')
+          let orderId = item.get('OrderID')
           let orderStatus = item.get('OrdStatus')
-          appGlobal.addOrderStateMachine(clorderid, orderFsm)
-          appGlobal.changeFsmState(clorderid, orderStatus)
+          appGlobal.addOrderStateMachine(orderId, orderFsm)
+          appGlobal.changeFsmState(orderId, orderStatus)
         })
         symbols = List([...new Set(symbols)])
         dispatch(updateOrderListHistory(orderList))

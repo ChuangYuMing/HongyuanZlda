@@ -10,8 +10,10 @@ import appGlobal from 'modules/common/app-global.js'
 export const cancelOrder = params => {
   return (dispatch, getState) => {
     let tokenID = getState().app.get('userToken')
+    let clordId = appGlobal.getClordID()
+    params.ClOrdID = clordId
     params.TokenID = tokenID
-    let clorderid = params['ClOrdID']
+    let orderId = params['OrderID']
     console.log('params', params)
     params = formatRequestData(params)
     let formData = formatFormData(params)
@@ -23,7 +25,7 @@ export const cancelOrder = params => {
       if (!obj['30058']) {
         return
       }
-      appGlobal.changeFsmState(clorderid, 'cancel')
+      appGlobal.changeFsmState(orderId, 'cancel')
       dispatch(changeOrderStatus(obj))
     })
   }

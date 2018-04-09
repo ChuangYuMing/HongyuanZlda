@@ -10,9 +10,13 @@ export default (state = init, action) => {
       return state.update('orderList', lists => lists.unshift(action.data))
     }
     case types.CHANGE_ORDER_STATUS: {
-      let targetIndex = state
-        .get('orderList')
-        .findIndex(i => i.get('ClOrdID') === action.data.get('ClOrdID'))
+      let targetIndex = state.get('orderList').findIndex(i => {
+        if (i.get('OrderID') !== '--') {
+          return i.get('OrderID') === action.data.get('OrderID')
+        } else {
+          return i.get('ClOrdID') === action.data.get('ClOrdID')
+        }
+      })
       if (targetIndex !== -1) {
         state = state.updateIn(['orderList', targetIndex], item =>
           item.merge(action.data)
@@ -42,7 +46,7 @@ export default (state = init, action) => {
       let { clorderid, value } = action
       let targetIndex = state
         .get('orderList')
-        .findIndex(i => i.get('ClOrdID') === clorderid)
+        .findIndex(i => i.get('OrderID') === clorderid)
       console.log('123123', clorderid, value, targetIndex)
       if (targetIndex !== -1) {
         state = state.updateIn(['orderList', targetIndex], list => {
@@ -55,7 +59,7 @@ export default (state = init, action) => {
     case types.ADD_DEAL_HISTORY: {
       let targetIndex = state
         .get('orderList')
-        .findIndex(i => i.get('ClOrdID') === action.data.get('ClOrdID'))
+        .findIndex(i => i.get('OrderID') === action.data.get('OrderID'))
       let target = state.getIn(['orderList', targetIndex])
       if (target.has('dealHistory')) {
         state = state.updateIn(['orderList', targetIndex], i =>
@@ -74,7 +78,7 @@ export default (state = init, action) => {
       console.log(action.flag)
       let targetIndex = state
         .get('orderList')
-        .findIndex(i => i.get('ClOrdID') === action.id)
+        .findIndex(i => i.get('OrderID') === action.id)
       state = state.updateIn(['orderList', targetIndex], i =>
         i.set('inflatDealHistory', action.flag)
       )

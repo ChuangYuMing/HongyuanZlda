@@ -26,6 +26,9 @@ class Main extends Component {
     }
   }
   componentDidMount() {
+    if (!this.props.isLogin) {
+      return
+    }
     let { userToken } = this.props
     // let promise1 = this.props.getProds(['US', 'HK'])
     let promise2 = this.props.getCustomerInfo({

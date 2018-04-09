@@ -24,7 +24,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(cancelOrder(targetRow))
       let price = targetRow.get('Price')
       let volume = value
-      let clorderid = targetRow.get('ClOrdID')
+      let orderId = targetRow.get('OrderID')
 
       let params = {
         MsgType: 'D',
@@ -37,15 +37,15 @@ const mapDispatchToProps = dispatch => {
         Branch: 'branch01',
         Username: targetRow.get('Username')
       }
-      appGlobal.addOrderPending(clorderid, () => {
+      appGlobal.addOrderPending(orderId, () => {
         dispatch(order(params))
       })
     },
-    checkDeleteRow: (clorderid, value) => {
-      dispatch(checkDeleteRow(clorderid, value))
+    checkDeleteRow: (orderId, value) => {
+      dispatch(checkDeleteRow(orderId, value))
     },
-    inflatDealHistory: (clorderid, flag) => {
-      dispatch(inflatDealHistory(clorderid, flag))
+    inflatDealHistory: (orderId, flag) => {
+      dispatch(inflatDealHistory(orderId, flag))
     },
     changeOrderPrice: ({ targetRow, value }) => {
       dispatch(cancelOrder(targetRow))
@@ -53,7 +53,7 @@ const mapDispatchToProps = dispatch => {
       let originVol = targetRow.get('LeavesQty')
       let price = value.price
       let volume = value.vol
-      let clorderid = targetRow.get('ClOrdID')
+      let orderId = targetRow.get('OrderID')
 
       let params1 = {
         MsgType: 'D',
@@ -77,7 +77,7 @@ const mapDispatchToProps = dispatch => {
         Branch: 'branch01',
         Username: targetRow.get('Username')
       }
-      appGlobal.addOrderPending(clorderid, () => {
+      appGlobal.addOrderPending(orderId, () => {
         dispatch(order(params1))
         dispatch(order(params2))
       })

@@ -57,14 +57,17 @@ class AppGlobal {
     this._clordIdCount = this._clordIdCount + 1
     return `${this._clordId}${this._clordIdCount}`
   }
-  addOrderPending(clorderid, callback) {
+  addOrderPending(orderId, callback) {
     this.needingOrderPending.push({
-      clorderid,
+      orderId,
       callback
     })
   }
   addOrderStateMachine(clorderid, fsm) {
     this.orderStatusMachine[clorderid] = fsm
+  }
+  deleteOrderStateMachine(clorderid) {
+    delete this.orderStatusMachine[clorderid]
   }
   getOrderFsm(clorderid) {
     return this.orderStatusMachine[clorderid]

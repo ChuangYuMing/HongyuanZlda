@@ -121,6 +121,8 @@ class FilterSearch extends Component {
     let items = list.map((item, index) => {
       let { Symbol, SName, filterInfo, Professional } = item
       let { firstHalf, secondHalf, key } = filterInfo
+      let SNameArr = SName.split('/')
+      SName = SNameArr.length > 1 ? SNameArr[1] : SName
       return (
         <li
           onClick={onClick}

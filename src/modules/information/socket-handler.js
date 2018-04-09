@@ -15,18 +15,18 @@ class SocketHandler {
   constructor() {}
   on() {
     cancelOrderObs.subscribe(cancelOrderPub, data => {
-      let clorderid = data.ClOrdID
+      let orderId = data.OrderID
       //for 改量改價
       let peddingOrder = appGlobal.needingOrderPending
       peddingOrder.forEach(element => {
-        console.log(element.clorderid, clorderid)
-        if (clorderid && element.clorderid === clorderid) {
+        console.log(element.orderId, orderId)
+        if (orderId && element.orderId === orderId) {
           element.callback()
         }
       })
     })
     dealHistoryObs.subscribe(dealHistoryPub, data => {
-      // let clorderid = data.ClOrdID
+      // let orderId = data.OrderID
       dispatch(addDealHistory(data))
     })
   }

@@ -32,6 +32,7 @@ const mapDispatchToProps = dispatch => {
         isLogin: false,
         userToken: ''
       })
+      dispatch(logout())
       // dispatch(updateAppInfo(data))
       // dispatch(clearOrder())
     }

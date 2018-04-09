@@ -879,7 +879,8 @@ class HkOrder extends PureComponent {
     let LowLimitPrice = quote.get('LowLimitPrice')
     let high = quote.get('high')
     let low = quote.get('low')
-
+    let NameArr = Name ? Name.split('/') : ''
+    Name = NameArr.length > 1 ? NameArr[1] : Name
     // APrice = parseFloat(APrice) > 0 ? parseFloat(APrice) : APrice
     // BPrice = parseFloat(BPrice) > 0 ? parseFloat(BPrice) : BPrice
     // Price = parseFloat(Price) > 0 ? parseFloat(Price) : Price

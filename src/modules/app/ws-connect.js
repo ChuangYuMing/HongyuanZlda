@@ -101,29 +101,34 @@ class WsConnect {
       console.log('---------------------------')
 
       let clordid = res.ClOrdID
+      let orderId = res.OrderID
       let status = res.OrdStatus
-      let orderFsm = appGlobal.getOrderFsm(clordid)
-      if (!orderFsm) {
+      let orderFsm
+
+      if (appGlobal.getOrderFsm(clordid)) {
+        let OriginOrderFsm = appGlobal.getOrderFsm(clordid)
+        appGlobal.deleteOrderStateMachine(clordid)
+        appGlobal.addOrderStateMachine(orderId, OriginOrderFsm)
+      } else if (!appGlobal.getOrderFsm(orderId)) {
         let fsmFactory = orderStateMachine('none')
-        orderFsm = new fsmFactory()
-        appGlobal.addOrderStateMachine(clordid, orderFsm)
+        let newOrderFsm = new fsmFactory()
+        appGlobal.addOrderStateMachine(orderId, newOrderFsm)
       }
-      // console.log(orderFsm.state)
-      // console.log(orderFsm.transitions())
+      orderFsm = appGlobal.getOrderFsm(orderId)
+      console.log(orderFsm.state)
+      console.log(orderFsm.transitions())
       if (orderFsm.state === 'cancel-wait' && status === '8') {
         status = 'cancelFail'
       }
-      if (!appGlobal.canTransistionOrderStatus(clordid, status)) {
-        let orderFsm = appGlobal.getOrderFsm(clordid)
+      if (!appGlobal.canTransistionOrderStatus(orderId, status)) {
         console.log(orderFsm.transitions())
         console.log(orderFsm.state)
         console.log(status)
         console.log('@@@@')
         return
       } else {
-        let orderFsm = appGlobal.getOrderFsm(clordid)
-        appGlobal.changeFsmState(clordid, status)
-        let b = appGlobal.getOrderFsm(clordid)
+        appGlobal.changeFsmState(orderId, status)
+        let b = appGlobal.getOrderFsm(orderId)
         console.log(b.state)
       }
 

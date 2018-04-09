@@ -29,7 +29,8 @@ class SocketHandler {
         CxlRejResponseTo,
         ClOrdID,
         LastQty,
-        ExecType
+        ExecType,
+        OrderID
       } = data
       let ttime = TransactTime ? TransactTime.split('-')[1].split('.')[0] : ''
       let side = Side === '1' ? '買' : '賣'
@@ -64,7 +65,7 @@ class SocketHandler {
         let order = store
           .getState()
           .order.get('orderList')
-          .find(i => i.get('ClOrdID') === ClOrdID)
+          .find(i => i.get('OrderID') === OrderID)
         console.log('order', order)
         ttime = order.get('TransactTime')
           ? order
