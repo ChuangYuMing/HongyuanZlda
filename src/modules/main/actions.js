@@ -143,8 +143,11 @@ export const getOrderStatus = params => {
           })
 
           item = Map(list[list.length - 1])
-          item.set('avgPrice', item.get('LastPx'))
+          // item.set('avgPrice', item.get('LastPx'))
           list.forEach(element => {
+            if (element['OrdStatus'] === '0') {
+              item = item.set('OrderQty', element['OrderQty'])
+            }
             if (element['OrdStatus'] === '2' || element['OrdStatus'] === '1') {
               element = Map(element)
               if (!item.get('dealHistory')) {

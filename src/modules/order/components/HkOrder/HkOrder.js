@@ -202,7 +202,8 @@ class HkOrder extends PureComponent {
       TokenID: userToken,
       ExDestination,
       DeliverToCompID,
-      MsgSeqNum: 'test123'
+      MsgSeqNum: 'test123',
+      TimeInForce: '0'
     }
     let checked = this.checkOrderParams(params)
     if (checked.hasOwnProperty('errorMsg')) {
