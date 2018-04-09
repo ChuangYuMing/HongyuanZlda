@@ -5,7 +5,7 @@ import validOrderStyles from './valid-order.css'
 import classNames from 'classnames/bind'
 import { StickyTable, Row, Cell } from 'react-sticky-table'
 import { orderStatusMaping } from 'tools/format-res-data.js'
-import { getDateFromFormat } from 'tools/date.js'
+import { getDateFromFormat, formatDate } from 'tools/date.js'
 import PopUp from 'modules/shared/components/PopUp/PopUp.js'
 import InformationRow from '../InformationRow/InformationRow.js'
 import { Decimal } from 'decimal.js'
@@ -333,9 +333,20 @@ class Information extends PureComponent {
       })
       let iRow = () => {
         let TransactTime = item.get('TransactTime')
-        TransactTime = TransactTime
-          ? TransactTime.split('-')[1].split('.')[0]
-          : 0
+        if (TransactTime !== '--') {
+          TransactTime = getDateFromFormat(
+            TransactTime.split('.')[0],
+            'yMMdd-HH:mm:ss'
+          )
+          let offset = new Date().getTimezoneOffset()
+          TransactTime =
+            offset < 0
+              ? TransactTime - offset * 60 * 1000
+              : TransactTime + offset * 60 * 1000
+
+          TransactTime = formatDate(new Date(TransactTime), 'HH:mm:ss')
+        }
+
         let showActionWrap = false
         if (item.get('isHistory') == true) {
           showActionWrap = false
@@ -358,8 +369,8 @@ class Information extends PureComponent {
                 <div>
                   <input
                     className={
-                      item.get('OrdStatus') !== '0'
-                        ? cx('checkDelete', 'hide')
+                      showActionWrap
+                        ? cx('checkDelete')
                         : cx('checkDelete', 'hide')
                     }
                     type="checkbox"
