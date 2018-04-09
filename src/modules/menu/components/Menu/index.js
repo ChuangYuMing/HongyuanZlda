@@ -20,13 +20,31 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   let flag = true
+  let keydownMaping = []
   document.addEventListener('keydown', function(event) {
-    // console.log(event.keyCode, event.metaKey)
-    if (event.keyCode == 82 && event.metaKey) {
+    console.log(event.keyCode, event.metaKey)
+    console.log(event)
+    let key = event.keyCode
+    if (key === 17 || key === 82) {
+      keydownMaping.push(key)
+    }
+    if (keydownMaping[0] === 17 && keydownMaping[1] === 82) {
+      flag = false
+    }
+
+    if (
+      (key == 82 && event.metaKey) ||
+      (key == 82 && event.ctrlKey) ||
+      key == 116
+    ) {
       flag = false
     }
   })
+  document.addEventListener('keyup', function(event) {
+    keydownMaping.length = 0
+  })
   window.addEventListener('beforeunload', function(e) {
+    alert(flag)
     if (flag) {
       let data = Map({
         isLogin: false,
