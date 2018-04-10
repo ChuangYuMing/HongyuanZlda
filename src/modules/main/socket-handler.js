@@ -5,6 +5,7 @@ import { changeOrderStatus, bidAndAskTick, updateTick } from './actions'
 import appGlobal from 'modules/common/app-global.js'
 import { orderTypeMaping } from 'tools/format-res-data.js'
 import { updateMainPopUpMsg } from 'modules/main/actions.js'
+import { searchProperty } from 'tools/other.js'
 
 const dispatch = store.dispatch
 const mainPopUpObs = new Observer()
@@ -13,6 +14,7 @@ class SocketHandler {
   constructor() {}
   on() {
     mainPopUpObs.subscribe(mainPopUpPub, data => {
+      console.log('@@@', data)
       let status = 'success'
       let {
         TransactTime,
@@ -30,8 +32,15 @@ class SocketHandler {
         ClOrdID,
         LastQty,
         ExecType,
-        OrderID
+        OrderID,
+        CxlQty
       } = data
+      let { CName } = searchProperty(
+        store.getState().main.get('customerInfo'),
+        ['CName'],
+        ['Account', Account]
+      )
+
       let ttime = TransactTime ? TransactTime.split('-')[1].split('.')[0] : ''
       let side = Side === '1' ? '買' : '賣'
       let orderType = orderTypeMaping(OrdType)
@@ -42,6 +51,11 @@ class SocketHandler {
         status = 'success'
         statusMsg = '委託成功'
         volume = OrderQty
+      }
+      if (ExecType === '4' && OrdStatus === '4') {
+        status = 'success'
+        statusMsg = '已取消'
+        volume = CxlQty
       }
       if (ExecType === '8') {
         //委託回報
@@ -81,7 +95,7 @@ class SocketHandler {
         status = 'error'
         statusMsg = Text
       }
-      popupMsg = `<span>${ttime} ${statusMsg}, 帳號：${Account},${Username}, ${orderType}</span>
+      popupMsg = `<span>${ttime} ${statusMsg}, 帳號：${Account},${CName}, ${orderType}</span>
         <br/>
         <span>${Symbol},  價格：${Price},  數量：${volume}股</span>
         `
