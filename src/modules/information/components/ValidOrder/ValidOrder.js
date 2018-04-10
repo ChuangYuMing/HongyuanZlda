@@ -437,7 +437,11 @@ class Information extends PureComponent {
               {item.get('avgPrice') ? item.get('avgPrice') : ''}
             </Cell>
             <Cell key="11">{item.get('LeavesQty')}</Cell>
-            <Cell key="12">{orderStatusMaping(item.get('OrdStatus'))}</Cell>
+            <Cell key="12">
+              {item.get('OrdStatus') === '8'
+                ? item.get('errorMsg')
+                : orderStatusMaping(item.get('OrdStatus'))}
+            </Cell>
           </Row>
         )
       }

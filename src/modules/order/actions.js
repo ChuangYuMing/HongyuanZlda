@@ -56,7 +56,8 @@ export const order = params => {
           changeOrderStatus(
             fromJS({
               ClOrdID: clordId,
-              OrdStatus: '8'
+              OrdStatus: '8',
+              errorMsg: obj['58']
             }),
             false
           )

@@ -871,15 +871,42 @@ class HkOrder extends PureComponent {
     let prodList = this.props.prodList || []
     let Symbol = quote.get('Symbol')
     let Name = quote.get('Name')
-    let APrice = quote.get('APrice')
-    let BPrice = quote.get('BPrice')
-    let Price = quote.get('Price')
-    let Open = quote.get('Open')
-    let PrePrice = quote.get('PrePrice')
-    let HighLimitPrice = quote.get('HighLimitPrice')
-    let LowLimitPrice = quote.get('LowLimitPrice')
-    let high = quote.get('high')
-    let low = quote.get('low')
+    let APrice =
+      quote.get('APrice') && quote.get('APrice') !== '--'
+        ? Decimal(quote.get('APrice')).toFixed(3, Decimal.ROUND_DOWN)
+        : '--'
+    let BPrice =
+      quote.get('BPrice') && quote.get('BPrice') !== '--'
+        ? Decimal(quote.get('BPrice')).toFixed(3, Decimal.ROUND_DOWN)
+        : '--'
+    let Price =
+      quote.get('Price') && quote.get('Price') !== '--'
+        ? Decimal(quote.get('Price')).toFixed(3, Decimal.ROUND_DOWN)
+        : '--'
+    let Open =
+      quote.get('Open') && quote.get('Open') !== '--'
+        ? Decimal(quote.get('Open')).toFixed(3, Decimal.ROUND_DOWN)
+        : '--'
+    let PrePrice =
+      quote.get('PrePrice') && quote.get('PrePrice') !== '--'
+        ? Decimal(quote.get('PrePrice')).toFixed(3, Decimal.ROUND_DOWN)
+        : '--'
+    let HighLimitPrice =
+      quote.get('HighLimitPrice') && quote.get('HighLimitPrice') !== '--'
+        ? Decimal(quote.get('HighLimitPrice')).toFixed(3, Decimal.ROUND_DOWN)
+        : '--'
+    let LowLimitPrice =
+      quote.get('LowLimitPrice') && quote.get('LowLimitPrice') !== '--'
+        ? Decimal(quote.get('LowLimitPrice')).toFixed(3, Decimal.ROUND_DOWN)
+        : '--'
+    let high =
+      quote.get('high') && quote.get('high') !== '--'
+        ? Decimal(quote.get('high')).toFixed(3, Decimal.ROUND_DOWN)
+        : '--'
+    let low =
+      quote.get('low') && quote.get('low') !== '--'
+        ? Decimal(quote.get('low')).toFixed(3, Decimal.ROUND_DOWN)
+        : '--'
     let NameArr = Name ? Name.split('/') : ''
     Name = NameArr.length > 1 ? NameArr[1] : Name
     // APrice = parseFloat(APrice) > 0 ? parseFloat(APrice) : APrice
@@ -1245,7 +1272,8 @@ class HkOrder extends PureComponent {
                   </span>
                 </div>
                 <div className={cx('item')}>
-                  <span className={cx('s1')}>{symbol}</span>
+                  <span className={cx('s1')}>{`${Name}`}</span>
+                  <span>{`${symbol}`}</span>
                 </div>
                 <div className={cx('item')}>
                   <span className={cx('s1')}>{volume}</span>
