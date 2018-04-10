@@ -4,7 +4,8 @@ import { cancelOrder, changeOrder } from '../../actions'
 import {
   order,
   checkDeleteRow,
-  inflatDealHistory
+  inflatDealHistory,
+  checkAllDelete
 } from 'modules/order/actions.js'
 import appGlobal from 'modules/common/app-global.js'
 
@@ -81,6 +82,9 @@ const mapDispatchToProps = dispatch => {
         dispatch(order(params1))
         dispatch(order(params2))
       })
+    },
+    checkAllDelete: value => {
+      dispatch(checkAllDelete(value))
     }
   }
 }

@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import Menu from './Menu'
 import { updateAppInfo } from 'modules/app/actions.js'
 import { clearOrder } from 'modules/order/actions.js'
+import { showBashDeletePopup } from 'modules/information/actions.js'
 import {
   changeTargetAccount,
   toggleChangePwdPopup
@@ -75,6 +76,9 @@ const mapDispatchToProps = dispatch => {
     },
     updateFilterSetting: (tag, value) => {
       dispatch(updateFilterSetting(tag, value))
+    },
+    showBashDeletePopup: value => {
+      dispatch(showBashDeletePopup(value))
     }
   }
 }

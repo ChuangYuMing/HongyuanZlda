@@ -10,6 +10,7 @@ import PopUp from 'modules/shared/components/PopUp/PopUp.js'
 import InformationRow from '../InformationRow/InformationRow.js'
 import { Decimal } from 'decimal.js'
 import { Observable } from 'rxjs'
+import BashDeletePopUp from '../BashDeletePopUp/index.js'
 
 let cx = classNames.bind(styles)
 let validOrderCx = classNames.bind(validOrderStyles)
@@ -24,7 +25,8 @@ class Information extends PureComponent {
       targetRow: Map({}),
       changeDiffVol: '',
       changeDiffVol2: '',
-      changeDiffPrice: ''
+      changeDiffPrice: '',
+      checkAllDelete: false
     }
   }
   showCancelPopUp = e => {
@@ -107,8 +109,6 @@ class Information extends PureComponent {
       MsgType: 'F',
       OrigClOrdID: targetRow.get('OrigClOrdID'),
       Username: targetRow.get('Username'),
-      OrigClOrdID: targetRow.get('OrigClOrdID'),
-      ClOrdID: targetRow.get('ClOrdID'),
       OrderID: targetRow.get('OrderID'),
       Branch: targetRow.get('Branch'),
       OrderID: targetRow.get('OrderID'),
@@ -141,6 +141,14 @@ class Information extends PureComponent {
     const value = target.checked
     let orderid = target.dataset.orderid
     this.props.checkDeleteRow(orderid, value)
+  }
+  handleCheckAllDelete = e => {
+    const target = e.target
+    const value = target.checked
+    this.props.checkAllDelete(value)
+    this.setState({
+      checkAllDelete: value
+    })
   }
   inflatDealHistory = e => {
     let target = e.target
@@ -289,11 +297,10 @@ class Information extends PureComponent {
         cellData = (
           <div className={cx('header1')}>
             <input
-              className={cx('hide')}
               type="checkbox"
-              name="checkDelete"
-              checked
-              readOnly
+              name="checkAllDelete"
+              checked={this.state.checkAllDelete}
+              onChange={this.handleCheckAllDelete}
             />
             <span className={cx('bt1')}>刪</span>
             <span className={cx('bt2')}>改</span>
@@ -703,6 +710,7 @@ class Information extends PureComponent {
             </div>
           </div>
         </PopUp>
+        <BashDeletePopUp orderList={list} />
       </div>
     )
   }

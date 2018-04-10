@@ -17,9 +17,13 @@ class Member extends PureComponent {
   }
   changeTargetAccount = e => {
     let { userToken } = this.props
-    let target = e.currentTarget
-    let account = target.dataset.account
-    let branch = target.dataset.branch
+    let target = e.target
+    let { name } = target.dataset
+    let currentTarget = e.currentTarget
+    let { account, branch } = currentTarget.dataset
+    if (name === 'cancelOrder') {
+      this.checkToBashCancelByAccount(account)
+    }
     let prams = {
       Account: account,
       Branch: branch,
@@ -56,6 +60,10 @@ class Member extends PureComponent {
     }
     this.props.getPurchasing(params)
   }
+  checkToBashCancelByAccount = account => {
+    this.props.checkToBashCancelByAccount(account)
+    this.props.toggleBashDeletePopup(true)
+  }
   componentDidUpdate() {
     let wrap = document.getElementById('member-table')
     let target = wrap.querySelector(`.${[styles['focus']]}`)
@@ -74,7 +82,7 @@ class Member extends PureComponent {
     let lists = this.props.customerInfo
     var rows = []
     var cells = []
-    let headers = ['帳號', '名稱', '   ']
+    let headers = ['帳號', '名稱', '刪委託', '   ']
     let { targetAccount } = this.props
     for (let i = 0; i < headers.length; i++) {
       cells.push(
@@ -113,6 +121,17 @@ class Member extends PureComponent {
             {CName}
           </Cell>
           <Cell key="2">
+            <span
+              data-account={Account}
+              data-branch={Branch}
+              data-name="cancelOrder"
+              // onClick={this.checkToBashCancelByAccount}
+              className={cx('btn', 'info-btn')}
+            >
+              刪委託
+            </span>
+          </Cell>
+          <Cell key="3">
             <span
               data-account={Account}
               data-branch={Branch}

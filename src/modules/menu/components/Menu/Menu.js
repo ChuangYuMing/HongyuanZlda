@@ -67,6 +67,9 @@ class Menu extends PureComponent {
     })
     this.props.updateFilterSetting('market', market)
   }
+  showBashDeletePopup = () => {
+    this.props.showBashDeletePopup(true)
+  }
   changeTargetSymbol = e => {
     let target = e.target
     let symbol = target.value
@@ -99,7 +102,9 @@ class Menu extends PureComponent {
     return (
       <div className={cx('menu-wrap')}>
         <div className={cx('item-wrap', 't1')}>
-          <span className={cx('btn')}>勾選後刪單</span>
+          <span onClick={this.showBashDeletePopup} className={cx('btn')}>
+            勾選後刪單
+          </span>
         </div>
         <div className={cx('item-wrap', 't2')}>
           <span>選取帳號</span>

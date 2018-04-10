@@ -175,10 +175,10 @@ export const clearOrder = () => {
   }
 }
 
-export const checkDeleteRow = (clorderid, value) => {
+export const checkDeleteRow = (orderId, value) => {
   return {
     type: types.CHECK_DELETE_ROW,
-    clorderid,
+    orderId,
     value
   }
 }
@@ -209,5 +209,19 @@ export const updateOrderListHistory = data => {
 export const clearQuote = () => {
   return {
     type: types.CLEAR_QUOTE
+  }
+}
+
+export const checkAllDelete = value => {
+  return {
+    type: types.CHECK_ALL_DELETE,
+    value
+  }
+}
+
+export const checkToBashCancelByAccount = account => {
+  return {
+    type: types.CHECK_TO_BASH_CANCEL_BY_ACCOUNT,
+    account
   }
 }

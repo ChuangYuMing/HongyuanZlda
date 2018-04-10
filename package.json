@@ -37,7 +37,7 @@
     "react-redux": "5.0.6",
     "react-router-dom": "4.2.2",
     "react-split-pane": "^0.1.77",
-    "react-sticky-table": "^1.2.0",
+    "react-sticky-table": "^2.0.2",
     "react-tabs": "^2.2.1",
     "redux": "3.7.2",
     "redux-immutable": "^4.0.0",

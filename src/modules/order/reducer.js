@@ -43,17 +43,44 @@ export default (state = init, action) => {
       return init
     }
     case types.CHECK_DELETE_ROW: {
-      let { clorderid, value } = action
+      let { orderId, value } = action
       let targetIndex = state
         .get('orderList')
-        .findIndex(i => i.get('OrderID') === clorderid)
-      console.log('123123', clorderid, value, targetIndex)
+        .findIndex(i => i.get('OrderID') === orderId)
       if (targetIndex !== -1) {
         state = state.updateIn(['orderList', targetIndex], list => {
           list = list.set('checkToDelete', value)
           return list
         })
       }
+      return state
+    }
+    case types.CHECK_TO_BASH_CANCEL_BY_ACCOUNT: {
+      state = state.update('orderList', list => {
+        return list.map(item => {
+          if (item.get('OrdStatus') === '0' || item.get('OrdStatus') === '1') {
+            if (item.get('Account') === action.account) {
+              item = item.set('checkToDelete', true)
+            } else {
+              item = item.set('checkToDelete', false)
+            }
+          }
+          return item
+        })
+      })
+      return state
+    }
+    case types.CHECK_ALL_DELETE: {
+      let value = action.value
+      state = state.update('orderList', list => {
+        list = list.map(item => {
+          if (item.get('OrdStatus') === '0' || item.get('OrdStatus') === '1') {
+            item = item.set('checkToDelete', value)
+          }
+          return item
+        })
+        return list
+      })
       return state
     }
     case types.ADD_DEAL_HISTORY: {

@@ -1,1 +1,1 @@
-export const NAME = 'inventory'
+export const NAME = 'information'

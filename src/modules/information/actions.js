@@ -3,7 +3,7 @@ import { formatFormData } from 'tools/other.js'
 import { formatRequestData } from 'tools/format-res-data.js'
 import { changeOrderStatus } from 'modules/order/actions.js'
 import { formatReponse } from 'tools/format-res-data.js'
-import { order } from 'modules/order/actions.js'
+import { order, checkDeleteRow } from 'modules/order/actions.js'
 import { callApi } from 'modules/common/api.js'
 import appGlobal from 'modules/common/app-global.js'
 
@@ -26,7 +26,15 @@ export const cancelOrder = params => {
         return
       }
       appGlobal.changeFsmState(orderId, 'cancel')
+      dispatch(checkDeleteRow(orderId, false))
       dispatch(changeOrderStatus(obj))
     })
+  }
+}
+
+export const showBashDeletePopup = value => {
+  return {
+    type: types.SHOW_BASH_DELETE_POPUP,
+    value
   }
 }

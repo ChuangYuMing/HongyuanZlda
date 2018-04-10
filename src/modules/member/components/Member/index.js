@@ -4,6 +4,8 @@ import { changeTargetAccount } from 'modules/main/actions.js'
 import { getInventory } from 'modules/inventory/actions.js'
 import { getPurchasing } from '../../actions.js'
 import { updateFilterSetting } from 'modules/menu/actions.js'
+import { showBashDeletePopup } from 'modules/information/actions.js'
+import { checkToBashCancelByAccount } from 'modules/order/actions.js'
 
 const mapStateToProps = state => {
   return {
@@ -27,6 +29,12 @@ const mapDispatchToProps = dispatch => {
     },
     updateFilterSetting: (tag, value) => {
       dispatch(updateFilterSetting(tag, value))
+    },
+    toggleBashDeletePopup: value => {
+      dispatch(showBashDeletePopup(value))
+    },
+    checkToBashCancelByAccount: account => {
+      dispatch(checkToBashCancelByAccount(account))
     }
   }
 }
