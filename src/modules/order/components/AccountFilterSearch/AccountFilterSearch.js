@@ -57,12 +57,24 @@ class AccountFilterSearch extends Component {
     this.enter.unsubscribe()
   }
   componentDidMount() {
-    //last item getBoundingClientRect().top
-    const LAST_ITEM_FILTER_BOUND_TOP = 527
-    const FIRST_ITEM_FILTER_BOUND_TOP = 394
+    let LAST_ITEM_FILTER_BOUND_TOP
+    let FIRST_ITEM_FILTER_BOUND_TOP
+    let caceluteHeight = () => {
+      let clientHeight = document.body.clientHeight
+      LAST_ITEM_FILTER_BOUND_TOP = clientHeight - 131
+      FIRST_ITEM_FILTER_BOUND_TOP = LAST_ITEM_FILTER_BOUND_TOP - 133
+    }
+    caceluteHeight()
+
     let listWrap = document.querySelector(`.${styles['filter-wrap']} ul`)
     let keyDowns = Observable.fromEvent(document, 'keydown')
+    let resize = Observable.fromEvent(window, 'resize')
     let filterWrap = document.getElementById('accountFilter')
+
+    let windowResize = resize.debounceTime(500).subscribe(e => {
+      caceluteHeight()
+    })
+
     let downByKey = keyDowns.filter(e => e.keyCode === 40).subscribe(e => {
       if (this.focusItemIndex < this.state.listLength) {
         let focusItem = listWrap.querySelector(

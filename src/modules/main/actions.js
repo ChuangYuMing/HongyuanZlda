@@ -83,13 +83,13 @@ export const getCustomerInfo = params => {
           return
         }
         let res = formatReponse(obj)
-        // let tempArr = []
-        // for (let index = 0; index < 2000; index++) {
-        //   let temp = JSON.parse(JSON.stringify(res[0]))
-        //   temp.Account = `${res[0].Account}-${index}`
-        //   tempArr.push(temp)
-        // }
-        // res = res.concat(tempArr)
+        let tempArr = []
+        for (let index = 0; index < 500; index++) {
+          let temp = JSON.parse(JSON.stringify(res[0]))
+          temp.Account = `${res[0].Account}-${index}`
+          tempArr.push(temp)
+        }
+        res = res.concat(tempArr)
         console.log(res)
         res = fromJS(res)
         dispatch(updateCustomerInfo(res))
