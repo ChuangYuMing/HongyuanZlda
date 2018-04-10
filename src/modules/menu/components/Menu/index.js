@@ -23,8 +23,8 @@ const mapDispatchToProps = dispatch => {
   let flag = true
   let keydownMaping = []
   document.addEventListener('keydown', function(event) {
-    console.log(event.keyCode, event.metaKey)
-    console.log(event)
+    // console.log(event.keyCode, event.metaKey)
+    // console.log(event)
     let key = event.keyCode
     if (key === 17 || key === 82) {
       keydownMaping.push(key)
@@ -45,7 +45,6 @@ const mapDispatchToProps = dispatch => {
     keydownMaping.length = 0
   })
   window.addEventListener('beforeunload', function(e) {
-    alert(flag)
     if (flag) {
       let data = Map({
         isLogin: false,
