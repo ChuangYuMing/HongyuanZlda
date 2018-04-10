@@ -83,13 +83,13 @@ export const getCustomerInfo = params => {
           return
         }
         let res = formatReponse(obj)
-        let tempArr = []
-        for (let index = 0; index < 500; index++) {
-          let temp = JSON.parse(JSON.stringify(res[0]))
-          temp.Account = `${res[0].Account}-${index}`
-          tempArr.push(temp)
-        }
-        res = res.concat(tempArr)
+        // let tempArr = []
+        // for (let index = 0; index < 500; index++) {
+        //   let temp = JSON.parse(JSON.stringify(res[0]))
+        //   temp.Account = `${res[0].Account}-${index}`
+        //   tempArr.push(temp)
+        // }
+        // res = res.concat(tempArr)
         console.log(res)
         res = fromJS(res)
         dispatch(updateCustomerInfo(res))
@@ -234,7 +234,26 @@ export const updatePwd = params => {
     })
   }
 }
-
+export const checkPwd = params => {
+  return (dispatch, getState) => {
+    return new Promise((resolve, reject) => {
+      params = formatRequestData(params)
+      let formData = formatFormData(params)
+      callApi(`/api/billing/change/pwd`, {
+        method: 'POST',
+        body: formData
+      }).then(obj => {
+        let res = obj['30059']
+        if (res === '1') {
+          dispatch(forceUpdatePwd(false))
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+      })
+    })
+  }
+}
 export const getExchange = params => {
   return (dispatch, getState) => {
     return new Promise((resolve, reject) => {

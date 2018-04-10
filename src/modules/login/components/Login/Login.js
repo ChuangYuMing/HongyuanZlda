@@ -37,6 +37,7 @@ class Login extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
     if (nextProps.errorMsg !== '') {
       this.setState({
         disableSubmit: false
@@ -56,9 +57,13 @@ class Login extends Component {
     this.setState({
       disableSubmit: true
     })
-    setTimeout(() => {
-      this.props.login(parms)
-    }, 5000)
+    this.props.login(parms).then(res => {
+      if (!res) {
+        this.setState({
+          disableSubmit: false
+        })
+      }
+    })
   }
   render() {
     let { errorMsg } = this.props

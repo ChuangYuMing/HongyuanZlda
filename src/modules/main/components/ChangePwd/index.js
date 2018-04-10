@@ -1,6 +1,10 @@
 import { connect } from 'react-redux'
 import ChangePwd from './ChangePwd'
-import { toggleChangePwdPopup, updatePwd } from 'modules/main/actions.js'
+import {
+  toggleChangePwdPopup,
+  updatePwd,
+  checkPwd
+} from 'modules/main/actions.js'
 
 const mapStateToProps = state => {
   return {
@@ -20,8 +24,16 @@ const mapDispatchToProps = dispatch => {
       return new Promise(resolve => {
         if (params['Password'] === '') {
           resolve('不能為空值')
+          return
         }
         dispatch(updatePwd(params)).then(res => {
+          resolve(res)
+        })
+      })
+    },
+    checkPwd: params => {
+      return new Promise(resolve => {
+        dispatch(checkPwd(params)).then(res => {
           resolve(res)
         })
       })

@@ -39,6 +39,7 @@ export const login = params => {
         } else {
           let errorMsg = obj['12017']
           dispatch(updateErrorMsg(errorMsg))
+          resolve(false)
         }
       })
     })

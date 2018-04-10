@@ -13,7 +13,11 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     login: data => {
-      dispatch(login(data))
+      return new Promise(resolve => {
+        dispatch(login(data)).then(res => {
+          resolve(res)
+        })
+      })
     }
   }
 }

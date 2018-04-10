@@ -7,7 +7,8 @@ class ChangePwd extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      pwd: ''
+      pwd: '',
+      oldPwd: ''
     }
   }
   handleInputChange = e => {
@@ -27,37 +28,56 @@ class ChangePwd extends PureComponent {
       pwd: ''
     })
   }
-  updatePwd = () => {
-    let { pwd } = this.state
-    let params = {
+  checkPwd = () => {
+    let { pwd, oldPwd } = this.state
+    let checkParams = {
       MsgType: 43,
       TokenID: this.props.tokenId,
-      SenderCompID: '',
-      SenderSubID: '',
+      RMode: '0',
+      Username: this.props.userId,
+      Password: oldPwd,
+      MsgSeqNum: ''
+    }
+    let updateParams = {
+      MsgType: 43,
+      TokenID: this.props.tokenId,
       RMode: '1',
       Username: this.props.userId,
       Password: pwd,
-      MsgSeqNum: '',
-      SendingTime: '',
-      TargetCompID: '',
-      TargetSubID: ''
+      MsgSeqNum: ''
     }
-    console.log(params)
+
+    this.props.checkPwd(checkParams).then(res => {
+      if (res) {
+        this.updatePwd(updateParams)
+      } else {
+        let msg = document.getElementsByClassName(styles['msg'])[0]
+        msg.textContent = '原密碼錯誤'
+      }
+    })
+  }
+  updatePwd = params => {
     this.props.updatePwd(params).then(res => {
-      let info = ''
       let msg = document.getElementsByClassName(styles['msg'])[0]
       msg.textContent = res
     })
   }
   render() {
     let { showChangePwd, forceUpdatePwd } = this.props
-    console.log('showChangePwd', showChangePwd)
     return (
       <div className={showChangePwd ? cx('wrap') : cx('hide')}>
         <div className={cx('main')}>
           <div className={cx('title')}>修改密碼</div>
           <div className={cx('pwd-wrap')}>
             <span className={cx('msg')} />
+            <span>原密碼：</span>
+            <input
+              onChange={this.handleInputChange}
+              name="oldPwd"
+              type="text"
+              value={this.state.oldPwd}
+            />
+            <br />
             <span>新密碼：</span>
             <input
               onChange={this.handleInputChange}
@@ -72,7 +92,7 @@ class ChangePwd extends PureComponent {
           <span onClick={this.hidePopup} className={cx('btn', 'cancel')}>
             關閉
           </span>
-          <span onClick={this.updatePwd} className={cx('btn', 'submit')}>
+          <span onClick={this.checkPwd} className={cx('btn', 'submit')}>
             送出
           </span>
         </div>
