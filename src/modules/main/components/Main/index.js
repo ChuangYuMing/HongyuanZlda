@@ -10,6 +10,7 @@ import {
   getProds2,
   getTradeUnit
 } from '../../actions.js'
+import { logout } from 'modules/menu/actions.js'
 
 const mapStateToProps = state => {
   return {
@@ -81,6 +82,10 @@ const mapDispatchToProps = dispatch => {
     },
     getTradeUnit: params => {
       dispatch(getTradeUnit(params))
+    },
+    logout: () => {
+      dispatch(logout())
+      window.location.replace('/order/login')
     }
   }
 }

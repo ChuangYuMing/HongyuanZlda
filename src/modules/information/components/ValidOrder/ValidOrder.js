@@ -333,6 +333,7 @@ class Information extends PureComponent {
         'hidden-row': index + 1 === inflatList.size ? true : false,
         error: item.get('OrdStatus') == '8',
         allDeal: item.get('OrdStatus') == '2',
+        partialDeal: item.get('OrdStatus') == '1',
         dealHistory: item.get('isHistory')
       })
       let sideCx = cx({

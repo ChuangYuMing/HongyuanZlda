@@ -58,12 +58,6 @@ const mapDispatchToProps = dispatch => {
   })
   return {
     logout: () => {
-      // let data = Map({
-      //   isLogin: false,
-      //   userToken: ''
-      // })
-      // dispatch(updateAppInfo(data))
-      // dispatch(clearOrder())
       dispatch(logout())
       window.location.replace('/order/login')
     },

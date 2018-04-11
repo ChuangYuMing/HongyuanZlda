@@ -60,7 +60,6 @@ class Main extends Component {
       },
       e => {
         console.log('系統異常！', e)
-        alert(`系統異常！ ${e['58'] ? e['58'] : ''}`)
       }
     )
 

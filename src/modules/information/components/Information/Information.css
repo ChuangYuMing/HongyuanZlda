@@ -93,6 +93,9 @@
 .allDeal {
   color: #ffae4b;
 }
+.partialDeal {
+  color: #f5b970;
+}
 .hide {
   opacity: 0;
   cursor: none;
