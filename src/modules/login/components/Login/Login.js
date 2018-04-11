@@ -66,7 +66,7 @@ class Login extends Component {
           })
         }
       })
-    }, 1000)
+    }, 300)
   }
   render() {
     let { errorMsg } = this.props
