@@ -1,6 +1,7 @@
 class AppGlobal {
   constructor() {
     if (PRODUCTION) {
+      // this._apiUrl = 'http://192.168.12.24:8008'
       this._apiUrl = window.location.origin
     } else {
       // this._apiUrl = 'http://192.168.12.134:8080'

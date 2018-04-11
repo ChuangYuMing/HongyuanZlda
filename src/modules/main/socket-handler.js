@@ -5,7 +5,7 @@ import { changeOrderStatus, bidAndAskTick, updateTick } from './actions'
 import appGlobal from 'modules/common/app-global.js'
 import { orderTypeMaping } from 'tools/format-res-data.js'
 import { updateMainPopUpMsg } from 'modules/main/actions.js'
-import { searchProperty } from 'tools/other.js'
+import { searchProperty, changeToLocalTime } from 'tools/other.js'
 
 const dispatch = store.dispatch
 const mainPopUpObs = new Observer()
@@ -41,7 +41,7 @@ class SocketHandler {
         ['Account', Account]
       )
 
-      let ttime = TransactTime ? TransactTime.split('-')[1].split('.')[0] : ''
+      let ttime = changeToLocalTime(TransactTime)
       let side = Side === '1' ? '買' : '賣'
       let orderType = orderTypeMaping(OrdType)
       let popupMsg = ''
@@ -81,12 +81,7 @@ class SocketHandler {
           .order.get('orderList')
           .find(i => i.get('OrderID') === OrderID)
         console.log('order', order)
-        ttime = order.get('TransactTime')
-          ? order
-              .get('TransactTime')
-              .split('-')[1]
-              .split('.')[0]
-          : ''
+        ttime = changeToLocalTime(order.get('TransactTime'))
         Account = order.get('Account')
         orderType = orderTypeMaping(order.get('OrdType'))
         Symbol = order.get('Symbol')

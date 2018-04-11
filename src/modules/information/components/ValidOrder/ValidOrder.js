@@ -6,6 +6,7 @@ import classNames from 'classnames/bind'
 import { StickyTable, Row, Cell } from 'react-sticky-table'
 import { orderStatusMaping } from 'tools/format-res-data.js'
 import { getDateFromFormat, formatDate } from 'tools/date.js'
+import { changeToLocalTime } from 'tools/other.js'
 import PopUp from 'modules/shared/components/PopUp/PopUp.js'
 import InformationRow from '../InformationRow/InformationRow.js'
 import { Decimal } from 'decimal.js'
@@ -340,19 +341,7 @@ class Information extends PureComponent {
       })
       let iRow = () => {
         let TransactTime = item.get('TransactTime')
-        if (TransactTime !== '--') {
-          TransactTime = getDateFromFormat(
-            TransactTime.split('.')[0],
-            'yMMdd-HH:mm:ss'
-          )
-          let offset = new Date().getTimezoneOffset()
-          TransactTime =
-            offset < 0
-              ? TransactTime - offset * 60 * 1000
-              : TransactTime + offset * 60 * 1000
-
-          TransactTime = formatDate(new Date(TransactTime), 'HH:mm:ss')
-        }
+        TransactTime = changeToLocalTime(TransactTime)
 
         let showActionWrap = false
         if (item.get('isHistory') == true) {
@@ -363,6 +352,11 @@ class Information extends PureComponent {
         ) {
           showActionWrap = true
         }
+        let inflateBtnCx = cx({
+          hide: !item.has('inflatDealHistory'),
+          'deflate-btn': item.get('inflatDealHistory') === true,
+          'inflate-btn': item.get('inflatDealHistory') === false
+        })
         return (
           <Row
             className={cxx}
@@ -417,11 +411,7 @@ class Information extends PureComponent {
                   data-orderid={item.get('OrderID')}
                   data-flag={item.get('inflatDealHistory')}
                   onClick={this.inflatDealHistory}
-                  className={
-                    item.has('inflatDealHistory')
-                      ? cx('inflate-btn')
-                      : cx('inflate-btn', 'hide')
-                  }
+                  className={inflateBtnCx}
                 />
                 <span className={cx('bt1')}>{item.get('Account')}</span>
               </div>

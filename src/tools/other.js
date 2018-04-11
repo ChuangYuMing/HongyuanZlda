@@ -1,5 +1,6 @@
 import queryString from 'query-string'
 import { isImmutable } from 'immutable'
+import { getDateFromFormat, formatDate } from 'tools/date.js'
 
 function sleep(milliseconds) {
   var start = new Date().getTime()
@@ -201,6 +202,25 @@ function decimalPlaces(num) {
       (match[2] ? +match[2] : 0)
   )
 }
+
+function changeToLocalTime(time) {
+  let localTime = ''
+  try {
+    if (time !== '--') {
+      localTime = getDateFromFormat(time.split('.')[0], 'yMMdd-HH:mm:ss')
+      let offset = new Date().getTimezoneOffset()
+      localTime =
+        offset < 0
+          ? localTime - offset * 60 * 1000
+          : localTime + offset * 60 * 1000
+
+      localTime = formatDate(new Date(localTime), 'HH:mm:ss')
+    }
+  } catch (error) {
+    console.log(error)
+  }
+  return localTime
+}
 export {
   sleep,
   getClientOffset,
@@ -213,5 +233,6 @@ export {
   text_truncate,
   searchProperty,
   keyWordOtherFilter,
-  decimalPlaces
+  decimalPlaces,
+  changeToLocalTime
 }
