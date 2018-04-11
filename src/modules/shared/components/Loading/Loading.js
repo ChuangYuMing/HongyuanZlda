@@ -6,7 +6,7 @@ let cx = classNames.bind(styles)
 
 function Loading({ width = '40px', height = '40px', style }) {
   return (
-    <div className={cx(style)}>
+    <div className={cx('loading-wrpa')} style={style}>
       <svg
         className={cx('loading')}
         version="1.1"

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styles from './login.css'
 import classNames from 'classnames/bind'
 import Logo from 'static/image/icons/logo.png'
+import Loading from 'modules/shared/components/Loading/Loading.js'
 
 let cx = classNames.bind(styles)
 class Login extends Component {
@@ -57,13 +58,15 @@ class Login extends Component {
     this.setState({
       disableSubmit: true
     })
-    this.props.login(parms).then(res => {
-      if (!res) {
-        this.setState({
-          disableSubmit: false
-        })
-      }
-    })
+    setTimeout(() => {
+      this.props.login(parms).then(res => {
+        if (!res) {
+          this.setState({
+            disableSubmit: false
+          })
+        }
+      })
+    }, 1000)
   }
   render() {
     let { errorMsg } = this.props
@@ -96,13 +99,19 @@ class Login extends Component {
                 onChange={this.handleInputChange}
               />
             </div>
-            <button
-              disabled={this.state.disableSubmit}
-              type="submit"
-              className={cx('btn')}
-            >
-              登入
-            </button>
+            {this.state.disableSubmit ? (
+              <div className={cx('loading-wrap')}>
+                <Loading />
+              </div>
+            ) : (
+              <button
+                disabled={this.state.disableSubmit}
+                type="submit"
+                className={cx('btn')}
+              >
+                登入
+              </button>
+            )}
           </div>
         </form>
       </div>
