@@ -12,6 +12,7 @@ import InformationRow from '../InformationRow/InformationRow.js'
 import { Decimal } from 'decimal.js'
 import { Observable } from 'rxjs'
 import BashDeletePopUp from '../BashDeletePopUp/index.js'
+import compose from 'lodash/fp/compose'
 
 let cx = classNames.bind(styles)
 let validOrderCx = classNames.bind(validOrderStyles)
@@ -257,18 +258,73 @@ class Information extends PureComponent {
       OrdStatus: 'E'
     })
 
-    if (!sortByTime) {
-      list = list.sort((a, b) => {
-        let atime = a.get('TransactTime').split('.')
-        let btime = b.get('TransactTime').split('.')
-        let adatetime = getDateFromFormat(atime[0], 'yMMdd-HH:mm:ss')
-        let bdatetime = getDateFromFormat(btime[0], 'yMMdd-HH:mm:ss')
-        adatetime = adatetime + parseInt(atime[1])
-        bdatetime = bdatetime + parseInt(btime[1])
-        // console.log(adatetime, bdatetime)
-        return adatetime - bdatetime
-      })
+    let sortWithTime = list => {
+      if (sortByTime) {
+        let flag = sortByTime === 'up' ? -1 : 1
+        list = list.sort((a, b) => {
+          let atime = a.get('TransactTime').split('.')
+          let btime = b.get('TransactTime').split('.')
+          let adatetime = getDateFromFormat(atime[0], 'yMMdd-HH:mm:ss')
+          let bdatetime = getDateFromFormat(btime[0], 'yMMdd-HH:mm:ss')
+          adatetime = adatetime + parseInt(atime[1])
+          bdatetime = bdatetime + parseInt(btime[1])
+          // console.log(adatetime, bdatetime)
+          return (adatetime - bdatetime) * flag
+        })
+      }
+      return list
     }
+    let compareByName = (flag, property) => {
+      return (a, b) => {
+        a = a.get(property)
+        b = b.get(property)
+        if (a > b) {
+          return 1 * flag
+        }
+        if (a < b) {
+          return -1 * flag
+        }
+        return 0
+      }
+    }
+
+    let sortWithSymbol = list => {
+      if (sortBySymbol) {
+        if (sortBySymbol === 'up') {
+          list = list.sort(compareByName(-1, 'Symbol'))
+        } else {
+          list = list.sort(compareByName(1, 'Symbol'))
+        }
+      }
+      return list
+    }
+    let sortWithAccount = list => {
+      if (sortByAccount) {
+        if (sortByAccount === 'up') {
+          list = list.sort(compareByName(-1, 'Account'))
+        } else {
+          list = list.sort(compareByName(1, 'Account'))
+        }
+      }
+      return list
+    }
+    let sortWithOrderID = list => {
+      if (sortByOrderId) {
+        if (sortByOrderId === 'up') {
+          list = list.sort(compareByName(-1, 'OrderID'))
+        } else {
+          list = list.sort(compareByName(1, 'OrderID'))
+        }
+      }
+      return list
+    }
+    let sortWithSetting = compose(
+      sortWithTime,
+      sortWithSymbol,
+      sortWithAccount,
+      sortWithOrderID
+    )
+    list = sortWithSetting(list)
     list = list.push(hiddenData)
     let inflatList = List([])
     list.forEach(item => {

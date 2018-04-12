@@ -160,6 +160,7 @@
 }
 
 .account-wrap {
+  position: relative;
   width: 100%;
   .bt1 {
     padding-left: 20px;
@@ -175,7 +176,7 @@
 
 .top-triangle {
   position: absolute;
-  right: 25px;
+  right: 0px;
   top: 10px;
   cursor: pointer;
   width: 0;
@@ -189,7 +190,7 @@
 }
 .down-triangle {
   position: absolute;
-  right: 25px;
+  right: 0px;
   top: 10px;
   cursor: pointer;
   width: 0;
