@@ -28,6 +28,7 @@ class Menu extends PureComponent {
       this.setState({
         account: targetAcc
       })
+      this.props.updateFilterSetting('account', targetAcc)
     }
   }
   handleInputChange = e => {
