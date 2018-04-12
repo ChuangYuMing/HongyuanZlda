@@ -12,6 +12,7 @@ import InformationRow from '../InformationRow/InformationRow.js'
 import { Decimal } from 'decimal.js'
 import { Observable } from 'rxjs'
 import BashDeletePopUp from '../BashDeletePopUp/index.js'
+import compose from 'lodash/fp/compose'
 
 let cx = classNames.bind(styles)
 let validOrderCx = classNames.bind(validOrderStyles)
@@ -19,7 +20,10 @@ class Information extends PureComponent {
   constructor() {
     super()
     this.state = {
-      sortByTime: false,
+      sortByAccount: false,
+      sortByOrderId: false,
+      sortByTime: 'up',
+      sortBySymbol: false,
       showCancelPopUp: false,
       showChangeVolPopUp: false,
       showChangePricePopUp: false,
@@ -162,6 +166,38 @@ class Information extends PureComponent {
     }
     this.props.inflatDealHistory(orderid, flag)
   }
+  toggleSort = e => {
+    let target = e.currentTarget
+    let { cellindex } = target.dataset
+    let { sortByAccount, sortByOrderId, sortByTime, sortBySymbol } = this.state
+    let sorts = [
+      { i: '1', name: 'sortByAccount' },
+      { i: '2', name: 'sortByOrderId' },
+      { i: '3', name: 'sortByTime' },
+      { i: '4', name: 'sortBySymbol' }
+    ]
+    let targetSort = sorts.find(item => item.i === cellindex)
+    let value
+    let newState = {}
+    if (!targetSort) {
+      return
+    }
+    if (this.state[targetSort.name] === 'up') {
+      value = 'down'
+    } else if (this.state[targetSort.name] === 'down') {
+      value = 'up'
+    } else {
+      value = 'up'
+    }
+    sorts.forEach((item, index) => {
+      if (item.name !== targetSort.name) {
+        newState[item.name] = false
+      } else {
+        newState[item.name] = value
+      }
+    })
+    this.setState(newState)
+  }
   componentDidMount() {
     let keyDowns = Observable.fromEvent(document, 'keydown')
     let enterBykey = keyDowns.filter(e => e.keyCode === 13).subscribe(e => {
@@ -205,6 +241,7 @@ class Information extends PureComponent {
   }
   render() {
     let list = this.props.data
+    let { sortByAccount, sortByOrderId, sortByTime, sortBySymbol } = this.state
     let targetRow = this.state.targetRow
     let hiddenData = Map({
       Account: '255428',
@@ -221,18 +258,73 @@ class Information extends PureComponent {
       OrdStatus: 'E'
     })
 
-    if (this.state.sortByTime) {
-      list = list.sort((a, b) => {
-        let atime = a.get('TransactTime').split('.')
-        let btime = b.get('TransactTime').split('.')
-        let adatetime = getDateFromFormat(atime[0], 'yMMdd-HH:mm:ss')
-        let bdatetime = getDateFromFormat(btime[0], 'yMMdd-HH:mm:ss')
-        adatetime = adatetime + parseInt(atime[1])
-        bdatetime = bdatetime + parseInt(btime[1])
-        // console.log(adatetime, bdatetime)
-        return adatetime - bdatetime
-      })
+    let sortWithTime = list => {
+      if (sortByTime) {
+        let flag = sortByTime === 'up' ? -1 : 1
+        list = list.sort((a, b) => {
+          let atime = a.get('TransactTime').split('.')
+          let btime = b.get('TransactTime').split('.')
+          let adatetime = getDateFromFormat(atime[0], 'yMMdd-HH:mm:ss')
+          let bdatetime = getDateFromFormat(btime[0], 'yMMdd-HH:mm:ss')
+          adatetime = adatetime + parseInt(atime[1])
+          bdatetime = bdatetime + parseInt(btime[1])
+          // console.log(adatetime, bdatetime)
+          return (adatetime - bdatetime) * flag
+        })
+      }
+      return list
     }
+    let compareByName = (flag, property) => {
+      return (a, b) => {
+        a = a.get(property)
+        b = b.get(property)
+        if (a > b) {
+          return 1 * flag
+        }
+        if (a < b) {
+          return -1 * flag
+        }
+        return 0
+      }
+    }
+
+    let sortWithSymbol = list => {
+      if (sortBySymbol) {
+        if (sortBySymbol === 'up') {
+          list = list.sort(compareByName(-1, 'Symbol'))
+        } else {
+          list = list.sort(compareByName(1, 'Symbol'))
+        }
+      }
+      return list
+    }
+    let sortWithAccount = list => {
+      if (sortByAccount) {
+        if (sortByAccount === 'up') {
+          list = list.sort(compareByName(-1, 'Account'))
+        } else {
+          list = list.sort(compareByName(1, 'Account'))
+        }
+      }
+      return list
+    }
+    let sortWithOrderID = list => {
+      if (sortByOrderId) {
+        if (sortByOrderId === 'up') {
+          list = list.sort(compareByName(-1, 'OrderID'))
+        } else {
+          list = list.sort(compareByName(1, 'OrderID'))
+        }
+      }
+      return list
+    }
+    let sortWithSetting = compose(
+      sortWithTime,
+      sortWithSymbol,
+      sortWithAccount,
+      sortWithOrderID
+    )
+    list = sortWithSetting(list)
     list = list.push(hiddenData)
     let inflatList = List([])
     list.forEach(item => {
@@ -292,9 +384,36 @@ class Information extends PureComponent {
       '未成交數量',
       '狀態'
     ]
+
     for (let i = 0; i < headers.length; i++) {
       let cellData = ''
-      if (i == 0) {
+      let sortCx = ''
+      switch (i) {
+        case 1:
+          if (sortByAccount) {
+            sortCx = sortByAccount === 'up' ? 'top-triangle' : 'down-triangle'
+          }
+          break
+        case 2:
+          if (sortByOrderId) {
+            sortCx = sortByOrderId === 'up' ? 'top-triangle' : 'down-triangle'
+          }
+          break
+        case 3:
+          if (sortByTime) {
+            sortCx = sortByTime === 'up' ? 'top-triangle' : 'down-triangle'
+          }
+          break
+        case 4:
+          if (sortBySymbol) {
+            sortCx = sortBySymbol === 'up' ? 'top-triangle' : 'down-triangle'
+          }
+          break
+        default:
+          sortCx = ''
+          break
+      }
+      if (i === 0) {
         cellData = (
           <div className={cx('header1')}>
             <input
@@ -310,13 +429,23 @@ class Information extends PureComponent {
         )
       } else if (i == 1) {
         cellData = (
-          <div className={cx('account-wrap')}>
+          <div
+            onClick={this.toggleSort}
+            data-cellindex={i}
+            className={cx('account-wrap')}
+          >
             <a className={cx('inflate-btn', 'hide')} />
             <span className={cx('bt1')}>{headers[i]}</span>
+            <span className={cx(sortCx)} />
           </div>
         )
       } else {
-        cellData = headers[i]
+        cellData = (
+          <div onClick={this.toggleSort} data-cellindex={i}>
+            <span>{headers[i]}</span>
+            <span className={cx(sortCx)} />
+          </div>
+        )
       }
       cells.push(
         <Cell className={cx('header-cell')} key={i}>
