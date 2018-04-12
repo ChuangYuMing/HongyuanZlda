@@ -221,6 +221,20 @@ function changeToLocalTime(time) {
   }
   return localTime
 }
+
+function getOriginOrderVoulme(obj) {
+  let originOrderVolume = ''
+  try {
+    let LeavesQty = obj.get('LeavesQty')
+    let CumQty = obj.get('CumQty')
+    let CxlQty = obj.get('CxlQty')
+    originOrderVolume =
+      parseInt(LeavesQty) + parseInt(CumQty) + parseInt(CxlQty)
+  } catch (error) {
+    originOrderVolume = '--'
+  }
+  return originOrderVolume
+}
 export {
   sleep,
   getClientOffset,
@@ -234,5 +248,6 @@ export {
   searchProperty,
   keyWordOtherFilter,
   decimalPlaces,
-  changeToLocalTime
+  changeToLocalTime,
+  getOriginOrderVoulme
 }

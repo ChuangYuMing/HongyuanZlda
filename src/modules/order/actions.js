@@ -1,5 +1,5 @@
 import * as types from './action-types'
-import { formatFormData } from 'tools/other.js'
+import { formatFormData, getOriginOrderVoulme } from 'tools/other.js'
 import { formatReponse, formatRequestData } from 'tools/format-res-data.js'
 import appGlobal from 'modules/common/app-global.js'
 import { quoteFormatEven } from 'tools/apex-dataformat'
@@ -86,6 +86,11 @@ export const changeOrderStatus = (res, mappingData = true) => {
   } else {
     data = fromJS(res)
   }
+  if (data.get('OrdStatus') !== '8') {
+    let originOrderVolume = getOriginOrderVoulme(data)
+    data = data.set('originOrderVolume', originOrderVolume)
+  }
+
   return {
     type: types.CHANGE_ORDER_STATUS,
     data
@@ -185,6 +190,8 @@ export const checkDeleteRow = (orderId, value) => {
 
 export const addDealHistory = data => {
   data = Map(data)
+  let originOrderVolume = getOriginOrderVoulme(data)
+  data = data.set('originOrderVolume', originOrderVolume)
   return {
     type: types.ADD_DEAL_HISTORY,
     data

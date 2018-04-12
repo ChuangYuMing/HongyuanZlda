@@ -77,6 +77,7 @@ function fixDataMaping() {
     '30056': 'Branch',
     '30057': 'RMode',
     '30058': 'Items',
+    '30060': 'SecondaryClOrdID',
     '30061': 'Address',
     '30062': 'Phone',
     '30063': 'Email',
