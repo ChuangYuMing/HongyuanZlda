@@ -3,7 +3,7 @@ import { callApi } from 'modules/common/api.js'
 import appGlobal from 'modules/common/app-global.js'
 import { formatReponse, formatRequestData } from 'tools/format-res-data.js'
 import { formatGetRequestData } from 'tools/other.js'
-import { formatFormData } from 'tools/other.js'
+import { formatFormData, getOriginOrderVoulme } from 'tools/other.js'
 import { getDateFromFormat } from 'tools/date.js'
 import { updateOrderListHistory } from 'modules/order/actions.js'
 import { fromJS } from 'immutable'
@@ -143,13 +143,13 @@ export const getOrderStatus = params => {
           })
 
           item = Map(list[list.length - 1])
-          // item.set('avgPrice', item.get('LastPx'))
+          let originOrderVolume = getOriginOrderVoulme(item)
+          item = item.set('originOrderVolume', originOrderVolume)
+
           list.forEach(element => {
-            if (element['OrdStatus'] === '0') {
-              item = item.set('originOrderVolume', element['OrderQty'])
-            }
             if (element['OrdStatus'] === '2' || element['OrdStatus'] === '1') {
               element = Map(element)
+              element = element.set('originOrderVolume', originOrderVolume)
               if (!item.get('dealHistory')) {
                 item = item.update('dealHistory', i => {
                   let list = List([])

@@ -236,13 +236,6 @@ class Information extends PureComponent {
     list = list.push(hiddenData)
     let inflatList = List([])
     list.forEach(item => {
-      let originOrderVolume = item.get('originOrderVolume')
-      if (item.get('OrdStatus') == '2') {
-        item = item.set('originOrderVolume', item.get('CumQty'))
-      }
-      if (item.get('OrdStatus') == '8') {
-        item = item.set('originOrderVolume', item.get('OrderQty'))
-      }
       if (item.has('dealHistory')) {
         let dealHistory = item.get('dealHistory')
         let totalPrice = Decimal(0)
@@ -263,11 +256,11 @@ class Information extends PureComponent {
           dealHistory.forEach(h => {
             h = h.set('isHistory', true)
             h = h.set('OrderID', h.get('ExecID'))
-            if (h.get('OrdStatus') == '2') {
-              h = h.set('originOrderVolume', h.get('CumQty'))
-            } else {
-              h = h.set('originOrderVolume', originOrderVolume)
-            }
+
+            let LeavesQty = h.get('LeavesQty')
+            let CumQty = h.get('CumQty')
+            let CxlQty = h.get('CxlQty')
+
             inflatList = inflatList.push(h)
           })
         }
@@ -432,7 +425,7 @@ class Information extends PureComponent {
             </Cell>
             <Cell key="9">{item.get('CxlQty')}</Cell>
             <Cell key="10">
-              {item.get('avgPrice') ? item.get('avgPrice') : ''}
+              {item.get('avgPrice') ? item.get('avgPrice') : '--'}
             </Cell>
             <Cell key="11">{item.get('LeavesQty')}</Cell>
             <Cell key="12">

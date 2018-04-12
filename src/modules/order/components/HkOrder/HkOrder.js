@@ -907,8 +907,10 @@ class HkOrder extends PureComponent {
       quote.get('low') && quote.get('low') !== '--'
         ? Decimal(quote.get('low')).toFixed(3, Decimal.ROUND_DOWN)
         : '--'
-    let NameArr = Name ? Name.split('/') : ''
-    Name = NameArr.length > 1 ? NameArr[1] : Name
+
+    let NameArr = Name ? Name.split('/') : ['']
+    Name = NameArr.length > 1 ? NameArr[1] : NameArr[0]
+
     // APrice = parseFloat(APrice) > 0 ? parseFloat(APrice) : APrice
     // BPrice = parseFloat(BPrice) > 0 ? parseFloat(BPrice) : BPrice
     // Price = parseFloat(Price) > 0 ? parseFloat(Price) : Price
