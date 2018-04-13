@@ -38,6 +38,7 @@ class App extends React.PureComponent {
             <Route exact path={'/temp3'} component={Temp3} />
             <Route exact path={'/order/login'} component={Login} />
           </Switch>
+          <span className={cx('version')}>v20180413</span>
         </div>
       )
     }

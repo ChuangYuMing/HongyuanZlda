@@ -117,6 +117,9 @@ class WsConnect {
       orderFsm = appGlobal.getOrderFsm(orderId)
       console.log(orderFsm.state)
       console.log(orderFsm.transitions())
+      if (status === '8') {
+        res['errorMsg'] = res['Text']
+      }
       if (orderFsm.state === 'cancel-wait' && status === '8') {
         status = 'cancelFail'
       }

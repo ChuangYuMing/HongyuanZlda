@@ -1,6 +1,15 @@
 import * as types from './action-types'
-import { formatFormData, getOriginOrderVoulme } from 'tools/other.js'
-import { formatReponse, formatRequestData } from 'tools/format-res-data.js'
+import {
+  formatFormData,
+  getOriginOrderVoulme,
+  searchProperty,
+  changeToLocalTime
+} from 'tools/other.js'
+import {
+  formatReponse,
+  formatRequestData,
+  orderTypeMaping
+} from 'tools/format-res-data.js'
 import appGlobal from 'modules/common/app-global.js'
 import { quoteFormatEven } from 'tools/apex-dataformat'
 import { Map } from 'immutable'
@@ -45,29 +54,45 @@ export const order = params => {
       apiUrl
     ).then(obj => {
       console.log('order response', obj)
-      if (obj.hasOwnProperty('373')) {
-        let clordId = obj['11']
-        let status = 'error'
-        let errMsg = `發生錯誤, ${obj['58']}, error code: ${obj['373']}`
-        let popupMsg = `<span>${errMsg}</span>`
-        let orderFsm = appGlobal.getOrderFsm(clordId)
-        appGlobal.changeFsmState(clordId, 'error')
-        dispatch(
-          changeOrderStatus(
-            fromJS({
-              ClOrdID: clordId,
-              OrdStatus: '8',
-              errorMsg: obj['58']
-            }),
-            false
+      if (obj['35'] === '67') {
+        //風控reject
+        if (obj['150'] === '8') {
+          let { Account, Symbol, OrdType, Price, OrderQty, Side } = params
+          let side = Side === '1' ? '買' : '賣'
+          let orderType = orderTypeMaping(OrdType)
+          let { CName } = searchProperty(
+            getState().main.get('customerInfo'),
+            ['CName'],
+            ['Account', Account]
           )
-        )
-        dispatch(updateMainPopUpMsg(popupMsg, status))
+          let clordId = obj['11']
+          let status = 'error'
+          let errMsg = `發生錯誤, ${obj['58']}`
+          let ttime = changeToLocalTime(obj['60'])
+          let popupMsg = `<span>${ttime} ${errMsg}, 帳號：${Account},${CName}, ${orderType}</span>
+                        <br/>
+                        <span>${Symbol},  價格：${Price},  數量：${OrderQty}股</span>
+                        `
+
+          // let popupMsg = `<span>${errMsg}</span>`
+          let orderFsm = appGlobal.getOrderFsm(clordId)
+          appGlobal.changeFsmState(clordId, 'error')
+          dispatch(
+            changeOrderStatus(
+              fromJS({
+                ClOrdID: clordId,
+                OrdStatus: '8',
+                TransactTime: obj['60'],
+                errorMsg: obj['58']
+              }),
+              false
+            )
+          )
+          dispatch(updateMainPopUpMsg(popupMsg, status))
+        }
         return
       }
-      if (!obj['30058']) {
-        return
-      }
+
       let data = formatReponse(obj)[0]
       let orderFsm = appGlobal.getOrderFsm(data.ClOrdID)
       if (appGlobal.canTransistionOrderStatus(data.ClOrdID, data.OrdStatus)) {
