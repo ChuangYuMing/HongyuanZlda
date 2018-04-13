@@ -117,10 +117,22 @@ export const getQuote = (symbols, options = {}) => {
       },
       apiUrl
     ).then(obj => {
-      console.log(obj)
+      console.log('getQuote', obj)
+      if (!obj) {
+        let symbol = symbols[0]
+        dispatch(
+          show(
+            Map({
+              Symbol: symbol
+            })
+          )
+        )
+        return
+      }
       if (!obj.Prods) {
         return
       }
+
       let quote = obj.Prods[0].Quote
       let symbol = obj.Prods[0].Symbol
       let iob = Map(quoteFormatEven(symbol, quote))
