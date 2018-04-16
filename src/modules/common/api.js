@@ -12,13 +12,14 @@ const callApi = (endpoint, config, url) => {
     })
     .then(obj => {
       if (obj.hasOwnProperty('373')) {
-        console.log('系統異常！', obj)
+        console.log('異常！', obj)
         if (obj['373'] === '98') {
           alert(`Token驗證錯誤，請重新登入！`)
           store.dispatch(logout())
           window.location.replace('/order/login')
         } else {
-          alert(`系統異常！ ${e['58'] ? e['58'] : ''}`)
+          console.log('123123')
+          alert(`系統異常！ ${obj['58'] ? obj['58'] : ''}`)
         }
         return
       }

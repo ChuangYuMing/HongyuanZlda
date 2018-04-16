@@ -112,6 +112,9 @@ class Information extends PureComponent {
       if (filterStatus.indexOf(x.get('OrdStatus')) !== -1) {
         return true
       }
+      if (x.get('OrdStatus') === '4' && parseInt(x.get('CumQty')) > 0) {
+        return true
+      }
       return false
     })
     let ErrorList = filterList.filter(x => {

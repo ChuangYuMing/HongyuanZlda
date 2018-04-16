@@ -145,7 +145,9 @@ export const getOrderStatus = params => {
           item = Map(list[list.length - 1])
           let originOrderVolume = getOriginOrderVoulme(item)
           item = item.set('originOrderVolume', originOrderVolume)
-
+          if (item.get('OrdStatus') === '8') {
+            item = item.set('errorMsg', item.get('Text'))
+          }
           list.forEach(element => {
             if (element['OrdStatus'] === '2' || element['OrdStatus'] === '1') {
               element = Map(element)

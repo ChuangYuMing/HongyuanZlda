@@ -12,3 +12,11 @@
     color: white;
   }
 }
+
+.version {
+  display: inline-block;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  color: white;
+}

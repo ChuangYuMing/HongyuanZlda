@@ -155,6 +155,12 @@ class Information extends PureComponent {
       checkAllDelete: value
     })
   }
+  clearCheckToDelete = () => {
+    this.props.checkAllDelete(false)
+    this.setState({
+      checkAllDelete: false
+    })
+  }
   inflatDealHistory = e => {
     let target = e.target
     let orderid = target.dataset.orderid
@@ -823,7 +829,10 @@ class Information extends PureComponent {
             </div>
           </div>
         </PopUp>
-        <BashDeletePopUp orderList={list} />
+        <BashDeletePopUp
+          clearCheckToDelete={this.clearCheckToDelete}
+          orderList={list}
+        />
       </div>
     )
   }

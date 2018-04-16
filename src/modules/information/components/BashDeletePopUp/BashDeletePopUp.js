@@ -32,6 +32,7 @@ class BashDeletePopUp extends PureComponent {
   }
   closePopUp = () => {
     this.props.toggleBashDeletePopup(false)
+    this.props.clearCheckToDelete()
   }
   checkDeleteRow = e => {
     let target = e.target
