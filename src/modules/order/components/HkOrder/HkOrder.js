@@ -1111,7 +1111,7 @@ class HkOrder extends PureComponent {
                           parseFloat(Open) > 0 ? parseFloat(Open) : Open
                         }
                       >
-                        <span className={cx('left-wrap')}>[+4]開盤價</span>
+                        <span className={cx('left-wrap')}>[+4] 開盤價</span>
                         <span className={cx('right-wrap')} style={bPriceStyle}>
                           {Open}
                         </span>
@@ -1124,7 +1124,7 @@ class HkOrder extends PureComponent {
                             : PrePrice
                         }
                       >
-                        <span className={cx('left-wrap')}>[+5]平盤價</span>
+                        <span className={cx('left-wrap')}>[+5] 平盤價</span>
                         <span className={cx('right-wrap')} style={bPriceStyle}>
                           {PrePrice}
                         </span>
