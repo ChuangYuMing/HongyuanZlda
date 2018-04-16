@@ -64,7 +64,7 @@ class HkOrder extends PureComponent {
     this.endIndexAccountFilter = 100
     this.symbolFilterList = []
     this.accountFilterList = []
-    this.focusPriceItemIndex = 1
+    this.focusPriceItemIndex = 0
   }
   handleInputChange = e => {
     const target = e.target
@@ -647,12 +647,14 @@ class HkOrder extends PureComponent {
       let focusItem = priceListWrap.querySelector(
         `li:nth-child(${this.focusPriceItemIndex})`
       )
-      focusItem.classList.remove(styles['focus'])
-      this.focusPriceItemIndex = 1
-      let nextFocusItem = priceListWrap.querySelector(
-        `li:nth-child(${this.focusPriceItemIndex})`
-      )
-      nextFocusItem.classList.add(styles['focus'])
+      if (focusItem) {
+        focusItem.classList.remove(styles['focus'])
+      }
+      this.focusPriceItemIndex = 0
+      // let nextFocusItem = priceListWrap.querySelector(
+      //   `li:nth-child(${this.focusPriceItemIndex})`
+      // )
+      // nextFocusItem.classList.add(styles['focus'])
     })
     volumeInputFocus.map(e => e).subscribe(e => {
       // console.log('volumeInputFocus')
@@ -818,6 +820,7 @@ class HkOrder extends PureComponent {
       if (!showPirceFilter || targetInput !== 'price') {
         return
       }
+
       if (this.focusPriceItemIndex < 7) {
         let focusItem = priceListWrap.querySelector(
           `li:nth-child(${this.focusPriceItemIndex})`
@@ -826,7 +829,9 @@ class HkOrder extends PureComponent {
         let nextFocusItem = priceListWrap.querySelector(
           `li:nth-child(${this.focusPriceItemIndex + 1})`
         )
-        focusItem.classList.remove(styles['focus'])
+        if (focusItem) {
+          focusItem.classList.remove(styles['focus'])
+        }
         nextFocusItem.classList.add(styles['focus'])
         this.focusPriceItemIndex = this.focusPriceItemIndex + 1
       }
