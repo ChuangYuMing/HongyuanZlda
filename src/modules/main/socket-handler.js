@@ -21,7 +21,7 @@ class SocketHandler {
         Account,
         Username,
         Symbol,
-        Side,
+        Side: side,
         OrdType,
         Price,
         OrderQty,
@@ -42,7 +42,7 @@ class SocketHandler {
       )
 
       let ttime = changeToLocalTime(TransactTime)
-      let side = Side === '1' ? '買' : '賣'
+      // let side = Side === '1' ? '買' : '賣'
       let orderType = orderTypeMaping(OrdType)
       let popupMsg = ''
       let statusMsg = ''
@@ -67,11 +67,13 @@ class SocketHandler {
         //部分成交/全部成交
         if (OrdStatus === '1') {
           statusMsg = '部分成交'
+          status = 'partialDeal'
         }
         if (OrdStatus === '2') {
           statusMsg = '完全成交'
+          status = 'allDeal'
         }
-        status = 'deal'
+
         volume = LastQty
       }
       if (MsgType === '9' && CxlRejResponseTo === '1') {
@@ -94,7 +96,7 @@ class SocketHandler {
         <br/>
         <span>${Symbol},  價格：${Price},  數量：${volume}股</span>
         `
-      dispatch(updateMainPopUpMsg(popupMsg, status))
+      dispatch(updateMainPopUpMsg(popupMsg, status, side))
     })
   }
   off() {

@@ -12,11 +12,12 @@ import { orderStateMachine } from 'modules/order/stateMachine.js'
 import { Decimal } from 'decimal.js'
 import { setTodaySymbol } from 'modules/menu/actions.js'
 
-export const updateMainPopUpMsg = (data, status) => {
+export const updateMainPopUpMsg = (data, status, side) => {
   return {
     type: types.UPDATE_MAIN_POPUP_MSG,
     data,
-    status
+    status,
+    side
   }
 }
 

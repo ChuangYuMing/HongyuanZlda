@@ -17,6 +17,7 @@ export default (state = init, action) => {
       let obj = Map({
         id: id.toString(),
         msg: action.data,
+        side: action.side,
         status: action.status
       })
       state = state.update('mainPopupMsg', list => {
