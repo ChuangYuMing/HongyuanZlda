@@ -57,8 +57,8 @@ export const order = params => {
       if (obj['35'] === '67') {
         //風控reject
         if (obj['150'] === '8') {
-          let { Account, Symbol, OrdType, Price, OrderQty, Side } = params
-          let side = Side === '1' ? '買' : '賣'
+          let { Account, Symbol, OrdType, Price, OrderQty, Side: side } = params
+          // let side = Side === '1' ? '買' : '賣'
           let orderType = orderTypeMaping(OrdType)
           let { CName } = searchProperty(
             getState().main.get('customerInfo'),
@@ -88,7 +88,7 @@ export const order = params => {
               false
             )
           )
-          dispatch(updateMainPopUpMsg(popupMsg, status))
+          dispatch(updateMainPopUpMsg(popupMsg, status, side))
         }
         return
       }

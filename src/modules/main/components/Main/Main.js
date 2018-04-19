@@ -101,12 +101,24 @@ class Main extends Component {
     if (lastMainPopMsg) {
       let id = lastMainPopMsg.get('id')
       let msg = lastMainPopMsg.get('msg')
+      let side = lastMainPopMsg.get('side')
       let status = lastMainPopMsg.get('status')
+      console.log(status, side)
+      let a = status === 'success' && side === '1'
+      console.log('a', a)
       let statuscx = cx({
         mainPopup: true,
-        success: status === 'success',
-        error: status === 'error',
-        deal: status === 'deal'
+        pubsty2:
+          (status === 'success' && side === '1') ||
+          (status === 'partialDeal' && side === '1'),
+        pubsty1:
+          (status === 'success' && side === '2') ||
+          (status === 'partialDeal' && side === '2'),
+        // pubsty2: status === 'partialDeal' && side === '1',
+        // pubsty1: status === 'partialDeal' && side === '1',
+        pubsty4: status === 'allDeal' && side === '1',
+        pubsty3: status === 'allDeal' && side === '2',
+        pubsty5: status === 'error'
       })
       let data = (
         <PopUp

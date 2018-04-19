@@ -88,11 +88,31 @@ $bottom-height: 220px;
   height: 100%;
   width: 100%;
   padding: 10px;
-  background-color: antiquewhite;
+  // background-color: antiquewhite;
   border-radius: 3px;
   .msg {
     padding-right: 15px;
   }
+}
+.pubsty1 {
+  background-color: green;
+  color: #fbff02;
+}
+.pubsty2 {
+  background-color: red;
+  color: white;
+}
+.pubsty3 {
+  background-color: #20b953;
+  color: #fbff02;
+}
+.pubsty4 {
+  background-color: #fc4040;
+  color: white;
+}
+.pubsty5 {
+  background-color: #4b4b4b;
+  color: white;
 }
 .success {
   background-color: green;
