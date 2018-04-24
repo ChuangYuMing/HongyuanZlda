@@ -37,6 +37,8 @@ class Order extends Component {
             <TabList>
               <Tab>港股</Tab>
               <Tab>美股</Tab>
+              <Tab>滬港通</Tab>
+              <Tab>深港通</Tab>
             </TabList>
 
             <TabPanel>
@@ -60,6 +62,30 @@ class Order extends Component {
                 accountList={this.props.customerInfo}
                 changeTargetAccount={this.props.changeTargetAccount}
                 tradeUnit={this.props.tradeUnit.get('US')}
+                customerInfo={this.props.customerInfo}
+              />
+            </TabPanel>
+            <TabPanel>
+              <HkOrder
+                country="HH"
+                prodList={prodList['HH']}
+                order={this.props.order}
+                getQuote={this.props.getQuote}
+                accountList={this.props.customerInfo}
+                changeTargetAccount={this.props.changeTargetAccount}
+                tradeUnit={this.props.tradeUnit.get('HH')}
+                customerInfo={this.props.customerInfo}
+              />
+            </TabPanel>
+            <TabPanel>
+              <HkOrder
+                country="HZ"
+                prodList={prodList['HZ']}
+                order={this.props.order}
+                getQuote={this.props.getQuote}
+                accountList={this.props.customerInfo}
+                changeTargetAccount={this.props.changeTargetAccount}
+                tradeUnit={this.props.tradeUnit.get('HZ')}
                 customerInfo={this.props.customerInfo}
               />
             </TabPanel>

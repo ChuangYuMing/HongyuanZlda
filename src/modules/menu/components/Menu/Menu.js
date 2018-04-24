@@ -139,6 +139,8 @@ class Menu extends PureComponent {
             <option value="all">全部交易所</option>
             <option value="HK">港股</option>
             <option value="US">美股</option>
+            <option value="HH">滬港通</option>
+            <option value="HZ">深港通</option>
           </select>
         </div>
         <div className={cx('item-wrap', 't5')}>

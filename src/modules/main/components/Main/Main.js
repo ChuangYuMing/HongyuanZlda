@@ -124,7 +124,7 @@ class Main extends Component {
         <PopUp
           key={0}
           show={true}
-          width="400px"
+          width="430px"
           height="60px"
           top="initial"
           bottom="126px"

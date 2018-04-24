@@ -961,6 +961,10 @@ class HkOrder extends PureComponent {
         break
       case 'HK':
         orderPopTitle = '港股'
+      case 'HH':
+        orderPopTitle = '滬港通'
+      case 'HZ':
+        orderPopTitle = '深港通'
       default:
         break
     }
