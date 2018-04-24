@@ -83,7 +83,17 @@ class Menu extends PureComponent {
     this.props.showChangePwd()
   }
   render() {
-    let { customerInfo, targetAccount, todaySymbols } = this.props
+    let { customerInfo, targetAccount, todaySymbols, exchange } = this.props
+    let marketOption = []
+    exchange.entrySeq().forEach((e, index) => {
+      let market = e[0]
+      let marketName = e[1].getIn([0, 'MName'])
+      marketOption.push(
+        <option key={index} value={market}>
+          {marketName}
+        </option>
+      )
+    })
     let accountList = customerInfo.map((item, index) => {
       return (
         <option key={index} value={item.get('Account')}>
@@ -137,10 +147,7 @@ class Menu extends PureComponent {
             onChange={this.changeTargetMarket}
           >
             <option value="all">全部交易所</option>
-            <option value="HK">港股</option>
-            <option value="US">美股</option>
-            <option value="HH">滬港通</option>
-            <option value="HZ">深港通</option>
+            {marketOption}
           </select>
         </div>
         <div className={cx('item-wrap', 't5')}>

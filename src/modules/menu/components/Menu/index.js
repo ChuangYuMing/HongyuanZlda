@@ -15,7 +15,8 @@ const mapStateToProps = state => {
     customerInfo: state.main.get('customerInfo'),
     targetAccount: state.main.get('targetAccount'),
     member: state.main.get('customerInfo'),
-    todaySymbols: state.menu.get('todaySymbols')
+    todaySymbols: state.menu.get('todaySymbols'),
+    exchange: state.main.get('exchange')
   }
 }
 

@@ -97,7 +97,8 @@ function fixDataMaping() {
     '30107': 'TodaySell',
     '30108': 'BankMoney',
     '30109': 'ReFund',
-    '30110': 'BankMeta'
+    '30110': 'BankMeta',
+    '30114': 'MName'
   }
   for (const key in fixToName) {
     const element = fixToName[key]

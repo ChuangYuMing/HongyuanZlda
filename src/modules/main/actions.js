@@ -327,10 +327,13 @@ export const getExchange = params => {
             res.forEach((item, i) => {
               let price = []
               let entryPx = []
-              item['30058'].forEach(element => {
-                price.push(element['44'])
-                entryPx.push(element['270'])
-              })
+              if (item['30058']) {
+                item['30058'].forEach(element => {
+                  price.push(element['44'])
+                  entryPx.push(element['270'])
+                })
+              }
+
               tradeUnit[markets[i]] = {
                 price,
                 entryPx

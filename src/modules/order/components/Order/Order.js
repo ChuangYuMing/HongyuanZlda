@@ -23,8 +23,29 @@ class Order extends Component {
   }
 
   render() {
-    let prodList = this.props.prodList
-    console.log(this.props.tradeUnit)
+    let { prodList, exchange } = this.props
+    let tabs = []
+    let tabPanels = []
+    exchange.entrySeq().forEach((e, index) => {
+      let market = e[0]
+      let marketName = e[1].getIn([0, 'MName'])
+      tabs.push(<Tab key={index}>{`${marketName}`}</Tab>)
+      tabPanels.push(
+        <TabPanel key={index}>
+          <HkOrder
+            country={market}
+            marketName={marketName}
+            prodList={prodList[`${market}`]}
+            order={this.props.order}
+            getQuote={this.props.getQuote}
+            accountList={this.props.customerInfo}
+            changeTargetAccount={this.props.changeTargetAccount}
+            tradeUnit={this.props.tradeUnit.get(`${market}`)}
+            customerInfo={this.props.customerInfo}
+          />
+        </TabPanel>
+      )
+    })
     return (
       <div id="orderWrap" className={cx('order-wrap')}>
         <div className={cx('setting-wrap')}>
@@ -34,61 +55,9 @@ class Order extends Component {
         </div>
         <div className={cx('tabs-wrap')}>
           <Tabs>
-            <TabList>
-              <Tab>港股</Tab>
-              <Tab>美股</Tab>
-              <Tab>滬港通</Tab>
-              <Tab>深港通</Tab>
-            </TabList>
+            <TabList>{tabs}</TabList>
 
-            <TabPanel>
-              <HkOrder
-                country="HK"
-                prodList={prodList['HK']}
-                order={this.props.order}
-                getQuote={this.props.getQuote}
-                accountList={this.props.customerInfo}
-                changeTargetAccount={this.props.changeTargetAccount}
-                tradeUnit={this.props.tradeUnit.get('HK')}
-                customerInfo={this.props.customerInfo}
-              />
-            </TabPanel>
-            <TabPanel>
-              <HkOrder
-                country="US"
-                prodList={prodList['US']}
-                order={this.props.order}
-                getQuote={this.props.getQuote}
-                accountList={this.props.customerInfo}
-                changeTargetAccount={this.props.changeTargetAccount}
-                tradeUnit={this.props.tradeUnit.get('US')}
-                customerInfo={this.props.customerInfo}
-              />
-            </TabPanel>
-            <TabPanel>
-              <HkOrder
-                country="HH"
-                prodList={prodList['HH']}
-                order={this.props.order}
-                getQuote={this.props.getQuote}
-                accountList={this.props.customerInfo}
-                changeTargetAccount={this.props.changeTargetAccount}
-                tradeUnit={this.props.tradeUnit.get('HH')}
-                customerInfo={this.props.customerInfo}
-              />
-            </TabPanel>
-            <TabPanel>
-              <HkOrder
-                country="HZ"
-                prodList={prodList['HZ']}
-                order={this.props.order}
-                getQuote={this.props.getQuote}
-                accountList={this.props.customerInfo}
-                changeTargetAccount={this.props.changeTargetAccount}
-                tradeUnit={this.props.tradeUnit.get('HZ')}
-                customerInfo={this.props.customerInfo}
-              />
-            </TabPanel>
+            {tabPanels}
           </Tabs>
         </div>
       </div>
