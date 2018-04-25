@@ -13,7 +13,7 @@ let init = fromJS({
 export default (state = init, action) => {
   switch (action.type) {
     case types.UPDATE_FILTER_SETTING: {
-      return state.updateIn(['filterSetting', action.tag], i => action.value)
+      return state.update('filterSetting', i => i.merge(action.setting))
     }
     case types.UPDATE_TODAY_SYMBOL: {
       let index = state

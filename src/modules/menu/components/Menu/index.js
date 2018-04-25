@@ -68,8 +68,8 @@ const mapDispatchToProps = dispatch => {
     showChangePwd: () => {
       dispatch(toggleChangePwdPopup(true))
     },
-    updateFilterSetting: (tag, value) => {
-      dispatch(updateFilterSetting(tag, value))
+    updateFilterSetting: setting => {
+      dispatch(updateFilterSetting(setting))
     },
     showBashDeletePopup: value => {
       dispatch(showBashDeletePopup(value))

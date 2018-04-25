@@ -28,7 +28,10 @@ class Menu extends PureComponent {
       this.setState({
         account: targetAcc
       })
-      this.props.updateFilterSetting('account', targetAcc)
+
+      this.props.updateFilterSetting({
+        account: targetAcc
+      })
     }
   }
   handleInputChange = e => {
@@ -40,7 +43,7 @@ class Menu extends PureComponent {
       [name]: value
     })
     if (name === 'partialDeal' || name === 'allDeal') {
-      this.props.updateFilterSetting(name, value)
+      this.props.updateFilterSetting({ [name]: value })
     }
   }
   changeTargetAccount = e => {
@@ -58,15 +61,14 @@ class Menu extends PureComponent {
     this.setState({
       account
     })
-    this.props.updateFilterSetting('account', account)
+    this.props.updateFilterSetting({ account })
   }
   changeTargetMarket = e => {
     let target = e.target
     let market = target.value
-    this.setState({
-      market
-    })
-    this.props.updateFilterSetting('market', market)
+    let setting = market !== 'all' ? { market, symbol: 'all' } : { market }
+    this.setState(setting)
+    this.props.updateFilterSetting(setting)
   }
   showBashDeletePopup = () => {
     this.props.showBashDeletePopup(true)
@@ -74,10 +76,9 @@ class Menu extends PureComponent {
   changeTargetSymbol = e => {
     let target = e.target
     let symbol = target.value
-    this.setState({
-      symbol
-    })
-    this.props.updateFilterSetting('symbol', symbol)
+    let setting = symbol !== 'all' ? { symbol, market: 'all' } : { symbol }
+    this.setState(setting)
+    this.props.updateFilterSetting(setting)
   }
   showChangePwd = () => {
     this.props.showChangePwd()

@@ -27,8 +27,8 @@ const mapDispatchToProps = dispatch => {
     getPurchasing: params => {
       dispatch(getPurchasing(params))
     },
-    updateFilterSetting: (tag, value) => {
-      dispatch(updateFilterSetting(tag, value))
+    updateFilterSetting: setting => {
+      dispatch(updateFilterSetting(setting))
     },
     toggleBashDeletePopup: value => {
       dispatch(showBashDeletePopup(value))

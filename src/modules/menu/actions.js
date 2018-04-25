@@ -6,11 +6,10 @@ export const logout = () => {
   }
 }
 
-export const updateFilterSetting = (tag, value) => {
+export const updateFilterSetting = setting => {
   return {
     type: types.UPDATE_FILTER_SETTING,
-    tag,
-    value
+    setting
   }
 }
 
