@@ -30,7 +30,7 @@ class Member extends PureComponent {
       TokenID: userToken
     }
     this.props.changeTargetAccount({ account, branch })
-    this.props.updateFilterSetting('account', account)
+    this.props.updateFilterSetting({ account })
     // this.props.getInventory(prams)
   }
   closePurchasing = () => {
@@ -224,11 +224,11 @@ class Member extends PureComponent {
         </tr>
       )
     })
-    console.log(purchasingPopData)
+    // console.log(purchasingPopData)
     // Object.keys(currency).forEach(item => {
     //   purchasingPopData = <tbody>{purchasingPopData}</tbody>
     // })
-    console.log('currency', currency)
+    // console.log('currency', currency)
     return (
       <div className={cx('member-wrap')}>
         <div id="member-table" className={cx('sticky-table')}>

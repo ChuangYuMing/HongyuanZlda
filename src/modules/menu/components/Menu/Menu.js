@@ -28,7 +28,10 @@ class Menu extends PureComponent {
       this.setState({
         account: targetAcc
       })
-      this.props.updateFilterSetting('account', targetAcc)
+
+      this.props.updateFilterSetting({
+        account: targetAcc
+      })
     }
   }
   handleInputChange = e => {
@@ -40,7 +43,7 @@ class Menu extends PureComponent {
       [name]: value
     })
     if (name === 'partialDeal' || name === 'allDeal') {
-      this.props.updateFilterSetting(name, value)
+      this.props.updateFilterSetting({ [name]: value })
     }
   }
   changeTargetAccount = e => {
@@ -58,15 +61,14 @@ class Menu extends PureComponent {
     this.setState({
       account
     })
-    this.props.updateFilterSetting('account', account)
+    this.props.updateFilterSetting({ account })
   }
   changeTargetMarket = e => {
     let target = e.target
     let market = target.value
-    this.setState({
-      market
-    })
-    this.props.updateFilterSetting('market', market)
+    let setting = market !== 'all' ? { market, symbol: 'all' } : { market }
+    this.setState(setting)
+    this.props.updateFilterSetting(setting)
   }
   showBashDeletePopup = () => {
     this.props.showBashDeletePopup(true)
@@ -74,16 +76,25 @@ class Menu extends PureComponent {
   changeTargetSymbol = e => {
     let target = e.target
     let symbol = target.value
-    this.setState({
-      symbol
-    })
-    this.props.updateFilterSetting('symbol', symbol)
+    let setting = symbol !== 'all' ? { symbol, market: 'all' } : { symbol }
+    this.setState(setting)
+    this.props.updateFilterSetting(setting)
   }
   showChangePwd = () => {
     this.props.showChangePwd()
   }
   render() {
-    let { customerInfo, targetAccount, todaySymbols } = this.props
+    let { customerInfo, targetAccount, todaySymbols, exchange } = this.props
+    let marketOption = []
+    exchange.entrySeq().forEach((e, index) => {
+      let market = e[0]
+      let marketName = e[1].getIn([0, 'MName'])
+      marketOption.push(
+        <option key={index} value={market}>
+          {marketName}
+        </option>
+      )
+    })
     let accountList = customerInfo.map((item, index) => {
       return (
         <option key={index} value={item.get('Account')}>
@@ -137,8 +148,7 @@ class Menu extends PureComponent {
             onChange={this.changeTargetMarket}
           >
             <option value="all">全部交易所</option>
-            <option value="HK">港股</option>
-            <option value="US">美股</option>
+            {marketOption}
           </select>
         </div>
         <div className={cx('item-wrap', 't5')}>

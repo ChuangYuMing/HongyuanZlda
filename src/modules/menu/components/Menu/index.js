@@ -15,7 +15,8 @@ const mapStateToProps = state => {
     customerInfo: state.main.get('customerInfo'),
     targetAccount: state.main.get('targetAccount'),
     member: state.main.get('customerInfo'),
-    todaySymbols: state.menu.get('todaySymbols')
+    todaySymbols: state.menu.get('todaySymbols'),
+    exchange: state.main.get('exchange')
   }
 }
 
@@ -67,8 +68,8 @@ const mapDispatchToProps = dispatch => {
     showChangePwd: () => {
       dispatch(toggleChangePwdPopup(true))
     },
-    updateFilterSetting: (tag, value) => {
-      dispatch(updateFilterSetting(tag, value))
+    updateFilterSetting: setting => {
+      dispatch(updateFilterSetting(setting))
     },
     showBashDeletePopup: value => {
       dispatch(showBashDeletePopup(value))

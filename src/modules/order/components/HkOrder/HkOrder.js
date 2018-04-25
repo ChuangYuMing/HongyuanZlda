@@ -872,7 +872,7 @@ class HkOrder extends PureComponent {
       })
   }
   render() {
-    let { quote, accountList, country } = this.props
+    let { quote, accountList, country, marketName } = this.props
     let prodList = this.props.prodList || []
     let Symbol = quote.get('Symbol')
     let Name = quote.get('Name')
@@ -949,21 +949,12 @@ class HkOrder extends PureComponent {
       stockUnit,
       currency
     } = this.state
-    let orderPopTitle = ''
+    let orderPopTitle = marketName
     let { CName } = searchProperty(
       this.props.customerInfo,
       ['CName'],
       ['Account', account]
     )
-    switch (country) {
-      case 'US':
-        orderPopTitle = '美股'
-        break
-      case 'HK':
-        orderPopTitle = '港股'
-      default:
-        break
-    }
     return (
       <div className={cx('usorder-wrap')}>
         <div className={cx('action-wrap')}>
